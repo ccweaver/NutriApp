@@ -1,0 +1,76 @@
+<html>
+<head>
+
+<link rel="stylesheet" type="text/css" href="{{STATIC_URL}}css/bootstrap.min.css"/>
+<link rel="stylesheet" type="text/css" href="{{STATIC_URL}}css/bootstrap-responsive.min.css"/> 
+<script type="text/javascript" src="{{STATIC_URL}}js/bootstrap.min.js"></script>
+
+    <title>Ingredients</title>
+    <style type="text/css">
+        body {
+            background-image: url('../static/food.jpg');
+        }
+
+        ul.errorlist {
+            margin: 0;
+            padding: 0;
+        }
+        .errorlist li {
+            background-color: red;
+            color: white;
+            display: block;
+            font-size: 10px;
+            margin: 0 0 3px;
+            padding: 4px 5px;
+        }
+        </style>
+</head>
+<body>
+<div class="navbar navbar-inverse navbar-fixed-top" id="topnavbar">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="/">{% block navtitle %} <span style="color:#12AA34;opacity=.99;">Nutri</span><span style="color:#BB9977;opacity=.99;">App</span>{% endblock %}</a>
+          </div>
+          </div>
+          </div>
+
+ 
+<br><br><br><br>
+<div class = "jumbotron">
+<div class="container-fluid">
+
+    {% if form.errors %}
+        <p style="color: red;">
+            Please correct the error{{ form.errors|pluralize }} below.
+        </p>
+    {% endif %}
+           {{ form.ingredient.errors }}
+            <label style="color: #555;" for="id_ingredient">
+            <font size="4">Ingredient:&nbsp;</font></label>
+            {{ form.ingredient }}
+&nbsp;&nbsp;&nbsp;
+            {{ form.amount.errors }}
+            <label style="color: #555;" for="id_amount">
+            <font size="4">Amount:&nbsp;</font></label>
+            {{ form.amount }}
+
+            {{ form.unit.errors }}
+            {{ form.unit }}
+
+        <br>
+        <br>
+        <input type="submit" class="btn btn-primary" value="Submit">
+    </form>
+    </div>
+    </div>
+
+
+<script src="{{STATIC_URL}}/js/bootstrap.min.js"></script>
+</body>
+</html>
