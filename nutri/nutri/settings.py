@@ -43,6 +43,7 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'ingred_table',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -62,14 +63,16 @@ WSGI_APPLICATION = 'nutri.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/1.6/ref/settings/#databases
 
+#   'HOST': 'ec2-54-200-21-53.us-west-2.compute.amazonaws.com',
+
 DATABASES = {
   'default': {
     'ENGINE': 'django.db.backends.postgresql_psycopg2',
-    'NAME': 'calo',
-    'HOST': 'ec2-54-200-21-53.us-west-2.compute.amazonaws.com',
-    'PORT': 22,
-    'USER': 'wustl_inst',
-    'PASSWORD': 'wustl_pass'
+    'NAME': 'ingredients',
+    'HOST': 'ccweaverdbinstance.cjqflsribv1h.us-west-2.rds.amazonaws.com',
+    'PORT': 5432,
+    'USER': 'ccweaver',
+    'PASSWORD': '1234567890'
   }
 }
 

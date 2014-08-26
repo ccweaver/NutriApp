@@ -1,0 +1,2 @@
+import autocomplete_light
+autocomplete_light.register()

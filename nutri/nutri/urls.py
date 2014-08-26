@@ -1,8 +1,12 @@
 from django.conf.urls import patterns, include, url
 from nutri.views import nutriForm
 
+import autocomplete_light
+autocomplete_light.autodiscover()
+
 from django.contrib import admin
 admin.autodiscover()
+
 
 urlpatterns = patterns('',
     # Examples:
@@ -11,4 +15,5 @@ urlpatterns = patterns('',
 
     url(r'^', nutriForm),
     url(r'^admin/', include(admin.site.urls)),
+	url(r'autocomplete/', include('autocomplete_light.urls')),
 )
