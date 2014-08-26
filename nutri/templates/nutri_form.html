@@ -5,23 +5,17 @@
 <link rel="stylesheet" type="text/css" href="{{STATIC_URL}}css/bootstrap-responsive.min.css"/> 
 <script type="text/javascript" src="{{STATIC_URL}}js/bootstrap.min.js"></script>
 
-    <title>Ingredients</title>
+    <title>Calo</title>
     <style type="text/css">
         body {
             background-image: url('../static/food.jpg');
         }
 
-        ul.errorlist {
-            margin: 0;
-            padding: 0;
-        }
+
         .errorlist li {
-            background-color: red;
-            color: white;
+            color: red;
             display: block;
-            font-size: 10px;
-            margin: 0 0 3px;
-            padding: 4px 5px;
+            font-size: 12px;
         }
         </style>
 </head>
@@ -35,27 +29,36 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="/">{% block navtitle %} <span style="color:#12AA34;opacity=.99;">Nutri</span><span style="color:#BB9977;opacity=.99;">App</span>{% endblock %}</a>
+          <a class="navbar-brand" href="/">{% block navtitle %} <span style="color:#12AA34;opacity=.99;">C</span><span style="color:#BB9977;opacity=.99;">a</span><span style="color:#12AA34;opacity=.99;">l</span><span style="color:#BB9977;opacity=.99;">o</span>{% endblock %}</a>
           </div>
           </div>
           </div>
 
  
 <br><br><br><br>
-<div class = "jumbotron">
+<div class="container">
+<div class="jumbotron" style="background-image: url(../static/board.jpg); background-size: 100%;">
 <div class="container-fluid">
+
 
     {% if form.errors %}
         <p style="color: red;">
             Please correct the error{{ form.errors|pluralize }} below.
         </p>
     {% endif %}
+    {% if form.amount.errors %}
+        <font size="3" color="red">Please enter an amount</font>
+    {% endif %}
+    {{form.amount.errors}}
+
+    <form id="ingredForm" method="post">
+        {% csrf_token %}
+
            {{ form.ingredient.errors }}
             <label style="color: #555;" for="id_ingredient">
             <font size="4">Ingredient:&nbsp;</font></label>
             {{ form.ingredient }}
 &nbsp;&nbsp;&nbsp;
-            {{ form.amount.errors }}
             <label style="color: #555;" for="id_amount">
             <font size="4">Amount:&nbsp;</font></label>
             {{ form.amount }}
@@ -65,9 +68,12 @@
 
         <br>
         <br>
-        <input type="submit" class="btn btn-primary" value="Submit">
+        <input type="submit" class="btn btn-primary" value="Add Ingredient">
+        <input type="submit" class="btn btn-danger" value="Submit Dish">
+
     </form>
     </div>
+    </div>  
     </div>
 
 

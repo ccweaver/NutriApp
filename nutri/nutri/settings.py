@@ -27,7 +27,7 @@ TEMPLATE_DEBUG = True
 ALLOWED_HOSTS = []
 
 TEMPLATE_DIRS = (
-    '/Users/campbellweaver/Documents/Personal/NutriApp/nutri/templates',
+    '/Users/campbellweaver/Documents/Personal/NutriApp/NutriApp/nutri/templates',
 )
 
 STATICFILES_DIRS = (
@@ -65,11 +65,11 @@ WSGI_APPLICATION = 'nutri.wsgi.application'
 DATABASES = {
   'default': {
     'ENGINE': 'django.db.backends.postgresql_psycopg2',
-    'NAME': 'ingredients',
-    'HOST': 'ccweaverdbinstance.cjqflsribv1h.us-west-2.rds.amazonaws.com',
-    'PORT': 5432,
-    'USER': 'ccweaver',
-    'PASSWORD': '1234567890'
+    'NAME': 'calo',
+    'HOST': 'ec2-54-200-21-53.us-west-2.compute.amazonaws.com',
+    'PORT': 22,
+    'USER': 'wustl_inst',
+    'PASSWORD': 'wustl_pass'
   }
 }
 

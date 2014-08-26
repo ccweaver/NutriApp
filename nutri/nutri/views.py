@@ -7,7 +7,10 @@ def nutriForm(request):
 		form = NutriForm(request.POST)
 		if form.is_valid():
 			cd = form.cleaned_data
-			return HttpResponseRedirect('/contact/thanks/')
+			print cd['ingredient']
+			print cd['amount']
+			print cd['unit']
+			return render(request, 'nutri_form.html', {'form': form})
 	else:
 		form = NutriForm(initial={'ingredient': 'pasta'})
 	return render(request, 'nutri_form.html', {'form': form})
