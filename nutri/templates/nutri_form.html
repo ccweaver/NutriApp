@@ -2,8 +2,36 @@
 <head>
 
 <link rel="stylesheet" type="text/css" href="{{STATIC_URL}}css/bootstrap.min.css"/>
-<link rel="stylesheet" type="text/css" href="{{STATIC_URL}}css/bootstrap-responsive.min.css"/> 
+<!--<link rel="stylesheet" type="text/css" href="{{STATIC_URL}}css/bootstrap-responsive.min.css"/> 
+--> 
 <script type="text/javascript" src="{{STATIC_URL}}js/bootstrap.min.js"></script>
+
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+
+<script>
+
+function iSearch(search_term) {
+$.ajax(
+    {
+        type: "post",
+        url: "",
+        data: {term:search_term, csrfmiddlewaretoken:document.getElementsByName('csrfmiddlewaretoken')[0].value},
+        success: function (data)
+        {
+        $("#reload").html(data);
+        return false;
+
+        },
+        error: function(data)
+        {
+            $("#reload").html(data);
+        }
+    });
+return false;
+};
+
+
+</script>
 
     <title>Calo</title>
     <style type="text/css">
@@ -17,6 +45,10 @@
             display: block;
             font-size: 12px;
         }
+        #iSelect {
+            width: 80%;
+        }
+
         </style>
 </head>
 <body>
@@ -36,11 +68,13 @@
 
  
 <br><br><br><br>
+
 <div class="container">
 <div class="jumbotron" style="background-image: url(../static/board.jpg); background-size: 100%;">
-<div class="container-fluid">
+<div class="container">
 
 
+<!--
     {% if form.errors %}
         <p style="color: red;">
             Please correct the error{{ form.errors|pluralize }} below.
@@ -51,6 +85,7 @@
     {% endif %}
     {{form.amount.errors}}
 
+    
     <form id="ingredForm" method="post">
         {% csrf_token %}
 
@@ -58,9 +93,10 @@
             <label style="color: #555;" for="id_ingredient">
             <font size="4">Ingredient:&nbsp;</font></label>
             {{ form.ingredient }}
-&nbsp;&nbsp;&nbsp;
+<br><br>
             <label style="color: #555;" for="id_amount">
             <font size="4">Amount:&nbsp;</font></label>
+            &nbsp;&nbsp;&nbsp;&nbsp;
             {{ form.amount }}
 
             {{ form.unit.errors }}
@@ -68,14 +104,43 @@
 
         <br>
         <br>
-        <input type="submit" class="btn btn-primary" value="Add Ingredient">
-        <input type="submit" class="btn btn-danger" value="Submit Dish">
 
     </form>
-    {% for i in ingred_list%}
+-->
 
-    {% endfor %}
+    <label style="color: #555;">
+            <font size="2">Search for ingredients:&nbsp;
+    <input id="searchbox" type="text" onkeyup="iSearch(this.value)">
+    </font></label>
+    <input id="refresh_button" type="button" onclick="iSearch(document.getElementById('searchbox').value)" value="refresh list">
 
+    <br><br>
+    <form id="ingredForm2" method="post">
+        {% csrf_token %}
+
+        <div id="reload">{% include 'select_temp.html' %}</div>
+
+        <br><br>
+        <label style="color: #555;">
+            <font size="4">Amount:&nbsp;</font></label>
+            &nbsp;&nbsp;&nbsp;&nbsp;
+            <input id="amount" type="text">
+
+        <select id="unit">
+        <option value="g">g</option>
+        <option value="oz">oz</option>
+        <option value="mL">mL</option>
+        <option value="tsp">tsp</option>
+        <option value="tblspn">tblspn</option>
+        </select>
+
+        <br><br>
+ 
+        <input class="btn btn-primary" value="Add Ingredient" id="add_ingredient" onclick="addIn">
+        <input type="submit" class="btn btn-danger" value="Submit Dish">
+
+        
+    </form>
 
     </div>
     </div>  

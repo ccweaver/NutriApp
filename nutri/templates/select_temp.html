@@ -1,0 +1,8 @@
+<label style="color: #555;">
+<font size="4">Ingredient:&nbsp;</font></label>
+<select id="iSelect" multiple="multiple">
+{% for i in ingred_list%}
+    <option value='{{ i }}'>{{i}}</option>        
+{% endfor %}
+
+</select>

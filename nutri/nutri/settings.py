@@ -44,6 +44,7 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'ingred_table',
+    'autocomplete_light',
 )
 
 MIDDLEWARE_CLASSES = (
