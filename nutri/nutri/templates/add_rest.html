@@ -1,0 +1,170 @@
+<html>
+<head>
+
+<link rel="stylesheet" type="text/css" href="{{STATIC_URL}}css/bootstrap.min.css"/>
+<!--<link rel="stylesheet" type="text/css" href="{{STATIC_URL}}css/bootstrap-responsive.min.css"/> 
+--> 
+<script type="text/javascript" src="{{STATIC_URL}}js/bootstrap.min.js"></script>
+
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+
+<style type="text/css">
+        body {
+            background-image: url('../static/restaurant2.jpg');
+        }
+
+        #rest_name {
+            -webkit-border-radius: 5px;
+            -moz-border-radius: 5px;
+            border-radius: 5px;
+            border-style: solid;
+            width: 50%;
+        }
+        #num_street {
+            -webkit-border-radius: 5px;
+            -moz-border-radius: 5px;
+            border-radius: 5px;
+            border-style: solid;
+            width: 50%;
+        }
+        #city {
+            -webkit-border-radius: 5px;
+            -moz-border-radius: 5px;
+            border-radius: 5px;
+            border-style: solid;
+        }
+        #state {
+            width: 75px;
+            height: 25px;
+            overflow: hidden;
+            background-color: white;
+            border: 1px solid #000;
+            font-style: bold;
+        }
+        #zipcode {
+            -webkit-border-radius: 5px;
+            -moz-border-radius: 5px;
+            border-radius: 5px;
+            border-style: solid;
+        }
+</style>
+
+
+    <title>Calo</title>
+</head>
+<body>
+<div class="navbar navbar-inverse navbar-fixed-top" id="topnavbar">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="/">{% block navtitle %} <span style="color:#12AA34;opacity=.99;">C</span><span style="color:#BB9977;opacity=.99;">a</span><span style="color:#12AA34;opacity=.99;">l</span><span style="color:#BB9977;opacity=.99;">o</span>{% endblock %}</a>
+          </div>
+          </div>
+          </div>
+
+<br><br><br><br><br>
+<div class="container">
+<div class="jumbotron" style="background-image: url(../static/board.jpg); background-size: 100%;">
+<div class="container">
+
+    <form id="RestForm" method="post">
+        {% csrf_token %}
+
+        <label style="color: #555;">
+            <font size="4">Restaurant Name:&nbsp;</font></label>
+            
+        <input id="rest_name" type="text" name="rest_name">
+        <br><br>
+
+        <label style="color: #555;">
+            <font size="2">Number & Street:&nbsp;</font></label>
+        <input id="num_street" type="text" name="num_street">
+
+            <br><br>
+
+        <label style="color: #555;">
+            <font size="2">City:&nbsp;</font></label>
+        <input id="city" type="text" name="city">
+        
+        <label style="color: #555;">
+            <font size="2">State:&nbsp;</font></label>    
+        <select id="state" name="state">
+            <option value="AL">AL</option>
+        <option value="AK">AK</option>
+        <option value="AZ">AZ</option>
+        <option value="AR">AR</option>
+        <option value="CA">CA</option>
+        <option value="CO">CO</option>
+        <option value="CT">CT</option>
+        <option value="DC">DC</option>
+        <option value="DE">DE</option>
+        <option value="FL">FL</option>
+        <option value="GA">GA</option>
+        <option value="HI">HI</option>
+        <option value="ID">ID</option>
+        <option value="IL">IL</option>
+        <option value="IN">IN</option>
+        <option value="IA">IA</option>
+        <option value="KS">KS</option>
+        <option value="KY">KY</option>
+        <option value="LA">LA</option>
+        <option value="ME">ME</option>
+        <option value="MD">MD</option>
+        <option value="MA">MA</option>
+        <option value="MI">MI</option>
+        <option value="MN">MN</option>
+        <option value="MS">MS</option>
+        <option value="MO">MO</option>
+        <option value="MT">MT</option>
+        <option value="NE">NE</option>
+        <option value="NV">NV</option>
+        <option value="NH">NH</option>
+        <option value="NJ">NJ</option>
+        <option value="NM">NM</option>
+        <option value="NY">NY</option>
+        <option value="NC">NC</option>
+        <option value="ND">ND</option>
+        <option value="OH">OH</option>
+        <option value="OK">OK</option>
+        <option value="OR">OR</option>
+        <option value="PA">PA</option>
+        <option value="RI">RI</option>
+        <option value="SC">SC</option>
+        <option value="SD">SD</option>
+        <option value="TN">TN</option>
+        <option value="TX">TX</option>
+        <option value="UT">UT</option>
+        <option value="VT">VT</option>
+        <option value="VA">VA</option>
+        <option value="WA">WA</option>
+        <option value="WV">WV</option>
+        <option value="WI">WI</option>
+        <option value="WY">WY</option>
+        </select>
+
+        <br>
+        <label style="color: #555;">
+            <font size="2">Zip Code:&nbsp;</font></label>    
+        <input id="zipcode" type="text" name="zipcode">
+        
+        
+
+
+        <br><br>
+ 
+        <input type="submit" class="btn btn-danger" value="Save">
+        
+    </form>
+</div>
+</div>
+</div>
+
+
+<script src="{{STATIC_URL}}/js/bootstrap.min.js"></script>
+</body>
+</html>

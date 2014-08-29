@@ -1,5 +1,5 @@
 from django.conf.urls import patterns, include, url
-from nutri.views import nutriForm
+from nutri.views import ingredient, add_restaurant
 
 
 from django.contrib import admin
@@ -11,7 +11,7 @@ urlpatterns = patterns('',
     # url(r'^$', 'nutri.views.home', name='home'),
     # url(r'^blog/', include('blog.urls')),
 
-    url(r'^', nutriForm),
+    url(r'^add_ingredient$', ingredient),
+    url(r'^add_restaurant$', add_restaurant),
     url(r'^admin/', include(admin.site.urls)),
-	url(r'autocomplete/', include('autocomplete_light.urls')),
 )
