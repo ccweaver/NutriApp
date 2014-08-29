@@ -1,8 +1,6 @@
 from django.conf.urls import patterns, include, url
 from nutri.views import nutriForm
 
-import autocomplete_light
-autocomplete_light.autodiscover()
 
 from django.contrib import admin
 admin.autodiscover()

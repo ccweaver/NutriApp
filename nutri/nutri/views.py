@@ -6,9 +6,10 @@ from ingred_table.models import Ingredient
 
 def nutriForm(request):
 	ingred_list = []
+	error = ""
 	#['jelly beans,RAW(of course)', 'barnacles']
 	if request.method == 'POST':
-
+		print request.POST
 		if 'term' in request.POST:
 			print request.POST['term']
 			ingred_list = Ingredient.objects.filter(ingredient__icontains=request.POST['term'])
@@ -21,15 +22,24 @@ def nutriForm(request):
 			#for x in range(0,count):
 			#	print ingred_list[x]
 
-		if 'ingred_to_add' in request.POST:
-			print request.POST['ingred_to_add']
-			print request.POST['amount']
-			print request.POST['unit']
+		if 'amount' in request.POST:
+			if 'ingred_to_add' not in request.POST:
+				error = 'Please search for and select an ingredient'
+			else:
+				ingred_to_add = request.POST['ingred_to_add']
+			amount = request.POST['amount']
+			unit = request.POST['unit']
+
+			if not error and not amount:
+				error = 'Please input an amount'
+			if error:
+				print 'major error'
+				return render(request, 'nutri_form.html', {'ingred_list':ingred_list, 'error':error})
 
 
-		return render(request, 'select_temp.html', {'ingred_list':ingred_list})
+		return render(request, 'select_temp.html', {'ingred_list':ingred_list, 'error':error})
 	else:
-		return render(request, 'nutri_form.html', {'ingred_list':ingred_list})
+		return render(request, 'nutri_form.html', {'ingred_list':ingred_list, 'error':error})
 
 
 
