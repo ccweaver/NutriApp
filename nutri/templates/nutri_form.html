@@ -118,15 +118,16 @@ return false;
     <form id="ingredForm2" method="post">
         {% csrf_token %}
 
+
         <div id="reload">{% include 'select_temp.html' %}</div>
 
         <br><br>
         <label style="color: #555;">
             <font size="4">Amount:&nbsp;</font></label>
             &nbsp;&nbsp;&nbsp;&nbsp;
-            <input id="amount" type="text">
+            <input id="amount" type="text" name="amount">
 
-        <select id="unit">
+        <select id="unit" name="unit">
         <option value="g">g</option>
         <option value="oz">oz</option>
         <option value="mL">mL</option>

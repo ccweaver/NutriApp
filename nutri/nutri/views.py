@@ -8,7 +8,7 @@ def nutriForm(request):
 	ingred_list = []
 	#['jelly beans,RAW(of course)', 'barnacles']
 	if request.method == 'POST':
-		print request.POST
+
 		if 'term' in request.POST:
 			print request.POST['term']
 			ingred_list = Ingredient.objects.filter(ingredient__icontains=request.POST['term'])
@@ -20,6 +20,12 @@ def nutriForm(request):
 			#count = 10
 			#for x in range(0,count):
 			#	print ingred_list[x]
+
+		if 'ingred_to_add' in request.POST:
+			print request.POST['ingred_to_add']
+			print request.POST['amount']
+			print request.POST['unit']
+
 
 		return render(request, 'select_temp.html', {'ingred_list':ingred_list})
 	else:
