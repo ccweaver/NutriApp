@@ -27,7 +27,7 @@ TEMPLATE_DEBUG = True
 ALLOWED_HOSTS = []
 
 TEMPLATE_DIRS = (
-    '/Users/campbellweaver/Documents/Personal/NutriApp/NutriApp/nutri/templates',
+    os.path.join(os.path.dirname(__file__), 'templates').replace('\\','/'),
 )
 
 STATICFILES_DIRS = (
@@ -44,7 +44,8 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'ingred_table',
-    'autocomplete_light',
+    'Restaurant',
+    'menu_items',
 )
 
 MIDDLEWARE_CLASSES = (
