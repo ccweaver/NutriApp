@@ -1,11 +1,20 @@
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 from django import forms
 from nutri.forms import NutriForm
 from django.shortcuts import render
 from ingred_table.models import Ingredient
+from Restaurant.models import Restaurant
+import re
+
+def sign_in(request):
+	if request.method == 'POST':
+		print request.POST
+	return render(request, 'sign_in.html')
 
 def ingredient(request):
+
 	ingred_list = []
+	d_name = "chicken parm"
 	error = ""
 	#['jelly beans,RAW(of course)', 'barnacles']
 	if request.method == 'POST':
@@ -32,7 +41,8 @@ def ingredient(request):
 			#count = 10
 			#for x in range(0,count):
 			#	print ingred_list[x].id
-
+			return render(request, 'select_temp.html', {'ingred_list':ingred_list, 'error':error, 'd_name':d_name})
+		
 		if 'amount' in request.POST:
 			if 'ingred_to_add' not in request.POST:
 				error = 'Please search for and select an ingredient'
@@ -45,13 +55,63 @@ def ingredient(request):
 				error = 'Please input an amount'
 			if error:
 				print 'major error'
-				return render(request, 'nutri_form.html', {'ingred_list':ingred_list, 'error':error})
+				return render(request, 'nutri_form.html', {'ingred_list':ingred_list, 'error':error, 'd_name':d_name})
+
+		if 'dish_name' in request.POST:
+			d_name = request.POST['dish_name']
+			print d_name
 
 
-		return render(request, 'select_temp.html', {'ingred_list':ingred_list, 'error':error})
-	else:
-		return render(request, 'nutri_form.html', {'ingred_list':ingred_list, 'error':error})
+	return render(request, 'nutri_form.html', {'ingred_list':ingred_list, 'error':error, 'd_name':d_name})
 
 def add_restaurant(request):
-	return render(request, 'add_rest.html')
+	error = ""
+	rest_name = ""
+	num_street = ""
+	city = ""
+	state = "--"
+	zipcode = ""
+	if request.method == 'POST':
+		rest_name = request.POST['rest_name']
+		if not rest_name:
+			error = 'Please enter the name of your restaurant'
+
+		num_street = request.POST['num_street']
+
+		nsSplit = num_street.split(' ')
+		num = nsSplit[0]
+		try:
+			int(num)
+		except ValueError:
+			if not error:
+				error = 'Please enter a street number and street name'
+
+		street = ""
+		for x in range (1, len(nsSplit)):
+			street = street + nsSplit[x]
+
+		city = request.POST['city']
+		if not city and not error:
+			error = 'Please enter a city'
+		
+		state = request.POST['state']
+		if state == '--' and not error:
+			error = 'Please select a state'
+
+		zipcode = request.POST['zipcode']
+		zRE = re.compile("^[0-9][0-9][0-9][0-9][0-9]$")
+		if not zRE.match(zipcode) and not error:
+			error = 'Please enter a valid 5 digit zip code'
+
+		if not error:
+			r = Restaurant(name=rest_name, number=num, street=street, city=city, state=state, zipcode=zipcode)
+			r.save()
+			return HttpResponseRedirect('/restaurant_profile')
+
+
+	return render(request, 'add_rest.html', {'error':error, 'rest_name':rest_name, 'num_street':num_street, 'city':city, 'state':state, 'zipcode':zipcode})
 	
+def restaurant_profile(request):
+
+	return render(request, 'rest_profile.html')
+
