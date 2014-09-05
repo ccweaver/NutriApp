@@ -1,6 +1,6 @@
 from django.http import HttpResponse, HttpResponseRedirect
 from django import forms
-from nutri.forms import NutriForm
+from nutri.forms import UserForm
 from django.shortcuts import render
 from ingred_table.models import Ingredient
 from Restaurant.models import Restaurant
@@ -9,7 +9,7 @@ import re
 def sign_in(request):
 	if request.method == 'POST':
 		print request.POST
-	return render(request, 'sign_in.html')
+	return render(request, 'sign_in.html', {'form':UserForm})
 
 def ingredient(request):
 

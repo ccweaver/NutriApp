@@ -78,8 +78,9 @@ function showModal()
         input[type="text"],input[type="password"] {
             -webkit-border-radius: 5px;
             -moz-border-radius: 5px;
-            border-radius: 5px;
+            border-radius: 10px;
             border-style: solid;
+            height: 40px;
         }
 
         }
@@ -102,9 +103,9 @@ function showModal()
         </div>
         <div class="navbar-collapse collapse">
             <ul class="nav navbar-nav navbar-right">
-            <li id="nav_login"  style="margin-top:2%;"><input type="text" id="username" placeholder="Username"></li>
+            <li id="nav_login"  style="margin-top:2%;"><input type="text" id="login-email" placeholder="Email"></li>
             <li id="nav_login_pass"  style="margin-top:2%;"><input type="password" id="pass" placeholder="Password"></li>
-            <li id="nav_login_submit"  style="margin-top:1%;"><button class="btn btn-danger" id="sign_in">Sign In</button>&nbsp;</li>
+            <li id="nav_login_submit"  style="margin-top:3%;"><button class="btn btn-danger" id="sign_in">Sign In</button>&nbsp;</li>
             </ul>
         </div>
     </div>
@@ -126,27 +127,32 @@ function showModal()
         <h4 class="modal-title" id="myModalLabel">New Restaurant Account</h4>
       </div>
       
-        <form id="newuserform" method="post" action="">
+        <form id="newuserform" method="post" action="/restaurant_profile/">
         {% csrf_token %}
 
         <div class="modal-body">
-      
+        {% if form.errors %}
+        <font size="3" color="A22;" style="bold;">  
+        Please correct the error{{ form.errors|pluralize }} below.
+        </font>  
+        {% endif %}
 
-        <font size="3" color="A22;" style="bold;"><div id="modal_error"></div></font>
         <label style="color: #555;">
-        
         <font style="normal;">
-        <input id="fname" type="text" name="fname" placeholder="First Name">&nbsp;
-        <input id="lname" type="text" name="lname" placeholder="Last name">
+        
+        {{ form.first_name.errors }}
+        {{ form.first_name }}
+        {{ form.last_name.errors }}
+        {{ form.last_name }}
         <font size="1"><br><br></font>
-        <input id="email" type="text" name="email" placeholder="Email">
-
+        {{ form.email.errors }}
+        {{ form.email }}
         <font size="1"><br><br></font>
-        <input id="pass" type="password" name="pass" placeholder="Password">&nbsp;  
-
-        <input id="re-pass" type="password" name="re-pass" placeholder="Re-type Password">        
-        </font>
-
+        {{ form.email2.errors }}
+        {{ form.email2 }}
+        <font size="1"><br><br></font>
+        {{ form.password.errors }}
+        {{ form.password }}
 
         </div>
         <div class="modal-footer">
