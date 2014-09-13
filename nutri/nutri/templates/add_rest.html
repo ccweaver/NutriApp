@@ -223,52 +223,6 @@ $(window).load(function(){
 </div>
 </div>
 
-<div data-backdrop="static" class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        {% if d_name %}
-        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-        {% endif %}
-        <h4 class="modal-title" id="myModalLabel">New User</h4>
-      </div>
-      
-        <form id="newdish" method="post" action="">
-        {% csrf_token %}
-
-        <div class="modal-body">
-      
-
-        <font size="3" color="A22;" style="bold;"><div id="modal_error"></div></font>
-        <label style="color: #555;">
-        
-        <input id="fname" type="text" name="fname" placeholder="First Name">&nbsp;
-        <input id="lname" type="text" name="lname" placeholder="Last name">
-        <font size="1"><br><br></font>
-        <input id="email" type="text" name="email" placeholder="Email">
-
-        <font size="1"><br><br></font>
-        <input id="pass" type="password" name="pass" placeholder="Password">&nbsp;  
-
-        <input id="re-pass" type="password" name="re-pass" placeholder="Re-type Password">        
-
-
-
-        </div>
-        <div class="modal-footer">
-            {% if d_name %}
-            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-            {% endif %}
-            <button class="btn btn-danger btn-sm" id="refresh_button" type="button" onclick="newDishForm(document.getElementById('dish_name').value, document.getElementById('dish_price').value)">
-                <span class="glyphicon glyphicon-ok"></span>
-                Done
-            </button> 
-        </form>
-    </div>
-  </div>
-</div>
-
-
 
 <script src="{{STATIC_URL}}/js/bootstrap.min.js"></script>
 </body>

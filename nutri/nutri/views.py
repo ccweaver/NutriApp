@@ -1,22 +1,78 @@
 from django.http import HttpResponse, HttpResponseRedirect
 from django import forms
-from nutri.forms import NutriForm
+from nutri.forms import UserForm
 from django.shortcuts import render
 from ingred_table.models import Ingredient
 from Restaurant.models import Restaurant
-import re
+from menu_items.models import Item
+import re, json
+from django.contrib.auth.models import User
+from django.contrib.auth import authenticate
 
 def sign_in(request):
+	invalid = ""
+	error = ""
+	uform = UserForm
 	if request.method == 'POST':
 		print request.POST
-	return render(request, 'sign_in.html')
+		if 'login_email' in request.POST:
+			login_email = request.POST['login_email']
+			login_pass = request.POST['login_pass']
+			user = authenticate(username=login_email, password=login_pass)
+			if user is not None:
+				data = {'success':'true'}
+			else:
+				data = {'success':'false'}
+			return HttpResponse(json.dumps(data), content_type = "application/json")
+			
+		if 'first_name' in request.POST:
+			uform = UserForm(request.POST)
+			
 
-def ingredient(request):
+			if uform.is_valid():
+				print 'valid form'
+				cd = uform.cleaned_data
+				fname = cd['first_name']
+				lname = cd['last_name']
+				email = cd['email']
+				email2 = cd['email2']						
+				password = cd['password']
+				print fname, lname, email, email2, password
+				if User.objects.filter(username=email):
+					error = 'This email address is already in use'
+					return render(request, 'sign_in.html', {'form':uform, 'invalid':invalid, 'error':error})
+				user = User.objects.create_user(email, email, password)
+				user.first_name = fname
+				user.last_name = lname
+				user.save()
+				return HttpResponseRedirect('/add_restaurant')
+			
+			else:
+				ere = re.compile("^.+@.+\..+$")
 
+				invalid = 'true'
+				print 'invalid form'
+				if not request.POST['first_name']:
+					error = 'Please enter a first name'
+				elif not request.POST['last_name']:
+					error = 'Please enter a last name'				
+				elif not ere.match(request.POST['email']):
+					error = 'Please enter a valid email address'
+				elif request.POST['email2'] != request.POST['email']:
+					error = "Email addresses don't match"
+				elif not request.POST['password']:
+					error = 'Please enter a password'
+
+	return render(request, 'sign_in.html', {'form':uform, 'invalid':invalid, 'error':error})
+
+
+def dish(request, rid):
 	ingred_list = []
-	d_name = "chicken parm"
+	d_name = "test"
 	error = ""
 	#['jelly beans,RAW(of course)', 'barnacles']
+	if not Restaurant.objects.filter(id=rid):
+		return HTTPResponseNotFound
 	if request.method == 'POST':
 		print request.POST
 		if 'term' in request.POST:
@@ -44,24 +100,45 @@ def ingredient(request):
 			return render(request, 'select_temp.html', {'ingred_list':ingred_list, 'error':error, 'd_name':d_name})
 		
 		if 'amount' in request.POST:
-			if 'ingred_to_add' not in request.POST:
-				error = 'Please search for and select an ingredient'
-			else:
-				ingred_to_add = request.POST['ingred_to_add']
+			ingred_to_add = request.POST['ingred_to_add']
 			amount = request.POST['amount']
 			unit = request.POST['unit']
 
-			if not error and not amount:
+			print 'am: ', amount
+			if not ingred_to_add:
+				error = "Please search for and select an ingredient"
+			elif not amount:
+				error = 'Please input a valid amount'
+			elif amount == '0':
 				error = 'Please input an amount'
+
+
 			if error:
 				print 'major error'
-				return render(request, 'nutri_form.html', {'ingred_list':ingred_list, 'error':error, 'd_name':d_name})
+			data = {'error':error}
+
+			return HttpResponse(json.dumps(data), content_type="application/json")
 
 		if 'dish_name' in request.POST:
 			d_name = request.POST['dish_name']
-			print d_name
+			d_price = request.POST['dish_price']
+			if not d_name:
+				error = 'Please enter a unique dish name'
+			else:
+				try:
+					float(d_price)
+				except ValueError:
+					error='Please enter a valid dish price'
+			
+			if not error:	
+				print d_name, d_price, rid
+				r = Restaurant.objects.filter(id=rid)
+				print r
+				i = Item(name=d_name, rest_id=rid, price=d_price)
+				i.save()
 
-
+				d_name = Item.objects.filter(name=d_name)
+	print d_name
 	return render(request, 'nutri_form.html', {'ingred_list':ingred_list, 'error':error, 'd_name':d_name})
 
 def add_restaurant(request):
@@ -72,8 +149,12 @@ def add_restaurant(request):
 	state = "--"
 	zipcode = ""
 	if request.method == 'POST':
+		print request.user
+		if not request.user:
+			error = 'You must be signed into an account to create a restaurant'
+
 		rest_name = request.POST['rest_name']
-		if not rest_name:
+		if not rest_name and not error:
 			error = 'Please enter the name of your restaurant'
 
 		num_street = request.POST['num_street']
@@ -104,14 +185,17 @@ def add_restaurant(request):
 			error = 'Please enter a valid 5 digit zip code'
 
 		if not error:
-			r = Restaurant(name=rest_name, number=num, street=street, city=city, state=state, zipcode=zipcode)
+			r = Restaurant(name=rest_name, number=num, street=street, city=city, state=state, zipcode=zipcode, user=request.user)
 			r.save()
 			return HttpResponseRedirect('/restaurant_profile')
 
 
 	return render(request, 'add_rest.html', {'error':error, 'rest_name':rest_name, 'num_street':num_street, 'city':city, 'state':state, 'zipcode':zipcode})
 	
-def restaurant_profile(request):
+def restaurant_profile(request, rid):
+	print rid
+	if request.method == 'POST':
+		return HttpResponseRedirect('/add_dish/' + rid)
 
-	return render(request, 'rest_profile.html')
+	return render(request, 'rest_profile.html', {'uname':request.user.username})
 

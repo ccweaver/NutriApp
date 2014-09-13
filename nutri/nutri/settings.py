@@ -46,6 +46,7 @@ INSTALLED_APPS = (
     'ingred_table',
     'Restaurant',
     'menu_items',
+    'added_ingreds',
 )
 
 MIDDLEWARE_CLASSES = (
