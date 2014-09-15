@@ -10,6 +10,7 @@
 
 
 <script>
+var d_name = "test"
 
 function iSearch(search_term) {
 $.ajax(
@@ -36,7 +37,7 @@ $.ajax(
     {
         type: "post",
         url: "",
-        data: {ingred_to_add: i, amount: a, unit: u, csrfmiddlewaretoken:document.getElementsByName('csrfmiddlewaretoken')[0].value},
+        data: {ingred_to_add: i, amount: a, unit: u, ingred_dish:d_name, csrfmiddlewaretoken:document.getElementsByName('csrfmiddlewaretoken')[0].value},
         success: function (data)
         {
         if (data.error) {
@@ -65,16 +66,15 @@ $.ajax(
         data: {dish_name:dish_name, dish_price:dish_price, csrfmiddlewaretoken:document.getElementsByName('csrfmiddlewaretoken')[0].value},
         success: function (data)
         {
-        if (dish_name == "") {
-            document.getElementById('modal_error').innerHTML = 'Please enter a dish name';
-        }
-        else if (isNaN(parseFloat(dish_price)) || !isFinite(dish_price))
-        {
-            document.getElementById('modal_error').innerHTML = 'Please enter the dish price';
+        if (data.error) {
+            document.getElementById('modal_error').innerHTML = data.error;
         }
         else {
+            document.getElementById('modal_error').innerHTML = "";
+            document.getElementById('name_wrapper').innerHTML = data.d_name;
+            d_name = data.d_name;
             hideModal();
-            $('#title_dish').html(data)
+
         }
 
         return false;
@@ -180,8 +180,7 @@ $(window).load(function(){
 
 <div class="container">
 
-<!--<div id='title_dish'>{% include 'dish_title.html' %}</div>-->
-    
+<font size="5" style="bold;"><div id='name_wrapper'></div></font>
     
     <font size="4" color="A22;" style="bold;">
     <div id="error_wrapper">{{error}}</div>
@@ -227,9 +226,7 @@ $(window).load(function(){
 
     </form>
 
-    {% for addition in added_in %}
-    {{addition}}
-    {% endfor %}
+    
 </div>
 </div>  
 </div>

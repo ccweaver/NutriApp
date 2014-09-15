@@ -5,6 +5,7 @@ from django.shortcuts import render
 from ingred_table.models import Ingredient
 from Restaurant.models import Restaurant
 from menu_items.models import Item
+from added_ingreds.models import Addition
 import re, json
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
@@ -68,7 +69,6 @@ def sign_in(request):
 
 def dish(request, rid):
 	ingred_list = []
-	d_name = "test"
 	error = ""
 	#['jelly beans,RAW(of course)', 'barnacles']
 	if not Restaurant.objects.filter(id=rid):
@@ -97,14 +97,13 @@ def dish(request, rid):
 			#count = 10
 			#for x in range(0,count):
 			#	print ingred_list[x].id
-			return render(request, 'select_temp.html', {'ingred_list':ingred_list, 'error':error, 'd_name':d_name})
+			return render(request, 'select_temp.html', {'ingred_list':ingred_list, 'error':error})
 		
 		if 'amount' in request.POST:
 			ingred_to_add = request.POST['ingred_to_add']
 			amount = request.POST['amount']
 			unit = request.POST['unit']
 
-			print 'am: ', amount
 			if not ingred_to_add:
 				error = "Please search for and select an ingredient"
 			elif not amount:
@@ -114,32 +113,65 @@ def dish(request, rid):
 
 
 			if error:
-				print 'major error'
-			data = {'error':error}
+				print 'major error: ', error
+
+			if not error:
+				i_t_a = Ingredient.objects.filter(ingredient=ingred_to_add)
+				
+				if unit == 'g' or unit == 'mL':
+					amnt_grams = float(amount)
+				elif unit == 'oz':
+					amnt_grams = float(amount) * 28.3495
+				elif unit == 'tsp':
+					amnt_grams = float(amount) * 4.92892
+				elif unit == 'tblspn':
+					amnt_grams = float(amount) * 14.78676
+				
+				amnt_grams = "{0:.2f}".format(round(amnt_grams,2))
+				
+				addition = Addition(amount_grams=amnt_grams)
+				i_t_a_id = i_t_a.values_list('id')[0][0]
+				addition.ingred_id = i_t_a_id 
+				
+				addition.save()
+				print '!!!!'
+				dish = Item.objects.filter(name=request.POST['ingred_dish'])
+				print dish
+				print '***'
+				dish.ingredients.add(addition)
+				print '!'
+			data = {'error':error, 'd_name':request.POST['d_name']}
 
 			return HttpResponse(json.dumps(data), content_type="application/json")
 
 		if 'dish_name' in request.POST:
 			d_name = request.POST['dish_name']
 			d_price = request.POST['dish_price']
+			print Item.objects.filter(name=d_name).filter(rest_id=rid)
 			if not d_name:
-				error = 'Please enter a unique dish name'
+				error = 'Please enter a dish name'
+			elif Item.objects.filter(name=d_name).filter(rest_id=rid):
+				error = 'Dish already exists on this menu'
+			elif not d_price:
+				error = "Please enter a dish price"
 			else:
 				try:
-					float(d_price)
+					if float(d_price) == 0:
+						error = "Please enter a dish price"
 				except ValueError:
 					error='Please enter a valid dish price'
-			
+			print 'the error is: ', error
 			if not error:	
 				print d_name, d_price, rid
 				r = Restaurant.objects.filter(id=rid)
 				print r
 				i = Item(name=d_name, rest_id=rid, price=d_price)
 				i.save()
+			data = {'error':error, 'd_name':d_name}
+			return HttpResponse(json.dumps(data), content_type="application/json")
 
-				d_name = Item.objects.filter(name=d_name)
-	print d_name
-	return render(request, 'nutri_form.html', {'ingred_list':ingred_list, 'error':error, 'd_name':d_name})
+
+	return render(request, 'nutri_form.html', {'ingred_list':ingred_list, 'error':error})
 
 def add_restaurant(request):
 	error = ""
