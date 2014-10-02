@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import User
 
 class Restaurant(models.Model):
 	name = models.CharField(max_length=300)
@@ -7,6 +8,7 @@ class Restaurant(models.Model):
 	city = models.CharField(max_length=300)
 	state = models.CharField(max_length=100)
 	zipcode = models.IntegerField()
+	user = models.ForeignKey(User, unique=True)
 
 	def __unicode__(self):
 		return u'%s' % (self.name)
