@@ -8,7 +8,7 @@ class Restaurant(models.Model):
 	city = models.CharField(max_length=300)
 	state = models.CharField(max_length=100)
 	zipcode = models.IntegerField()
-	user = models.ForeignKey(User, unique=True)
+	user = models.ForeignKey(User)
 
 	def __unicode__(self):
 		return u'%s' % (self.name)
