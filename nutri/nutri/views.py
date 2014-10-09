@@ -8,7 +8,7 @@ from menu_items.models import Item
 from added_ingreds.models import Addition
 import re, json
 from django.contrib.auth.models import User
-from django.contrib.auth import authenticate
+from django.contrib import auth
 
     
 def sign_in(request):
@@ -20,8 +20,10 @@ def sign_in(request):
         if 'login_email' in request.POST:
             login_email = request.POST['login_email']
             login_pass = request.POST['login_pass']
-            user = authenticate(username=login_email, password=login_pass)
+            user = auth.authenticate(username=login_email, password=login_pass)
+
             if user is not None:
+                auth.login(request, user)
                 data = {'success':'true'}
             else:
                 data = {'success':'false'}
@@ -47,6 +49,11 @@ def sign_in(request):
                 user.first_name = fname
                 user.last_name = lname
                 user.save()
+
+                print 'xxx'
+                user = auth.authenticate(username=email, password=password)
+                auth.login(request, user)
+                print '&*('
                 return HttpResponseRedirect('/add_restaurant')
             
             else:
@@ -194,10 +201,13 @@ def add_restaurant(request):
     city = ""
     state = "--"
     zipcode = ""
+    print request.user
+    print request.user.id
+    if not request.user or request.user.is_anonymous():
+        error = 'You must be signed into an account to create a restaurant'
+
     if request.method == 'POST':
-        print request.user
-        if not request.user:
-            error = 'You must be signed into an account to create a restaurant'
+
 
         rest_name = request.POST['rest_name']
         if not rest_name and not error:
@@ -233,15 +243,20 @@ def add_restaurant(request):
         if not error:
             r = Restaurant(name=rest_name, number=num, street=street, city=city, state=state, zipcode=zipcode, user=request.user)
             r.save()
-            return HttpResponseRedirect('/restaurant_profile')
+            rid = r.id
+            print rid
+            return HttpResponseRedirect('/restaurant_profile/' + str(rid))
 
 
     return render(request, 'add_rest.html', {'error':error, 'rest_name':rest_name, 'num_street':num_street, 'city':city, 'state':state, 'zipcode':zipcode})
     
 def restaurant_profile(request, rid):
     print rid
+    print request.user
+    print request.user.username
     if request.method == 'POST':
         return HttpResponseRedirect('/add_dish/' + rid)
 
-    return render(request, 'rest_profile.html', {'uname':request.user.username})
+    restaurant = Restaurant.objects.filter(id=rid)[0]
+    return render(request, 'rest_profile.html', {'uname':request.user.username, 'rest':restaurant})
 
