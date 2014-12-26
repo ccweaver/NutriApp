@@ -85,6 +85,9 @@ def dish(request, rid):
         return HTTPResponseNotFound
     if request.method == 'POST':
         print request.POST
+        if 'done' in request.POST:
+            data = {'rid':rid}
+            return HttpResponse(json.dumps(data), content_type="application/json")
         if 'term' in request.POST:
             print request.POST['term']
             terms = request.POST['term'].split(' ')

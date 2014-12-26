@@ -12,6 +12,25 @@
 <script>
 var d_name = "test"
 
+function submit() {
+$.ajax(
+    {
+        type: "post",
+        url: "",
+        data: {done:'true', csrfmiddlewaretoken:document.getElementsByName('csrfmiddlewaretoken')[0].value},
+        success: function (data)
+        {
+            location.href = "/restaurant_profile/" + data.rid;
+            return false;
+        },
+        error: function(data)
+        {
+        }
+    });
+return false;
+};
+
+
 function iSearch(search_term) {
 $.ajax(
     {
@@ -104,6 +123,13 @@ function hideModal()
 $(window).load(function(){
     $('#myModal').modal('show');
 });
+
+function showModal() {
+    $('#myModal').modal('show');
+    document.getElementById('x_button').innerHTML = '<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>';
+    document.getElementById('close_button').innerHTML = '<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>';
+
+}
 
 </script>
 
@@ -207,9 +233,6 @@ $(window).load(function(){
     </button>
 
     <br><br>
-    <form id="ingredForm2" method="post">
-        {% csrf_token %}
-
 
         <div id="reload">{% include 'select_temp.html' %}</div>
 
@@ -231,14 +254,13 @@ $(window).load(function(){
         <br><br>
         <b>
         <div id="list_ingred"></div>
-        <b>
+        </b>
         <br><br>
 
-        <a class="btn btn-primary" data-toggle="modal" href="#myModal">Edit Name & Price</a>
+        <a class="btn btn-primary" onclick="showModal()">Edit Name & Price</a>
         <input type="button" class="btn btn-primary" value="Add Ingredient" id="add_ingredient" onclick="addIn(document.getElementById('iSelect').value, document.getElementById('amount').value, document.getElementById('unit').value)">
-        <input type="submit" class="btn btn-danger" value="Submit Dish">
+        <input type="button" class="btn btn-danger" value="Complete Dish" onClick="submit()">
 
-    </form>
 
     
 </div>
@@ -250,9 +272,8 @@ $(window).load(function(){
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        {% if d_name %}
-        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-        {% endif %}
+        <div id="x_button">
+        </div>
         <h4 class="modal-title" id="myModalLabel">New Dish</h4>
       </div>
       
@@ -277,13 +298,10 @@ $(window).load(function(){
 
         </div>
         <div class="modal-footer">
-            {% if d_name %}
-            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-            {% endif %}
+            <div id="close_button">
             <button class="btn btn-danger btn-sm" id="refresh_button" type="button" onclick="newDishForm(document.getElementById('dish_name').value, document.getElementById('dish_price').value)">
-                <span class="glyphicon glyphicon-ok"></span>
-                Done
-            </button> 
+                <span class="glyphicon glyphicon-ok"></span>Done</button> 
+            </div>
         </form>
     </div>
   </div>
