@@ -45,13 +45,15 @@ $.ajax(
         }
         else {
             document.getElementById('error_wrapper').innerHTML = "";
-            document.getElementById('list_ingred').innerHTML = "asdf";
-            
-            var index;
-            for (i = 0; i < data.length-2; i++) {
-                index = "in" + i.toString();
-                document.getElementById('list_ingred').innerHTML += "* " + data.index + "<br>";
+
+
+            var list = "";
+            for (key in data) {
+                if (key != "d_name" && key !="error") {
+                    list += "* " + data[key] + "<br>";
+                }
             }
+            document.getElementById('list_ingred').innerHTML = list;
         }
         return false;
 
@@ -191,7 +193,7 @@ $(window).load(function(){
     
     <font size="4" color="A22;" style="bold;">
     <div id="error_wrapper"></div>
-    <div id="list_ingred"></div>
+
     </font>
     <br><br>
     
@@ -227,7 +229,11 @@ $(window).load(function(){
 
 
         <br><br>
- 
+        <b>
+        <div id="list_ingred"></div>
+        <b>
+        <br><br>
+
         <a class="btn btn-primary" data-toggle="modal" href="#myModal">Edit Name & Price</a>
         <input type="button" class="btn btn-primary" value="Add Ingredient" id="add_ingredient" onclick="addIn(document.getElementById('iSelect').value, document.getElementById('amount').value, document.getElementById('unit').value)">
         <input type="submit" class="btn btn-danger" value="Submit Dish">
