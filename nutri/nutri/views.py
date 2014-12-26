@@ -117,7 +117,7 @@ def dish(request, rid):
 
             if not ingred_to_add:
                 error = "Please search for and select an ingredient"
-            elif not amount or amount < 0:
+            elif not amount or float(amount) < 0:
                 error = 'Please input a valid amount'
             elif amount == '0':
                 error = 'Please input an amount'
@@ -154,13 +154,16 @@ def dish(request, rid):
             data = {}
             data['error'] = error
             data['d_name'] = request.POST['ingred_dish']
-           
-            added_ingred_ids = dish.values_list('ingredients')
-            for ind in range(0,len(added_ingred_ids)):
-                index = added_ingred_ids[ind][0]
-                print index
-                data['in' + str(ind)] = str(Addition.objects.filter(id=index)[0])
-                print data['in' + str(ind)]
+            
+            if not error:
+                added_ingred_ids = dish.values_list('ingredients')
+    
+                for ind in range(0,len(added_ingred_ids)):
+                    index = added_ingred_ids[ind][0]
+                    print index
+                    data['in' + str(ind)] = str(Addition.objects.filter(id=index)[0])
+                    print data['in' + str(ind)]
+                
             print data
             print 'we made it here'
             
