@@ -113,10 +113,11 @@ def dish(request, rid):
             ingred_to_add = request.POST['ingred_to_add']
             amount = request.POST['amount']
             unit = request.POST['unit']
+            dish = Item.objects.filter(rest_id=rid).filter(name=request.POST['ingred_dish'])
 
             if not ingred_to_add:
                 error = "Please search for and select an ingredient"
-            elif not amount:
+            elif not amount or amount < 0:
                 error = 'Please input a valid amount'
             elif amount == '0':
                 error = 'Please input an amount'
@@ -143,9 +144,8 @@ def dish(request, rid):
                 i_t_a_id = i_t_a.values_list('id')[0][0]
                 addition.ingred_id = i_t_a_id 
                 
-                addition.save()
-                dish = Item.objects.filter(rest_id=rid).filter(name=request.POST['ingred_dish'])[0]
-                dish.ingredients.add(addition)
+                addition.save()     
+                dish[0].ingredients.add(addition)
 
                 error = ''
 
@@ -154,14 +154,16 @@ def dish(request, rid):
             data = {}
             data['error'] = error
             data['d_name'] = request.POST['ingred_dish']
-            
-            '''
-            added_ingreds = Item.objects.filter(rest_id=rid).filter(name=request.POST['ingred_dish'])
-            for ind in range(0,len(added_ingreds)):
-                data[ind] = added_ingreds[ind]
+           
+            added_ingred_ids = dish.values_list('ingredients')
+            for ind in range(0,len(added_ingred_ids)):
+                index = added_ingred_ids[ind][0]
+                print index
+                data['in' + str(ind)] = str(Addition.objects.filter(id=index)[0])
+                print data['in' + str(ind)]
             print data
             print 'we made it here'
-            '''
+            
             
             return HttpResponse(json.dumps(data), content_type="application/json")
 
