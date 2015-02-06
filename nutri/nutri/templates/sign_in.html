@@ -31,7 +31,7 @@ $(document).on("click","#nav_login_submit",function(event)
                 else {
                   document.getElementById('login_pass').value = "";
 
-                  $("#buttons").effect("shake");
+                  $("#search").effect("shake");
                 }
               return false;
               },
@@ -72,22 +72,14 @@ function validModal(invalid)
         }
         
         #buttons {
-            margin-left: auto;
-            margin-right: auto;
-            margin-top: auto;
-            margin-bottom: auto;
-            width: 50%;
-            height:55px;
+            width: 25%;
+            height:35px;
+            margin-left: 15px;
         }
 
         #shake, #shake2, #shake3 {
           display: inline-block;
         }   
-
-        #viewmenus {
-            vertical-align: middle;
-        }
-
 
         input[type="text"],input[type="password"] {
             -webkit-border-radius: 5px;
@@ -98,7 +90,21 @@ function validModal(invalid)
             display: inline;
         }
 
+        #search{
+          height: 50px;
+          width: 80%;
+          margin-left: auto;
+          margin-right: auto;
+          margin-top: auto;
+          margin-bottom: auto;
+          vertical-align: middle;
         }
+
+        #search_bar {
+          height: 50px;
+          width: 70%;
+        }
+
 </style>
 
 
@@ -130,11 +136,18 @@ function validModal(invalid)
     </div>
 </div>
 
-<br><br><br><br><br><br><br><br><br><br>
+<br><br><br><br>
 
 <div id="buttons">
-<button class="btn btn-danger" style="width:49%; height:100%; white-space:normal;" onclick="showModal();">Create New Restaurant Account</button>
-<a id="viewmenus" href="/restaurant_profile" class="btn btn-primary" style="width:49%; height:100%;">View Menus</a>
+<button class="btn btn-danger" style="width:100%; height:100%; white-space:normal;" onclick="showModal();">Create New Restaurant Account</button>
+</div>
+
+<br><br><br><br>
+
+<div id="search">
+<font size="5" face="Calibri">
+<input type="text" id="search_bar" placeholder=" Search, search, search">
+</font>
 </div>
 
 
