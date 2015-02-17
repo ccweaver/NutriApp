@@ -17,7 +17,7 @@ $.ajax(
     {
         type: "post",
         url: "",
-        data: {done:'true', csrfmiddlewaretoken:document.getElementsByName('csrfmiddlewaretoken')[0].value},
+        data: {done:'true', ingred_dish:d_name, csrfmiddlewaretoken:document.getElementsByName('csrfmiddlewaretoken')[0].value},
         success: function (data)
         {
             location.href = "/restaurant_profile/" + data.rid;
@@ -69,7 +69,10 @@ $.ajax(
             var list = "";
             for (key in data) {
                 if (key != "d_name" && key !="error") {
-                    list += "* " + data[key] + "<br>";
+                    list += '<button class="btn btn-default btn-sm" id="' + key;
+                    list += 'type="button" onclick="removeIngred(' + key + ')">'
+                    list += '<span class="glyphicon glyphicon-remove"></span></button>';
+                    list += data[key] + "<br>";
                 }
             }
             document.getElementById('list_ingred').innerHTML = list;
@@ -81,6 +84,37 @@ $.ajax(
         {
             return false;
         }
+    });
+return false;
+};
+
+//canceling an added ingredient
+function removeIngred(key) {
+$.ajax(
+    {
+        type: "post",
+        url: "",
+        data: {delete_key: key, ingred_dish:d_name, csrfmiddlewaretoken:document.getElementsByName('csrfmiddlewaretoken')[0].value},
+        success: function (data)
+        {
+        if (data.error) {
+            document.getElementById('error_wrapper').innerHTML = data.error;
+        }
+        else {
+            document.getElementById('error_wrapper').innerHTML = "";
+
+            var list = "";
+            for (key in data) {
+                if (key != "d_name" && key !="error") {
+                    list += '<button class="btn btn-default btn-sm" id="' + key;
+                    list += 'type="button" onclick="removeIngred(' + key + ')">'
+                    list += '<span class="glyphicon glyphicon-remove"></span></button>';
+                    list += data[key] + "<br>";
+                }
+            }
+            document.getElementById('list_ingred').innerHTML = list;
+        }
+    }
     });
 return false;
 };
@@ -245,7 +279,7 @@ function showModal() {
         <select id="unit" name="unit">
         <option value="g">g</option>
         <option value="oz">oz</option>
-        <option value="mL">mL</option>
+        <option value="Fl. Oz">Fl. Oz</option>
         <option value="tsp">tsp</option>
         <option value="tblspn">tblspn</option>
         </select>

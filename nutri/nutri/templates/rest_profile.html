@@ -6,9 +6,17 @@
 <!--<link rel="stylesheet" type="text/css" href="{{STATIC_URL}}css/bootstrap-responsive.min.css"/> 
 --> 
 
+<script>
 
 
-
+</script>
+<style>
+    body {
+      background-image: url('../static/2-dark.jpg');
+      background-repeat: repeat;
+      background-attachment: fixed;
+      background-position: center; 
+    }
 </style>
 
 
@@ -37,6 +45,25 @@
 {{rest}}
 </div>
 </div>
+
+
+<table class="table table-bordered">
+    
+    <th> </th>
+    <th><font color="white">Calories</font></th>
+    <th><font color="white">Protein (g)</font></th>
+    <th><font color="white">Fat(g)</font></th>
+    <th><font color="white">Carbs (g)</font></th>
+    <th><font color="white">Sugar(g)</font></th>
+    <th><font color="white">Sodium(mg)</font></th>
+    <th><font color="white">Price</font></th>
+{% for s in strings %}
+{% if forloop.counter0|divisibleby:8 %}<tr>{% endif %}
+<td><font color="white">{{ s }}</font></td>
+{% if forloop.counter|divisibleby:8 %}</tr>{% endif %}
+{% endfor %}
+</font>
+</table>
 
 <form action="" method="post">
     {% csrf_token %}
