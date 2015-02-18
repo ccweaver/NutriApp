@@ -8,6 +8,7 @@ from menu_items.models import Item
 from added_ingreds.models import Addition
 import re, json
 from django.contrib.auth.models import User
+from django.contrib.auth import logout
 from django.contrib import auth
 
     
@@ -15,20 +16,49 @@ def sign_in(request):
     invalid = ""
     error = ""
     uform = UserForm
+    is_user = False
+    if request.user.username != '':
+        is_user = True
+
+    print request.user
+    print is_user
+
     if request.method == 'POST':
         print request.POST
         if 'login_email' in request.POST:
             login_email = request.POST['login_email']
             login_pass = request.POST['login_pass']
             user = auth.authenticate(username=login_email, password=login_pass)
-
+            print 'hi'
             if user is not None:
                 auth.login(request, user)
                 data = {'success':'true'}
             else:
                 data = {'success':'false'}
+
             return HttpResponse(json.dumps(data), content_type = "application/json")
             
+        if 'logout' in request.POST:
+            logout(request)
+            is_user = False
+            data = {'success':'true'}
+            return HttpResponse(json.dumps(data), content_type = "application/json")
+
+        if 'proflink' in request.POST:
+            rest_id = Restaurant.objects.filter(user=request.user.id)
+
+            if len(rest_id) > 0:
+                print 'mallows'
+                address = '/restaurant_profile/' + str(rest_id[0])
+            else:
+                address = "/add_restaurant"
+            
+            data = {'success':'true', 'href':address}
+
+            return HttpResponse(json.dumps(data), content_type = "application/json")                    
+                
+                
+
         if 'first_name' in request.POST:
             uform = UserForm(request.POST)
             
@@ -72,7 +102,7 @@ def sign_in(request):
                 elif not request.POST['password']:
                     error = 'Please enter a password'
 
-    return render(request, 'sign_in.html', {'form':uform, 'invalid':invalid, 'error':error})
+    return render(request, 'sign_in.html', {'form':uform, 'invalid':invalid, 'error':error, 'is_user':is_user, 'user':request.user.username})
 
 
 def dish(request, rid):

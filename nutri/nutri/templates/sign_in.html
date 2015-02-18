@@ -26,7 +26,9 @@ $(document).on("click","#nav_login_submit",function(event)
               success: function (data)
               {
                 if (data.success == 'true') {
-                  location.href = "/restaurant_profile/1"
+                  
+                    location.reload();
+                  
                 }
                 else {
                   document.getElementById('login_pass').value = "";
@@ -62,6 +64,48 @@ function validModal(invalid)
   if (invalid.innerHTML != "")
     showModal();
 }
+
+$(document).on("click","#logout",function(event)
+           {
+           $.ajax(
+           {
+              type: "post",
+              url: "",
+              data: {logout:'true', csrfmiddlewaretoken:document.getElementsByName('csrfmiddlewaretoken')[0].value},
+              success: function (data)
+              {;
+                location.reload();
+              return false;
+              },
+              error: function(data)
+              {
+
+              }
+            });
+           return false;
+});
+
+$(document).on("click","#proflink",function(event)
+           {
+           $.ajax(
+           {
+              type: "post",
+              url: "",
+              data: {proflink:'true', csrfmiddlewaretoken:document.getElementsByName('csrfmiddlewaretoken')[0].value},
+              success: function (data)
+              {
+               location.href = data.href; 
+              return false;
+
+              },
+              error: function(data)
+              {
+
+              }
+            });
+           return false;
+});
+
 
 </script>
 
@@ -105,6 +149,11 @@ function validModal(invalid)
           width: 70%;
         }
 
+        #proflink, #logout{
+          margin-right: 10px;
+          margin-top: 10px;
+        }
+
 </style>
 
 
@@ -124,13 +173,20 @@ function validModal(invalid)
         </div>
         <div class="navbar-collapse collapse">
             <ul class="nav navbar-nav navbar-right">
+            
+            {% if is_user %}
+            <button id="proflink" type="button" class="btn btn-primary">{{user}}</button>
+            <button id="logout" type="button" class="btn btn-danger">Logout</button>
+            {% else %}
+
             <div id="shake">
             <li id="nav_login"  style="margin-top:4%;"><input name="login_email" type="text" id="login_email" placeholder="Email"></li></div>
             <div id="shake2">
             <li id="nav_login_pass"  style="margin-top:4%;"><input name="login_pass" type="password" id="login_pass" placeholder="Password"></li></div>
             <div id="shake3">
             <li id="nav_login_submit"  style="margin-top:0%;"> <button type="submit" class="btn btn-danger btn-sm" id="login_button">Sign In</button>&nbsp;</li></div>
-            
+            {% endif %}
+                 
             </ul>
         </div>
     </div>
