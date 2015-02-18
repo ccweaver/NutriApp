@@ -303,6 +303,8 @@ def restaurant_profile(request, rid):
         return HttpResponseRedirect('/add_dish/' + rid)
 
     restaurant = Restaurant.objects.filter(id=rid)[0]
+
+
     menu = Item.objects.filter(rest_id=rid).filter(valid=True)
     print menu
     strings = []
@@ -317,20 +319,22 @@ def restaurant_profile(request, rid):
 
         for add in item.ingredients.all():
             ingred = Ingredient.objects.filter(id=add.ingred_id)[0]
+            amount = add.amount_grams
             print ingred
-            cal = cal + ingred.calories
-            gpro = gpro + ingred.protein
-            gfat = gfat + ingred.fat
-            gcarb = gcarb + ingred.carbs
-            gsug = gsug + ingred.sugar
-            mgna = mgna + ingred.sodium
+            cal = cal + ingred.calories*amount
+            gpro = gpro + ingred.protein*amount
+            gfat = gfat + ingred.fat*amount
+            gcarb = gcarb + ingred.carbs*amount
+            gsug = gsug + ingred.sugar*amount
+            mgna = mgna + ingred.sodium*amount
+        
         strings.append(item.name)
-        strings.append(cal)
-        strings.append(gpro)
-        strings.append(gfat)
-        strings.append(gcarb)
-        strings.append(gsug)
-        strings.append(mgna)
+        strings.append("%.2f" % cal)
+        strings.append("%.2f" % gpro)
+        strings.append("%.2f" % gfat)
+        strings.append("%.2f" % gcarb)
+        strings.append("%.2f" % gsug)
+        strings.append("%.2f" % mgna)
         strings.append(price)
       
     print strings
