@@ -50,16 +50,16 @@
 <table class="table table-bordered">
     
     <th> </th>
-    <th><font color="white">Calories</font></th>
-    <th><font color="white">Protein (g)</font></th>
-    <th><font color="white">Fat(g)</font></th>
-    <th><font color="white">Carbs (g)</font></th>
-    <th><font color="white">Sugar(g)</font></th>
-    <th><font color="white">Sodium(mg)</font></th>
-    <th><font color="white">Price</font></th>
+    <th><font color="black">Calories</font></th>
+    <th><font color="black">Protein (g)</font></th>
+    <th><font color="black">Fat(g)</font></th>
+    <th><font color="black">Carbs (g)</font></th>
+    <th><font color="black">Sugar(g)</font></th>
+    <th><font color="black">Sodium(mg)</font></th>
+    <th><font color="black">Price</font></th>
 {% for s in strings %}
 {% if forloop.counter0|divisibleby:8 %}<tr>{% endif %}
-<td><font color="white">{{ s }}</font></td>
+<td><font color="black">{{ s }}</font></td>
 {% if forloop.counter|divisibleby:8 %}</tr>{% endif %}
 {% endfor %}
 </font>
