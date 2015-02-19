@@ -17,6 +17,14 @@
       background-attachment: fixed;
       background-position: center; 
     }
+  .menu_table, .menu_table td{
+      border-color: black;
+    }
+
+    table, th, td {
+      border: 1px solid black;
+
+  } 
 </style>
 
 
@@ -41,13 +49,15 @@
 <div class="container">
 <div class="jumbotron" style="background-image: url(../static/marble2.jpg); background-size: 100%;">
 <div class="container">
-{{uname}}<br>
-{{rest}}
+
+<h1>{{rest}}</h1>
+
+<h4>{{address}}</h4>
 </div>
 </div>
 
 
-<table class="table table-bordered">
+<table class="table" id="menu_table">
     
     <th> </th>
     <th><font color="black">Calories</font></th>
@@ -65,11 +75,13 @@
 </font>
 </table>
 
+{% if my_prof %}
 <form action="" method="post">
     {% csrf_token %}
     <input type="submit" class="btn btn-default" value="Add Dish" 
          name="Submit">
 </form>
+{%endif%}
 </div>
 
 

@@ -1,4 +1,5 @@
 from django.http import HttpResponse, HttpResponseRedirect
+from django.http.response import HttpResponseForbidden
 from django import forms
 from nutri.forms import UserForm
 from django.shortcuts import render
@@ -49,7 +50,7 @@ def sign_in(request):
 
             if len(rest_id) > 0:
                 print 'mallows'
-                address = '/restaurant_profile/' + str(rest_id[0])
+                address = '/restaurant_profile/' + str(rest_id[0].id)
             else:
                 address = "/add_restaurant"
             
@@ -110,8 +111,16 @@ def dish(request, rid):
     error = ""
     add_i = {}
     #['jelly beans,RAW(of course)', 'barnacles']
-    if not Restaurant.objects.filter(id=rid):
-        return HTTPResponseNotFound
+    rest = None
+    rest_list = Restaurant.objects.filter(id=rid)
+    if len(rest_list) > 0:
+        rest = rest_list[0]
+
+    if not rest:
+        return HttpResponseForbidden()
+    if rest.user.id != request.user.id:
+        return HttpResponseForbidden()
+
     if request.method == 'POST':
         print request.POST
         if 'done' in request.POST:
@@ -301,7 +310,7 @@ def add_restaurant(request):
 
         street = ""
         for x in range (1, len(nsSplit)):
-            street = street + nsSplit[x]
+            street = street + ' ' + nsSplit[x]
 
         city = request.POST['city']
         if not city and not error:
@@ -331,13 +340,18 @@ def restaurant_profile(request, rid):
     print request.user.username
     if request.method == 'POST':
         return HttpResponseRedirect('/add_dish/' + rid)
+    my_prof = False
 
     restaurant = Restaurant.objects.filter(id=rid)[0]
-
+    if restaurant.user.id == request.user.id:
+        my_prof = True
+    address = str(restaurant.number) + ' ' + str(restaurant.street) + '\n' + str(restaurant.city) + ', ' + str(restaurant.state) + ', ' + str(restaurant.zipcode)
 
     menu = Item.objects.filter(rest_id=rid).filter(valid=True)
     print menu
     strings = []
+
+
     for item in menu:
         price = '$' + str(item.price)
         cal = 0
@@ -369,5 +383,5 @@ def restaurant_profile(request, rid):
       
     print strings
 
-    return render(request, 'rest_profile.html', {'uname':request.user.username, 'rest':restaurant, 'strings':strings})
+    return render(request, 'rest_profile.html', {'my_prof':my_prof, 'uname':request.user.username, 'rest':restaurant, 'strings':strings, 'address':address})
 
