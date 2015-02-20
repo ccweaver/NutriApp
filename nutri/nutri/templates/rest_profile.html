@@ -6,13 +6,29 @@
 <!--<link rel="stylesheet" type="text/css" href="{{STATIC_URL}}css/bootstrap-responsive.min.css"/> 
 --> 
 
+<script>
 
 
+</script>
+<style>
+    body {
+      background-image: url('http://i375.photobucket.com/albums/oo197/Charles-Stanton_151515/download_zpsqc62mtz0.jpg');
+      background-repeat: repeat;
+      background-attachment: fixed;
+      background-position: center; 
+    }
+  .menu_table, .menu_table td{
+      border-color: black;
+    }
 
+    table, th, td {
+      border: 1px solid black;
+
+  } 
 </style>
 
 
-    <title>Calo</title>
+    <title>CALOSPOT</title>
 </head>
 <body>
 <div class="navbar navbar-inverse navbar-fixed-top" id="topnavbar">
@@ -24,7 +40,8 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="/">{% block navtitle %} <span style="color:#12AA34;opacity=.99;">C</span><span style="color:#BB9977;opacity=.99;">a</span><span style="color:#12AA34;opacity=.99;">l</span><span style="color:#BB9977;opacity=.99;">o</span>{% endblock %}</a>
+          <a class="navbar-brand" href="/">{% block navtitle %} <span style="color:#2efb00;opacity=.99;">CALO</span><span style="color:#1500fb;opacity=.99;">SPOT</span>{% endblock %}</a>          
+              
           </div>
           </div>
           </div>
@@ -33,16 +50,39 @@
 <div class="container">
 <div class="jumbotron" style="background-image: url(../static/marble2.jpg); background-size: 100%;">
 <div class="container">
-{{uname}}<br>
-{{rest}}
+
+<h1>{{rest}}</h1>
+
+<h4>{{address}}</h4>
 </div>
 </div>
 
+
+<table class="table" id="menu_table">
+    
+    <th> </th>
+    <th><font color="black">Calories</font></th>
+    <th><font color="black">Protein (g)</font></th>
+    <th><font color="black">Fat(g)</font></th>
+    <th><font color="black">Carbs (g)</font></th>
+    <th><font color="black">Sugar(g)</font></th>
+    <th><font color="black">Sodium(mg)</font></th>
+    <th><font color="black">Price</font></th>
+{% for s in strings %}
+{% if forloop.counter0|divisibleby:8 %}<tr>{% endif %}
+<td><font color="black">{{ s }}</font></td>
+{% if forloop.counter|divisibleby:8 %}</tr>{% endif %}
+{% endfor %}
+</font>
+</table>
+
+{% if my_prof %}
 <form action="" method="post">
     {% csrf_token %}
     <input type="submit" class="btn btn-default" value="Add Dish" 
          name="Submit">
 </form>
+{%endif%}
 </div>
 
 

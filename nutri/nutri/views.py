@@ -1,4 +1,5 @@
 from django.http import HttpResponse, HttpResponseRedirect
+from django.http.response import HttpResponseForbidden
 from django import forms
 from nutri.forms import UserForm
 from django.shortcuts import render
@@ -8,6 +9,7 @@ from menu_items.models import Item
 from added_ingreds.models import Addition
 import re, json
 from django.contrib.auth.models import User
+from django.contrib.auth import logout
 from django.contrib import auth
 
     
@@ -15,20 +17,49 @@ def sign_in(request):
     invalid = ""
     error = ""
     uform = UserForm
+    is_user = False
+    if request.user.username != '':
+        is_user = True
+
+    print request.user
+    print is_user
+
     if request.method == 'POST':
         print request.POST
         if 'login_email' in request.POST:
             login_email = request.POST['login_email']
             login_pass = request.POST['login_pass']
             user = auth.authenticate(username=login_email, password=login_pass)
-
+            print 'hi'
             if user is not None:
                 auth.login(request, user)
                 data = {'success':'true'}
             else:
                 data = {'success':'false'}
+
             return HttpResponse(json.dumps(data), content_type = "application/json")
             
+        if 'logout' in request.POST:
+            logout(request)
+            is_user = False
+            data = {'success':'true'}
+            return HttpResponse(json.dumps(data), content_type = "application/json")
+
+        if 'proflink' in request.POST:
+            rest_id = Restaurant.objects.filter(user=request.user.id)
+
+            if len(rest_id) > 0:
+                print 'mallows'
+                address = '/restaurant_profile/' + str(rest_id[0].id)
+            else:
+                address = "/add_restaurant"
+            
+            data = {'success':'true', 'href':address}
+
+            return HttpResponse(json.dumps(data), content_type = "application/json")                    
+                
+                
+
         if 'first_name' in request.POST:
             uform = UserForm(request.POST)
             
@@ -72,7 +103,7 @@ def sign_in(request):
                 elif not request.POST['password']:
                     error = 'Please enter a password'
 
-    return render(request, 'sign_in.html', {'form':uform, 'invalid':invalid, 'error':error})
+    return render(request, 'sign_in.html', {'form':uform, 'invalid':invalid, 'error':error, 'is_user':is_user, 'user':request.user.username})
 
 
 def dish(request, rid):
@@ -80,11 +111,27 @@ def dish(request, rid):
     error = ""
     add_i = {}
     #['jelly beans,RAW(of course)', 'barnacles']
+    rest = None
+    rest_list = Restaurant.objects.filter(id=rid)
+    if len(rest_list) > 0:
+        rest = rest_list[0]
 
-    if not Restaurant.objects.filter(id=rid):
-        return HTTPResponseNotFound
+    if not rest:
+        return HttpResponseForbidden()
+    if rest.user.id != request.user.id:
+        return HttpResponseForbidden()
+
     if request.method == 'POST':
         print request.POST
+        if 'done' in request.POST:
+            print '******'
+            print request.POST['ingred_dish']
+            print '****'
+            dish = Item.objects.filter(rest_id=rid).filter(name=request.POST['ingred_dish'])[0]
+            dish.valid = True;
+            dish.save()
+            data = {'rid':rid}
+            return HttpResponse(json.dumps(data), content_type="application/json")
         if 'term' in request.POST:
             print request.POST['term']
             terms = request.POST['term'].split(' ')
@@ -117,7 +164,7 @@ def dish(request, rid):
 
             if not ingred_to_add:
                 error = "Please search for and select an ingredient"
-            elif not amount or amount < 0:
+            elif not amount or float(amount) < 0:
                 error = 'Please input a valid amount'
             elif amount == '0':
                 error = 'Please input an amount'
@@ -129,7 +176,7 @@ def dish(request, rid):
             if not error:
                 i_t_a = Ingredient.objects.filter(ingredient=ingred_to_add)
                 
-                if unit == 'g' or unit == 'mL':
+                if unit == 'g':
                     amnt_grams = float(amount)
                 elif unit == 'oz':
                     amnt_grams = float(amount) * 28.3495
@@ -137,33 +184,47 @@ def dish(request, rid):
                     amnt_grams = float(amount) * 4.92892
                 elif unit == 'tblspn':
                     amnt_grams = float(amount) * 14.78676
+                elif unit == 'Fl. Oz':
+                    amnt_grams = float(amount) * 0.0338150371
                 
                 amnt_grams = "{0:.2f}".format(round(amnt_grams,2))
                 
-                addition = Addition(amount_grams=amnt_grams)
                 i_t_a_id = i_t_a.values_list('id')[0][0]
-                addition.ingred_id = i_t_a_id 
                 
-                addition.save()     
-                dish[0].ingredients.add(addition)
+                added_ingred_ids = dish.values_list('ingredients')
+                for ind in range(0, len(added_ingred_ids)):       
+                    index = added_ingred_ids[ind][0]
+                    if index != None:
+                        print 'index'
+                        print index
+                        #grab id of ingredient
+                        prev_ads = Addition.objects.filter(id=index).values_list('ingred_id')[0][0]
+                        print 'hi'
+                        if prev_ads == i_t_a_id:
+                            error = "Ingredient already added to dish"
 
-                error = ''
+                if not error:                  
+                    addition = Addition(amount_grams=amnt_grams)
+                    addition.ingred_id = i_t_a_id 
+                    addition.save()     
+                    dish[0].ingredients.add(addition)
+
 
             
             
             data = {}
             data['error'] = error
             data['d_name'] = request.POST['ingred_dish']
-           
-            added_ingred_ids = dish.values_list('ingredients')
-            for ind in range(0,len(added_ingred_ids)):
-                index = added_ingred_ids[ind][0]
-                print index
-                data['in' + str(ind)] = str(Addition.objects.filter(id=index)[0])
-                print data['in' + str(ind)]
-            print data
-            print 'we made it here'
             
+            if not error:
+                added_ingred_ids = dish.values_list('ingredients')
+                for ind in range(0,len(added_ingred_ids)):
+                    index = added_ingred_ids[ind][0]
+                    print index
+                    data[index] = str(Addition.objects.filter(id=index)[0])
+                    print data[index]
+                
+            print data
             
             return HttpResponse(json.dumps(data), content_type="application/json")
 
@@ -193,6 +254,28 @@ def dish(request, rid):
             data = {'error':error, 'd_name':d_name}
             return HttpResponse(json.dumps(data), content_type="application/json")
 
+        if 'delete_key' in request.POST:
+            error = ''
+            print "HEYO"
+            delete_key = request.POST['delete_key']
+            dish = Item.objects.filter(rest_id=rid).filter(name=request.POST['ingred_dish'])
+            Addition.objects.filter(id=delete_key).delete()
+
+
+            data = {}
+            data['error'] = error
+            data['d_name'] = request.POST['ingred_dish']
+
+            added_ingred_ids = dish.values_list('ingredients')
+            print added_ingred_ids
+            for ind in range(0,len(added_ingred_ids)):
+                index = added_ingred_ids[ind][0]
+                if index != None:
+                    print index
+                    data[index] = str(Addition.objects.filter(id=index)[0])
+                    print data[index]
+
+            return HttpResponse(json.dumps(data), content_type="application/json")
 
     return render(request, 'nutri_form.html', {'ingred_list':ingred_list, 'error':error})
 
@@ -227,7 +310,7 @@ def add_restaurant(request):
 
         street = ""
         for x in range (1, len(nsSplit)):
-            street = street + nsSplit[x]
+            street = street + ' ' + nsSplit[x]
 
         city = request.POST['city']
         if not city and not error:
@@ -254,11 +337,51 @@ def add_restaurant(request):
     
 def restaurant_profile(request, rid):
     print rid
-    print request.user
     print request.user.username
     if request.method == 'POST':
         return HttpResponseRedirect('/add_dish/' + rid)
+    my_prof = False
 
     restaurant = Restaurant.objects.filter(id=rid)[0]
-    return render(request, 'rest_profile.html', {'uname':request.user.username, 'rest':restaurant})
+    if restaurant.user.id == request.user.id:
+        my_prof = True
+    address = str(restaurant.number) + ' ' + str(restaurant.street) + '\n' + str(restaurant.city) + ', ' + str(restaurant.state) + ', ' + str(restaurant.zipcode)
+
+    menu = Item.objects.filter(rest_id=rid).filter(valid=True)
+    print menu
+    strings = []
+
+
+    for item in menu:
+        price = '$' + str(item.price)
+        cal = 0
+        gpro = 0
+        gfat = 0
+        gcarb = 0
+        gsug = 0 
+        mgna = 0
+
+        for add in item.ingredients.all():
+            ingred = Ingredient.objects.filter(id=add.ingred_id)[0]
+            amount = add.amount_grams
+            print ingred
+            cal = cal + ingred.calories*amount
+            gpro = gpro + ingred.protein*amount
+            gfat = gfat + ingred.fat*amount
+            gcarb = gcarb + ingred.carbs*amount
+            gsug = gsug + ingred.sugar*amount
+            mgna = mgna + ingred.sodium*amount
+        
+        strings.append(item.name)
+        strings.append("%.2f" % cal)
+        strings.append("%.2f" % gpro)
+        strings.append("%.2f" % gfat)
+        strings.append("%.2f" % gcarb)
+        strings.append("%.2f" % gsug)
+        strings.append("%.2f" % mgna)
+        strings.append(price)
+      
+    print strings
+
+    return render(request, 'rest_profile.html', {'my_prof':my_prof, 'uname':request.user.username, 'rest':restaurant, 'strings':strings, 'address':address})
 
