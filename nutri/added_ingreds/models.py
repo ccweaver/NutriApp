@@ -6,4 +6,4 @@ class Addition(models.Model):
 	amount_grams = models.DecimalField(max_digits=10, decimal_places=2)
 
 	def __unicode__(self):
-		return u'%s' % (self.ingred)
+		return u'%s: %sg' % (self.ingred, self.amount_grams)
