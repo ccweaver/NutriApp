@@ -286,6 +286,7 @@ def add_restaurant(request):
     city = ""
     state = "--"
     zipcode = ""
+    website = ""
     print request.user
     print request.user.id
     if not request.user or request.user.is_anonymous():
@@ -325,15 +326,21 @@ def add_restaurant(request):
         if not zRE.match(zipcode) and not error:
             error = 'Please enter a valid 5 digit zip code'
 
+        website = request.POST['website']
+        zRE = re.compile("^www\..+\....$")
+        if not zRE.match(website) and not error:
+            error = 'Please enter a valid website'
+
+
         if not error:
-            r = Restaurant(name=rest_name, number=num, street=street, city=city, state=state, zipcode=zipcode, user=request.user)
+            r = Restaurant(name=rest_name, number=num, street=street, city=city, state=state, zipcode=zipcode, website=website, user=request.user)
             r.save()
             rid = r.id
             print rid
             return HttpResponseRedirect('/restaurant_profile/' + str(rid))
 
 
-    return render(request, 'add_rest.html', {'error':error, 'rest_name':rest_name, 'num_street':num_street, 'city':city, 'state':state, 'zipcode':zipcode})
+    return render(request, 'add_rest.html', {'error':error, 'rest_name':rest_name, 'num_street':num_street, 'city':city, 'state':state, 'zipcode':zipcode, 'website':website})
     
 def restaurant_profile(request, rid):
     print rid
@@ -345,7 +352,9 @@ def restaurant_profile(request, rid):
     restaurant = Restaurant.objects.filter(id=rid)[0]
     if restaurant.user.id == request.user.id:
         my_prof = True
-    address = str(restaurant.number) + ' ' + str(restaurant.street) + '\n' + str(restaurant.city) + ', ' + str(restaurant.state) + ', ' + str(restaurant.zipcode)
+    website = str(restaurant.website)
+    address = str(restaurant.number) + ' ' + str(restaurant.street)
+    city_st_zip = str(restaurant.city) + ', ' + str(restaurant.state) + ', ' + str(restaurant.zipcode)
 
     menu = Item.objects.filter(rest_id=rid).filter(valid=True)
     print menu
@@ -383,5 +392,5 @@ def restaurant_profile(request, rid):
       
     print strings
 
-    return render(request, 'rest_profile.html', {'my_prof':my_prof, 'uname':request.user.username, 'rest':restaurant, 'strings':strings, 'address':address})
+    return render(request, 'rest_profile.html', {'my_prof':my_prof, 'uname':request.user.username, 'rest':restaurant, 'strings':strings, 'address':address, 'website':website, 'csz':city_st_zip})
 
