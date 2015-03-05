@@ -185,7 +185,7 @@ def dish(request, rid):
                 elif unit == 'tblspn':
                     amnt_grams = float(amount) * 14.78676
                 elif unit == 'Fl. Oz':
-                    amnt_grams = float(amount) * 0.0338150371
+                    amnt_grams = float(amount) * 30
                 
                 amnt_grams = "{0:.2f}".format(round(amnt_grams,2))
                 
