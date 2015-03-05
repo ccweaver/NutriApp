@@ -10,6 +10,8 @@ class Restaurant(models.Model):
 	zipcode = models.IntegerField()
 	user = models.ForeignKey(User)
 	website = models.CharField(max_length=300)
+	phone = models.Intergerfield()
+	
 
 	def __unicode__(self):
 		return u'%s' % (self.name)
