@@ -108,6 +108,7 @@ def sign_in(request):
 
 def dish(request, rid):
     ingred_list = []
+    alpha_ingreds = Ingredient.objects.order_by('name')
     error = ""
     add_i = {}
     #['jelly beans,RAW(of course)', 'barnacles']
