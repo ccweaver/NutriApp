@@ -112,13 +112,20 @@ $(document).on("click","#proflink",function(event)
 
 <style type="text/css">
         body {
-            background-image: url('../static/food2.jpg');
+            background-image: url('http://i375.photobucket.com/albums/oo197/Charles-Stanton_151515/awesome-bright-cool-food-Favim.com-621419_zpskfxq2xkk.jpg');
+            background-size: cover;
         }
         
         #buttons {
-            width: 25%;
+            width: 30%;
             height:35px;
-            margin-left: 15px;
+            margin-left: 850px;
+            margin-top: 25px;
+            background-color:#1500fb;
+        }
+        
+        #login_button { width: 95%;
+          
         }
 
         #shake, #shake2, #shake3 {
@@ -130,7 +137,7 @@ $(document).on("click","#proflink",function(event)
             -moz-border-radius: 5px;
             border-radius: 10px;
             border-style: solid;
-            height: 35px;
+            height: 30px;
             display: inline;
         }
 
@@ -147,13 +154,30 @@ $(document).on("click","#proflink",function(event)
         #search_bar {
           height: 50px;
           width: 70%;
+          margin-left: 150px;
+          margin-top: 0px;
         }
 
         #proflink, #logout{
           margin-right: 10px;
           margin-top: 10px;
         }
-
+        
+        #SearchMessage {
+          margin-left: 100px;
+          font-size:25px;
+          padding-top:15px;
+          padding-bottom: 15px;
+        }
+        .fizzle {
+          color:#1500fb;
+          font-size:30px;
+        }
+        .jumbotron {
+          margin-left:200px;
+          margin-right:200px;
+          border-radius:25px;
+        }
 </style>
 
 
@@ -180,33 +204,39 @@ $(document).on("click","#proflink",function(event)
             {% else %}
 
             <div id="shake">
-            <li id="nav_login"  style="margin-top:4%;"><input name="login_email" type="text" id="login_email" placeholder="Email"></li></div>
+            <li id="nav_login"  style="margin-top:4%;"><input name="login_email" type="text" id="login_email" placeholder="  Email"></li></div>
             <div id="shake2">
-            <li id="nav_login_pass"  style="margin-top:4%;"><input name="login_pass" type="password" id="login_pass" placeholder="Password"></li></div>
+            <li id="nav_login_pass"  style="margin-top:4%;"><input name="login_pass" type="password" id="login_pass" placeholder="  Password"></li></div>
             <div id="shake3">
-            <li id="nav_login_submit"  style="margin-top:0%;"> <button type="submit" class="btn btn-danger btn-sm" id="login_button">Sign In</button>&nbsp;</li></div>
+            <li id="nav_login_submit"  style="margin-top:0%;"> <button type="submit" class="btn btn-danger btn-sm" id="login_button">Restaurant Management: Sign In</button>&nbsp;</li></div>
             {% endif %}
                  
             </ul>
+            
         </div>
     </div>
 </div>
 
 <br><br><br><br>
-
-<div id="buttons">
-<button class="btn btn-danger" style="width:100%; height:100%; white-space:normal;" onclick="showModal();">Create New Restaurant Account</button>
-</div>
+<div class = "container-fluid">
+              <div id="buttons">
+                <button class="btn btn-danger"; style="width:100%; height:100%; white-space:normal;" onclick="showModal();">Restaurant Management: Create New Account</button>
+              </div>
 
 <br><br><br><br>
+            <div class="jumbotron" style="background-image:url(http://i375.photobucket.com/albums/oo197/Charles-Stanton_151515/142549540133226_zpsl7tcwqvd.jpg); background-size: 100%;">
+              <div id=SearchMessage>
+              Restaurants post menus to this website. <br> All items on these menus are <span class="fizzle"><u>under 500 calories.</u></span><br> Search for them below.
+              </div>
+            </div>
+<br><br><br><br>
 
-<div id="search">
-<font size="5" face="Calibri">
-<input type="text" id="search_bar" placeholder=" Search, search, search">
-</font>
+              <div id="search">
+              <font size="5" face="Calibri">
+              <input type="text" id="search_bar" placeholder="  Enter City or Zip to find menus near you! Local spots only, no chains.">
+              </font>
+              </div>
 </div>
-
-
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">

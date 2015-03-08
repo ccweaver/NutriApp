@@ -76,6 +76,8 @@ $(window).load(function(){
             border-radius: 5px;
             border-style: solid;
             width: 50%;
+            margin-left: 38px;
+            
         }
         #city {
             -webkit-border-radius: 5px;
@@ -83,6 +85,8 @@ $(window).load(function(){
             border-radius: 5px;
             border-style: solid;
             width: 30%;
+            margin-left:30px;
+            
         }
         #state {
             width: 75px;
@@ -98,7 +102,11 @@ $(window).load(function(){
             border-radius: 5px;
             border-style: solid;
             width: 20%;
+            margin-left:34px;
         }
+        #website { 
+            margin-left: 52px;
+            width:50%;}
 </style>
 
 
@@ -136,6 +144,10 @@ $(window).load(function(){
         <br><br>
 
         <div class="container">
+        <label style= "color:#555";>
+            <font size="2">Website:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font></label>
+        <input id="website" type="text" name="website" value='{{website}}'>
+        <br>    
         <label style="color: #555;">
             <font size="2">Number & Street:&nbsp;</font></label>
         <input id="num_street" type="text" name="num_street" value='{{num_street}}'>

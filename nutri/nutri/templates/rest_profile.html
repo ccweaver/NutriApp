@@ -17,14 +17,32 @@
       background-attachment: fixed;
       background-position: center; 
     }
-  .menu_table, .menu_table td{
-      border-color: black;
-    }
-
-    table, th, td {
-      border: 1px solid black;
-
-  } 
+    .menu_table, .menu_table td{
+	      border-color: black;
+	      border-top-color: black;
+	    }
+	
+	    table, th, td {
+	      border: 1px solid black;
+	      border-top-color: black;
+	        }
+	    
+	    #menu_table {
+	      border-top-color:black;
+	    }
+	    
+	    .menutitle {
+	    	margin-left:350px;
+	    	padding-bottom:30px;
+	    	font-size:30px;
+	    }
+	
+	#shizzle {
+		color:#1500fb
+	}
+   
+    
+   
 </style>
 
 
@@ -53,8 +71,15 @@
 
 <h1>{{rest}}</h1>
 
-<h4>{{address}}</h4>
+<h3>{{address}}</h4>
+<h3>{{csz}}</h3><br>
+<h4>{{website}}<h3>
 </div>
+</div>
+
+
+<div class="menutitle">
+	<u>The <span id="shizzle">500 Calories and Under</span> Menu</u>
 </div>
 
 

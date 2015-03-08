@@ -9,6 +9,9 @@ class Restaurant(models.Model):
 	state = models.CharField(max_length=100)
 	zipcode = models.IntegerField()
 	user = models.ForeignKey(User)
+	website = models.CharField(max_length=300)
+	
+	
 
 	def __unicode__(self):
 		return u'%s' % (self.name)
