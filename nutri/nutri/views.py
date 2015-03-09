@@ -11,6 +11,7 @@ import re, json
 from django.contrib.auth.models import User
 from django.contrib.auth import logout
 from django.contrib import auth
+from datetime import datetime
 
     
 def sign_in(request):
@@ -137,14 +138,15 @@ def dish(request, rid):
             print request.POST['term']
             terms = request.POST['term'].split(' ')
 
+            print 'ayo'
             if len(terms) == 1:
-                ingred_list = Ingredient.objects.filter(ingredient__icontains=request.POST['term'])
+                ingred_list = Ingredient.objects.filter(ingredient__icontains=request.POST['term']).order_by('ingredient')
             if len(terms) == 2:
-                ingred_list = Ingredient.objects.filter(ingredient__icontains=terms[0]).filter(ingredient__icontains=terms[1])
+                ingred_list = Ingredient.objects.filter(ingredient__icontains=terms[0]).filter(ingredient__icontains=terms[1]).order_by('ingredient')
             if len(terms) == 3:
-                ingred_list = Ingredient.objects.filter(ingredient__icontains=terms[0]).filter(ingredient__icontains=terms[1]).filter(ingredient__icontains=terms[2])
+                ingred_list = Ingredient.objects.filter(ingredient__icontains=terms[0]).filter(ingredient__icontains=terms[1]).filter(ingredient__icontains=terms[2]).order_by('ingredient')
             if len(terms) == 4:
-                ingred_list = Ingredient.objects.filter(ingredient__icontains=terms[0]).filter(ingredient__icontains=terms[1]).filter(ingredient__icontains=terms[2]).filter(ingredient__icontains=terms[3])
+                ingred_list = Ingredient.objects.filter(ingredient__icontains=terms[0]).filter(ingredient__icontains=terms[1]).filter(ingredient__icontains=terms[2]).filter(ingredient__icontains=terms[3]).order_by('ingredient')
 
 
             if not ingred_list:
@@ -288,6 +290,21 @@ def add_restaurant(request):
     state = "--"
     zipcode = ""
     website = ""
+    phone = ""
+    MoOpen = ""
+    MoClose = ""
+    TuOpen = ""
+    TuClose = ""
+    WeOpen = ""
+    WeClose = ""
+    ThOpen = ""
+    ThClose = ""
+    FrOpen = ""
+    FrClose = ""
+    SaOpen = ""
+    SaClose = ""
+    SuOpen = ""
+    SuClose = ""    
     print request.user
     print request.user.id
     if not request.user or request.user.is_anonymous():
@@ -300,8 +317,22 @@ def add_restaurant(request):
         if not rest_name and not error:
             error = 'Please enter the name of your restaurant'
 
-        num_street = request.POST['num_street']
+        website = request.POST['website']
+        zRE = re.compile("^www\..+\....$")
+        if not zRE.match(website) and not error:
+            error = 'Please enter a valid website'
 
+
+        phone = request.POST['phone']
+        zRE = re.compile("^(\+\d{1,2}\s)?\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4}$")
+        if not zRE.match(phone) and not error:
+            error = 'Please enter a valid 10 digit phone number'
+        elif zRE.match(phone):
+            phoneNum = phone.replace('-', '').replace(' ', '').replace('(', '').replace(')', '').replace('+', '') 
+            print phoneNum
+            phoneNum = int(float(phoneNum))
+
+        num_street = request.POST['num_street']
         nsSplit = num_street.split(' ')
         num = nsSplit[0]
         try:
@@ -327,23 +358,175 @@ def add_restaurant(request):
         if not zRE.match(zipcode) and not error:
             error = 'Please enter a valid 5 digit zip code'
 
-        website = request.POST['website']
-        zRE = re.compile("^www\..+\....$")
-        if not zRE.match(website) and not error:
-            error = 'Please enter a valid website'
+
+        #opening times
+        rawTime = request.POST['MoOpen']
+        split = rawTime.split(':')
+        hr = split[0]
+        if hr == '12':
+            hr = '0'
+        mi = int(split[1].split(' ')[0])
+        if split[1].split(' ')[1] == 'pm':
+            hr = int(hr) + 12
+        MoOpen = datetime(2014, 3, 9, int(hr), mi)
+
+        rawTime = request.POST['TuOpen']
+        split = rawTime.split(':')
+        hr = split[0]
+        if hr == '12':
+            hr = '0'
+        mi = int(split[1].split(' ')[0])
+        if split[1].split(' ')[1] == 'pm':
+            hr = int(hr) + 12
+        TuOpen = datetime(2014, 3, 9, int(hr), mi)
+
+        rawTime = request.POST['WeOpen']
+        split = rawTime.split(':')
+        hr = split[0]
+        if hr == '12':
+            hr = '0'
+        mi = int(split[1].split(' ')[0])
+        if split[1].split(' ')[1] == 'pm':
+            hr = int(hr) + 12
+        WeOpen = datetime(2014, 3, 9, int(hr), mi)
+
+        rawTime = request.POST['ThOpen']
+        split = rawTime.split(':')
+        hr = split[0]
+        if hr == '12':
+            hr = '0'
+        mi = int(split[1].split(' ')[0])
+        if split[1].split(' ')[1] == 'pm':
+            hr = int(hr) + 12
+        ThOpen = datetime(2014, 3, 9, int(hr), mi)
+
+        rawTime = request.POST['FrOpen']
+        split = rawTime.split(':')
+        hr = split[0]
+        if hr == '12':
+            hr = '0'
+        mi = int(split[1].split(' ')[0])
+        if split[1].split(' ')[1] == 'pm':
+            hr = int(hr) + 12
+        FrOpen = datetime(2014, 3, 9, int(hr), mi)
+
+        rawTime = request.POST['SaOpen']
+        split = rawTime.split(':')
+        hr = split[0]
+        if hr == '12':
+            hr = '0'
+        mi = int(split[1].split(' ')[0])
+        if split[1].split(' ')[1] == 'pm':
+            hr = int(hr) + 12
+        SaOpen = datetime(2014, 3, 9, int(hr), mi)
+
+        rawTime = request.POST['SuOpen']
+        split = rawTime.split(':')
+        hr = split[0]
+        if hr == '12':
+            hr = '0'
+        mi = int(split[1].split(' ')[0])
+        if split[1].split(' ')[1] == 'pm':
+            hr = int(hr) + 12
+        SuOpen = datetime(2014, 3, 9, int(hr), mi)
+
+        #closing times
+        rawTime = request.POST['MoClose']
+        split = rawTime.split(':')
+        hr = split[0]
+        if hr == '12':
+            hr = '0'
+        mi = int(split[1].split(' ')[0])
+        if split[1].split(' ')[1] == 'pm':
+            hr = int(hr) + 12
+        MoClose = datetime(2014, 3, 9, int(hr), mi)
+
+        rawTime = request.POST['TuClose']
+        split = rawTime.split(':')
+        hr = split[0]
+        if hr == '12':
+            hr = '0'
+        mi = int(split[1].split(' ')[0])
+        if split[1].split(' ')[1] == 'pm':
+            hr = int(hr) + 12
+        TuClose = datetime(2014, 3, 9, int(hr), mi)
+
+        rawTime = request.POST['WeClose']
+        split = rawTime.split(':')
+        hr = split[0]
+        if hr == '12':
+            hr = '0'
+        mi = int(split[1].split(' ')[0])
+        if split[1].split(' ')[1] == 'pm':
+            hr = int(hr) + 12
+        WeClose = datetime(2014, 3, 9, int(hr), mi)
+
+        rawTime = request.POST['ThClose']
+        split = rawTime.split(':')
+        hr = split[0]
+        if hr == '12':
+            hr = '0'
+        mi = int(split[1].split(' ')[0])
+        if split[1].split(' ')[1] == 'pm':
+            hr = int(hr) + 12
+        ThClose = datetime(2014, 3, 9, int(hr), mi)
+
+        rawTime = request.POST['FrClose']
+        split = rawTime.split(':')
+        hr = split[0]
+        if hr == '12':
+            hr = '0'
+        mi = int(split[1].split(' ')[0])
+        if split[1].split(' ')[1] == 'pm':
+            hr = int(hr) + 12
+        FrClose = datetime(2014, 3, 9, int(hr), mi)
+
+        rawTime = request.POST['SaClose']
+        split = rawTime.split(':')
+        hr = split[0]
+        if hr == '12':
+            hr = '0'
+        mi = int(split[1].split(' ')[0])
+        if split[1].split(' ')[1] == 'pm':
+            hr = int(hr) + 12
+        SaClose = datetime(2014, 3, 9, int(hr), mi)
+
+        rawTime = request.POST['SuClose']
+        split = rawTime.split(':')
+        hr = split[0]
+        if hr == '12':
+            hr = '0'
+        mi = int(split[1].split(' ')[0])
+        if split[1].split(' ')[1] == 'pm':
+            hr = int(hr) + 12
+        SuClose = datetime(2014, 3, 9, int(hr), mi)
 
 
         if not error:
-            r = Restaurant(name=rest_name, number=num, street=street, city=city, state=state, zipcode=zipcode, website=website, user=request.user)
+            r = Restaurant(name=rest_name, number=num, street=street, city=city, state=state, zipcode=zipcode, website=website, phone=phoneNum, moopen=MoOpen, tuopen=TuOpen, weopen=WeOpen, thopen=ThOpen, fropen=FrOpen, saopen=SaOpen, suopen=SuOpen, moclose=MoClose, tuclose=TuClose, weclose=WeClose, thclose=ThClose, frclose=FrClose, saclose=SaClose, suclose=SuClose, user=request.user)
             r.save()
             rid = r.id
             print rid
             return HttpResponseRedirect('/restaurant_profile/' + str(rid))
 
 
-    return render(request, 'add_rest.html', {'error':error, 'rest_name':rest_name, 'num_street':num_street, 'city':city, 'state':state, 'zipcode':zipcode, 'website':website})
+    return render(request, 'add_rest.html', {'error':error, 'rest_name':rest_name, 'num_street':num_street, 'city':city, 'state':state, 'zipcode':zipcode, 'website':website, 'phone':phone, 'MoOpen':MoOpen, 'TuOpen':TuOpen, 'WeOpen':WeOpen, 'ThOpen':ThOpen, 'FrOpen':FrOpen, 'SaOpen':SaOpen, 'SuOpen':SuOpen, 'MoClose':MoClose, 'TuClose':TuClose, 'WeClose':WeClose, 'ThClose':ThClose, 'FrClose':FrClose, 'SaClose':SaClose, 'SuClose':SuClose})
     
 def restaurant_profile(request, rid):
+    MoOpen = ""
+    MoClose = ""
+    TuOpen = ""
+    TuClose = ""
+    WeOpen = ""
+    WeClose = ""
+    ThOpen = ""
+    ThClose = ""
+    FrOpen = ""
+    FrClose = ""
+    SaOpen = ""
+    SaClose = ""
+    SuOpen = ""
+    SuClose = ""   
     print rid
     print request.user.username
     if request.method == 'POST':
@@ -356,6 +539,165 @@ def restaurant_profile(request, rid):
     website = str(restaurant.website)
     address = str(restaurant.number) + ' ' + str(restaurant.street)
     city_st_zip = str(restaurant.city) + ', ' + str(restaurant.state) + ', ' + str(restaurant.zipcode)
+    
+    phone = str(restaurant.phone)
+    if len(phone) == 10:
+        phone = '(' + phone[0:3] + ') ' + phone[3:6] + '-' + phone[6:10]
+    
+    hr = restaurant.moopen.hour
+    mi = restaurant.moopen.minute
+    if str(mi) == '0':
+        mi = '00'
+    if hr == 0:
+        MoOpen = 12 + str(':') + str(mi) + ' am'
+    elif hr > 12:
+        MoOpen = str(hr - 12) + str(':') + str(mi) + ' pm'
+    else:
+        MoOpen = str(hr) + str(':') + str(mi) + ' am'
+    
+    hr = restaurant.tuopen.hour
+    mi = restaurant.tuopen.minute
+    if str(mi) == '0':
+        mi = '00'
+    if hr == 0:
+        TuOpen = 12 + str(':') + str(mi) + ' am'
+    elif hr > 12:
+        TuOpen = str(hr - 12) + str(':') + str(mi) + ' pm'
+    else:
+        TuOpen = str(hr) + str(':') + str(mi) + ' am'
+
+    hr = restaurant.weopen.hour
+    mi = restaurant.weopen.minute
+    if str(mi) == '0':
+        mi = '00'
+    if hr == 0:
+        WeOpen = 12 + str(':') + str(mi) + ' am'
+    elif hr > 12:
+        WeOpen = str(hr - 12) + str(':') + str(mi) + ' pm'
+    else:
+        WeOpen = str(hr) + str(':') + str(mi) + ' am'
+
+    hr = restaurant.thopen.hour
+    mi = restaurant.thopen.minute
+    if str(mi) == '0':
+        mi = '00'
+    if hr == 0:
+        ThOpen = 12 + str(':') + str(mi) + ' am'
+    elif hr > 12:
+        ThOpen = str(hr - 12) + str(':') + str(mi) + ' pm'
+    else:
+        ThOpen = str(hr) + str(':') + str(mi) + ' am'
+    
+    hr = restaurant.fropen.hour
+    mi = restaurant.fropen.minute
+    if str(mi) == '0':
+        mi = '00'
+    if hr == 0:
+        FrOpen = 12 + str(':') + str(mi) + ' am'
+    elif hr > 12:
+        FrOpen = str(hr - 12) + str(':') + str(mi) + ' pm'
+    else:
+        FrOpen = str(hr) + str(':') + str(mi) + ' am'
+    
+    hr = restaurant.saopen.hour
+    mi = restaurant.saopen.minute
+    if str(mi) == '0':
+        mi = '00'
+    if hr == 0:
+        SaOpen = 12 + str(':') + str(mi) + ' am'
+    elif hr > 12:
+        SaOpen = str(hr - 12) + str(':') + str(mi) + ' pm'
+    else:
+        SaOpen = str(hr) + str(':') + str(mi) + ' am'
+    
+    hr = restaurant.suopen.hour
+    mi = restaurant.suopen.minute
+    if str(mi) == '0':
+        mi = '00'
+    if hr == 0:
+        SuOpen = 12 + str(':') + str(mi) + ' am'
+    elif hr > 12:
+        SuOpen = str(hr - 12) + str(':') + str(mi) + ' pm'
+    else:
+        SuOpen = str(hr) + str(':') + str(mi) + ' am'
+
+#closing times
+    hr = restaurant.moclose.hour
+    mi = restaurant.moclose.minute
+    if str(mi) == '0':
+        mi = '00'
+    if hr == 0:
+        MoClose = 12 + str(':') + str(mi) + ' am'
+    elif hr > 12:
+        MoClose = str(hr - 12) + str(':') + str(mi) + ' pm'
+    else:
+        MoClose = str(hr) + str(':') + str(mi) + ' am'
+    
+    hr = restaurant.tuclose.hour
+    mi = restaurant.tuclose.minute
+    if str(mi) == '0':
+        mi = '00'
+    if hr == 0:
+        TuClose = 12 + str(':') + str(mi) + ' am'
+    elif hr > 12:
+        TuClose = str(hr - 12) + str(':') + str(mi) + ' pm'
+    else:
+        TuClose = str(hr) + str(':') + str(mi) + ' am'
+
+    hr = restaurant.weclose.hour
+    mi = restaurant.weclose.minute
+    if str(mi) == '0':
+        mi = '00'
+    if hr == 0:
+        WeClose = 12 + str(':') + str(mi) + ' am'
+    elif hr > 12:
+        WeClose = str(hr - 12) + str(':') + str(mi) + ' pm'
+    else:
+        WeClose = str(hr) + str(':') + str(mi) + ' am'
+
+    hr = restaurant.thclose.hour
+    mi = restaurant.thclose.minute
+    if str(mi) == '0':
+        mi = '00'
+    if hr == 0:
+        ThClose = 12 + str(':') + str(mi) + ' am'
+    elif hr > 12:
+        ThClose = str(hr - 12) + str(':') + str(mi) + ' pm'
+    else:
+        ThClose = str(hr) + str(':') + str(mi) + ' am'
+    
+    hr = restaurant.frclose.hour
+    mi = restaurant.frclose.minute
+    if str(mi) == '0':
+        mi = '00'
+    if hr == 0:
+        FrClose = 12 + str(':') + str(mi) + ' am'
+    elif hr > 12:
+        FrClose = str(hr - 12) + str(':') + str(mi) + ' pm'
+    else:
+        FrClose = str(hr) + str(':') + str(mi) + ' am'
+    
+    hr = restaurant.saclose.hour
+    mi = restaurant.saclose.minute
+    if str(mi) == '0':
+        mi = '00'
+    if hr == 0:
+        SaClose = 12 + str(':') + str(mi) + ' am'
+    elif hr > 12:
+        SaClose = str(hr - 12) + str(':') + str(mi) + ' pm'
+    else:
+        SaClose = str(hr) + str(':') + str(mi) + ' am'
+    
+    hr = restaurant.suclose.hour
+    mi = restaurant.suclose.minute
+    if str(mi) == '0':
+        mi = '00'
+    if hr == 0:
+        SuClose = 12 + str(':') + str(mi) + ' am'
+    elif hr > 12:
+        SuClose = str(hr - 12) + str(':') + str(mi) + ' pm'
+    else:
+        SuClose = str(hr) + str(':') + str(mi) + ' am'
 
     menu = Item.objects.filter(rest_id=rid).filter(valid=True)
     print menu
@@ -393,5 +735,6 @@ def restaurant_profile(request, rid):
       
     print strings
 
-    return render(request, 'rest_profile.html', {'my_prof':my_prof, 'uname':request.user.username, 'rest':restaurant, 'strings':strings, 'address':address, 'website':website, 'csz':city_st_zip})
+    return render(request, 'rest_profile.html', {'my_prof':my_prof, 'uname':request.user.username, 'rest':restaurant, 'strings':strings, 'address':address, 'website':website, 'csz':city_st_zip, 'phone':phone, \
+        'MoOpen':MoOpen, 'TuOpen':TuOpen, 'WeOpen':WeOpen, 'ThOpen':ThOpen, 'FrOpen':FrOpen, 'SaOpen':SaOpen, 'SuOpen':SuOpen, 'MoClose':MoClose, 'TuClose':TuClose, 'WeClose':WeClose, 'ThClose':ThClose, 'FrClose':FrClose, 'SaClose':SaClose, 'SuClose':SuClose})
 
