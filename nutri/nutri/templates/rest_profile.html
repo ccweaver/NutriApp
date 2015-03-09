@@ -155,9 +155,9 @@
     <th><font color="black">Price</font></th>
     <th><font color="black">Description</font></th>
 {% for s in strings %}
-{% if forloop.counter0|divisibleby:8 %}<tr>{% endif %}
+{% if forloop.counter0|divisibleby:9 %}<tr>{% endif %}
 <td><font color="black">{{ s }}</font></td>
-{% if forloop.counter|divisibleby:8 %}</tr>{% endif %}
+{% if forloop.counter|divisibleby:9 %}</tr>{% endif %}
 {% endfor %}
 </font>
 </table>
