@@ -138,7 +138,6 @@ def dish(request, rid):
             print request.POST['term']
             terms = request.POST['term'].split(' ')
 
-            print 'ayo'
             if len(terms) == 1:
                 ingred_list = Ingredient.objects.filter(ingredient__icontains=request.POST['term']).order_by('ingredient')
             if len(terms) == 2:
@@ -234,7 +233,7 @@ def dish(request, rid):
         if 'dish_name' in request.POST:
             d_name = request.POST['dish_name']
             d_price = request.POST['dish_price']
-            print Item.objects.filter(name=d_name).filter(rest_id=rid)
+            d_description = request.POST['dish_description']
             if not d_name:
                 error = 'Please enter a dish name'
             elif Item.objects.filter(name=d_name).filter(rest_id=rid):
@@ -249,10 +248,8 @@ def dish(request, rid):
                     error='Please enter a valid dish price'
             print 'the error is: ', error
             if not error:   
-                print d_name, d_price, rid
                 r = Restaurant.objects.filter(id=rid)
-                print r
-                i = Item(name=d_name, rest_id=rid, price=d_price)
+                i = Item(name=d_name, rest_id=rid, price=d_price, description=d_description)
                 i.save()
             data = {'error':error, 'd_name':d_name}
             return HttpResponse(json.dumps(data), content_type="application/json")
