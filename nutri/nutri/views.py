@@ -709,6 +709,7 @@ def restaurant_profile(request, rid):
         gcarb = 0
         gsug = 0 
         mgna = 0
+        description = str(item.description)
 
         for add in item.ingredients.all():
             ingred = Ingredient.objects.filter(id=add.ingred_id)[0]
@@ -729,6 +730,7 @@ def restaurant_profile(request, rid):
         strings.append("%.2f" % gsug)
         strings.append("%.2f" % mgna)
         strings.append(price)
+        strings.append(description)
       
     print strings
 
