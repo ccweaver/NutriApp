@@ -736,9 +736,7 @@ def restaurant_profile(request, rid):
             ingred = Ingredient.objects.filter(id=add.ingred_id)[0]
             amount = add.amount_grams
             print ingred
-            <div class="firstcol">
             cal = cal + ingred.calories*amount
-            </div>
             gpro = gpro + ingred.protein*amount
             gfat = gfat + ingred.fat*amount
             gcarb = gcarb + ingred.carbs*amount
@@ -757,11 +755,6 @@ def restaurant_profile(request, rid):
       
     print strings
 
-    <style>
-    
-    .firstcol {
-        font-color:#1500fb}
-    </style>
     
     return render(request, 'rest_profile.html', {'my_prof':my_prof, 'uname':request.user.username, 'rest':restaurant, 'strings':strings, 'address':address, 'website':website, 'csz':city_st_zip, 'phone':phone, \
         'MoOpen':MoOpen, 'TuOpen':TuOpen, 'WeOpen':WeOpen, 'ThOpen':ThOpen, 'FrOpen':FrOpen, 'SaOpen':SaOpen, 'SuOpen':SuOpen, 'MoClose':MoClose, 'TuClose':TuClose, 'WeClose':WeClose, 'ThClose':ThClose, 'FrClose':FrClose, 'SaClose':SaClose, 'SuClose':SuClose})
