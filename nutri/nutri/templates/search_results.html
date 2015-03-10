@@ -1,0 +1,206 @@
+<html>
+<head>
+
+<link rel="stylesheet" type="text/css" href="{{STATIC_URL}}css/bootstrap.min.css"/>
+<!--<link rel="stylesheet" type="text/css" href="{{STATIC_URL}}css/bootstrap-responsive.min.css"/> 
+--> 
+
+
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+<script type="text/javascript" src="{{STATIC_URL}}js/bootstrap.min.js"></script>
+<script>
+//  handles submitting the newuser form
+function newUserForm(dish_name, dish_price) {
+$.ajax(
+    {
+        type: "post",
+        url: "",
+        data: {dish_name:dish_name, dish_price:dish_price, csrfmiddlewaretoken:document.getElementsByName('csrfmiddlewaretoken')[0].value},
+        success: function (data)
+        {
+        if (dish_name == "") {
+            document.getElementById('modal_error').innerHTML = 'Please enter a dish name';
+        }
+        else if (isNaN(parseFloat(dish_price)) || !isFinite(dish_price))
+        {
+            document.getElementById('modal_error').innerHTML = 'Please enter the dish price';
+        }
+        else {
+            hideModal();
+        }
+
+        return false;
+        },
+        error: function(data)
+        {
+        }
+    });
+return false;
+};
+
+function setTimes() {
+    document.getElementById('TuOpen').value = document.getElementById('MoOpen').value;
+    document.getElementById('TuClose').value = document.getElementById('MoClose').value;
+    document.getElementById('WeOpen').value = document.getElementById('MoOpen').value;
+    document.getElementById('WeClose').value = document.getElementById('MoClose').value;
+    document.getElementById('ThOpen').value = document.getElementById('MoOpen').value;
+    document.getElementById('ThClose').value = document.getElementById('MoClose').value;
+    document.getElementById('FrOpen').value = document.getElementById('MoOpen').value;
+    document.getElementById('FrClose').value = document.getElementById('MoClose').value;
+    document.getElementById('SaOpen').value = document.getElementById('MoOpen').value;
+    document.getElementById('SaClose').value = document.getElementById('MoClose').value;    
+    document.getElementById('SuOpen').value = document.getElementById('MoOpen').value;
+    document.getElementById('SuClose').value = document.getElementById('MoClose').value;
+    return false;
+}
+
+
+$(window).load(function(){
+    var $select = $(".opentime");
+    $select.append($("<option value='12:00 am'>12:00 am</option>"))
+    $select.append($("<option value='12:30 am'>12:30 am</option>"))
+    for(i=1; i<=11; i++){
+        if(i!=7) {
+        $select.append($("<option></option>").val(i + ":00 am").html(i + ":00 am"))
+        $select.append($("<option></option>").val(i + ":30 am").html(i + ":30 am"))
+        }
+        else {
+            $select.append($("<option selected></option>").val(i + ":00 am").html(i + ":00 am"))
+            $select.append($("<option></option>").val(i + ":30 am").html(i + ":30 am"))
+        }
+    }
+    $select.append($("<option value='12:00 pm'>12:00 pm</option>"))
+    $select.append($("<option value='12:30 pm'>12:30 pm</option>"))
+    for(i=1; i<=11; i++){
+        $select.append($("<option></option>").val(i + "00 pm").html(i + ":00 pm"))
+        $select.append($("<option></option>").val(i + "30 pm").html(i + ":30 pm"))
+
+    }
+    var $select2 = $(".closetime");
+    $select2.append($("<option value='12:00 am'>12:00 am</option>"))
+    $select2.append($("<option value='12:30 am'>12:30 am</option>"))
+    for(i=1; i<=11; i++){
+        $select2.append($("<option></option>").val(i + ":00 am").html(i + ":00 am"))
+        $select2.append($("<option></option>").val(i + ":30 am").html(i + ":30 am"))
+    }
+    $select2.append($("<option value='12:00 pm'>12:00 pm</option>"))
+    $select2.append($("<option value='12:30 pm'>12:30 pm</option>"))
+    for(i=1; i<=11; i++){
+        if(i!=10) {
+            $select2.append($("<option></option>").val(i + ":00 pm").html(i + ":00 pm"))
+            $select2.append($("<option></option>").val(i + ":30 pm").html(i + ":30 pm"))
+        }
+        else {
+            $select2.append($("<option></option>").val(i + ":00 pm").html(i + ":00 pm"))
+            $select2.append($("<option selected></option>").val(i + ":30 pm").html(i + ":30 pm"))
+        }
+
+    }
+
+
+});
+</script>
+
+
+<style type="text/css">
+
+
+           
+        body {
+            background-image: url('../static/restaurant2.JPG');
+        }
+
+        input[type="text"],input[type="password"] {
+            -webkit-border-radius: 5px;
+            -moz-border-radius: 5px;
+            border-radius: 5px;
+            border-style: solid;
+        }
+
+        #rest_name {
+            -webkit-border-radius: 5px;
+            -moz-border-radius: 5px;
+            border-radius: 5px;
+            border-style: solid;
+            width: 50%;
+        }
+        #num_street {
+            -webkit-border-radius: 5px;
+            -moz-border-radius: 5px;
+            border-radius: 5px;
+            border-style: solid;
+            width: 50%;
+            margin-left: 38px;
+            
+        }
+        #city {
+            -webkit-border-radius: 5px;
+            -moz-border-radius: 5px;
+            border-radius: 5px;
+            border-style: solid;
+            width: 30%;
+            margin-left:30px;
+            
+        }
+        #state {
+            width: 75px;
+            height: 25px;
+            overflow: hidden;
+            background-color: white;
+            border: 1px solid #000;
+            font-style: bold;
+        }
+        #zipcode {
+            -webkit-border-radius: 5px;
+            -moz-border-radius: 5px;
+            border-radius: 5px;
+            border-style: solid;
+            width: 20%;
+            margin-left:34px;
+        }
+        #website { 
+            margin-left: 52px;
+            width:50%;}
+
+        #MoOpen, #MoClose, #TuOpen, #TuClose, #WeOpen, #WeClose, #ThOpen, #ThClose, #FrOpen, #FrClose, #SaOpen, #SaClose, #SuOpen, #SuClose {
+            -webkit-border-radius: 5px;
+            -moz-border-radius: 5px;
+            border-radius: 5px;
+            border-style: solid;
+            width: 80%;
+        }
+</style>
+
+
+    <title>CALOSPOT</title>
+</head>
+<body>
+<div class="navbar navbar-inverse navbar-fixed-top" id="topnavbar">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="/">{% block navtitle %} <span style="color:#2efb00;opacity=.99;">CALO</span><span style="color:#1500fb;opacity=.99;">SPOT</span>{% endblock %}</a>          
+              
+          </div>
+          </div>
+          </div>
+
+<br><br><br><br><br>
+<div class="container">
+
+{% for r in rests %}
+<a href="/restaurant_profile/{{r.rid}}">{{r.r}}</a>
+<br>
+{% endfor %}
+
+</div>
+
+
+<script src="{{STATIC_URL}}/js/bootstrap.min.js"></script>
+</body>
+</html>

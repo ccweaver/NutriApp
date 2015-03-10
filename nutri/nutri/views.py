@@ -25,8 +25,29 @@ def sign_in(request):
     print request.user
     print is_user
 
+    
+    if request.method == 'GET':
+        if 'search' in request.GET:
+            term = request.GET['search']
+            print term
+            
+            zRE = re.compile("^[0-9][0-9][0-9][0-9][0-9]$")
+            if zRE.match(term):
+                restaurants = Restaurant.objects.all().order_by('zipcode')
+                rs = []
+                for r in restaurants:
+                    rs.append({'r':r.name, 'zipDist':abs(r.zipcode-int(term)), 'rid':r.id})
+                r_zipSorted = sorted(rs, key=lambda r: r['zipDist'])
+                return render(request, 'search_results.html', {'rests':r_zipSorted})
+
+            else:
+                r_citySorted = Restaurant.objects.filter(city__icontains=term)
+                rs = []
+                for r in r_citySorted:
+                    rs.append({'r':r.name, 'rid':r.id})
+                return render(request, 'search_results.html', {'rests':rs})
+
     if request.method == 'POST':
-        print request.POST
         if 'login_email' in request.POST:
             login_email = request.POST['login_email']
             login_pass = request.POST['login_pass']
