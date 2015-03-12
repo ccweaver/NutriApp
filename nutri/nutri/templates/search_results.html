@@ -169,6 +169,10 @@ $(window).load(function(){
             border-style: solid;
             width: 80%;
         }
+        
+        .returns{
+            margin-top:150px;
+        }
 </style>
 
 
@@ -192,14 +196,17 @@ $(window).load(function(){
 
 <br><br><br><br><br>
 <div class="container">
+<div class="returns">
 
 {% for r in rests %}
-<ul style="padding-top:20px; font-size:20px; margin-left:300px; margin-top:100px;">
+
+<ul style="padding-top:20px; font-size:20px; margin-left:300px;">
 <a href="/restaurant_profile/{{r.rid}}">{{r.r}}</a> {{r.t}} {{r.s}}, {{r.u}} {{r.v}}, {{r.w}}
 </ul>
 
 {% endfor %}
 
+</div>
 </div>
 
 
