@@ -45,7 +45,7 @@ def sign_in(request):
                 rs = []
                 for r in r_citySorted:
                     rs.append({'r':r.name, 'rid':r.id, 's':r.street, 't':r.number, 'u':r.city, 'v':r.state, 'w':r.zipcode})
-                alpha_rs = Restaurant.objects.order_by('street')
+                    alpha_rs = rs.objects.order_by('s')
                 return render(request, 'search_results.html', {'rests':rs})
 
     if request.method == 'POST':
