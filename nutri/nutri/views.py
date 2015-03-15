@@ -43,7 +43,7 @@ def sign_in(request):
             else:
                 r_citySorted = Restaurant.objects.filter(city__icontains=term)
                 rs = []
-                alpha_rs = Restaurant.objects.order_by('s')
+                alpha_rs = Restaurant.objects.order_by('street')
                 for r in r_citySorted:
                     rs.append({'r':r.name, 'rid':r.id, 's':r.street, 't':r.number, 'u':r.city, 'v':r.state, 'w':r.zipcode})
                 return render(request, 'search_results.html', {'rests':rs})
