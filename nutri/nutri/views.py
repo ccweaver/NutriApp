@@ -372,7 +372,7 @@ def add_restaurant(request):
             error = 'Please select a state'
 
         zipcode = request.POST['zipcode']
-        zRE = re.compile("^[0-9][0-9][0-9][0-9][0-9]$")
+        zRE = re.compile("^[0-9][0-9][0-9][0-9][0-9]{0-9}$")
         if not zRE.match(zipcode) and not error:
             error = 'Please enter a valid 5 digit zip code'
 
