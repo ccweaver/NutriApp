@@ -372,7 +372,7 @@ def add_restaurant(request):
             error = 'Please select a state'
 
         zipcode = request.POST['zipcode']
-        zRE = re.compile("^[0-9][0-9][0-9][0-9][0-9]{0-9}$")
+        zRE = re.compile("[0-9]^[0-9][0-9][0-9][0-9]{0-9}$")
        
 
         #opening times
