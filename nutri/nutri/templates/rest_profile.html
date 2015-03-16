@@ -44,7 +44,9 @@
    		padding-top:15px;
    	}
    	
-   	
+   	.info, .lister {
+   		display:inline-block;
+   	}
    	 
    
 </style>
@@ -72,7 +74,7 @@
 <div class="container">
 <div class="jumbotron" style="background-image: url(../static/marble2.jpg); background-size: 100%;">
 <div class="container">
-
+<div class="info">
 <h1>{{rest}}</h1>
 
 <div class = "topper">
@@ -83,8 +85,9 @@
 <h3>{{website}}<h4>
 <h4>{{phone}}</h4>
 </div>
+</div>
 
-	
+<div class="lister">
 <ul style="list-style-type:none; padding-left:0">
    <li> M: {{MoOpen}} to {{MoClose}}</li>
    <li> T: {{TuOpen}} to {{TuClose}}</li>
@@ -94,6 +97,7 @@
    <li> Sat: {{SaOpen}} to {{SaClose}}</li>
    <li> Sun: {{SuOpen}} to {{SuClose}}</li> 
 </ul>
+</div>
 
         
 <div id="USDA">
