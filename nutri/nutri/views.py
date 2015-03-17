@@ -186,11 +186,11 @@ def dish(request, rid):
             dish = Item.objects.filter(rest_id=rid).filter(name=request.POST['ingred_dish'])
 
             if not ingred_to_add:
-                error = "Please search for and select (by clicking on) an ingredient"
+                error = "Please search for and select (by clicking on) an ingredient. Then enter an amount, and click Add Ingredient."
             elif not amount or float(amount) < 0:
                 error = 'Please input a valid amount'
             elif amount == '0':
-                error = 'Please input an amount'
+                error = 'Please input an amount. Then click Add Ingredient.'
 
 
             if error:
