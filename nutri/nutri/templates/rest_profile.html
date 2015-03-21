@@ -135,7 +135,9 @@ return false;
 {% for s in strings %}
 {% if forloop.counter0|divisibleby:10 %}<tr>
 <td>
+{% if my_prof %}
 <button class="btn btn-default btn-sm" id=type="button" onclick="removeItem('{{s}}')"><span class="glyphicon glyphicon-remove"></span></button>
+{% endif %}
 </td>
 {% endif %}
 <td><font color="black">{{ s }}</font></td>
