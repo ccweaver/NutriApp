@@ -8,6 +8,7 @@
 
 <script>
 
+
 //deleting a dish
 function removeItem(key) {
 $.ajax(
@@ -23,6 +24,41 @@ $.ajax(
     });
 return false;
 };
+
+function openIngreds(key) {
+
+$.ajax(
+    {
+        type: "post",
+        url: "",
+        data: {ingred_dish:key, csrfmiddlewaretoken:document.getElementsByName('csrfmiddlewaretoken')[0].value},
+        success: function (data)
+        {
+          showModal();
+          document.getElementById('myModalLabel').innerHTML = data.dish;
+          if(data.ingreds) {
+            list = "";
+            for (i in data.ingreds) {
+              list += data.ingreds[i];
+              list += '<br>';
+            }
+          }
+          document.getElementById('ingred_list').innerHTML = list;
+          showModal();
+        }
+    });
+return false;
+};
+
+function hideModal()
+{
+    $('#myModal').modal('hide');
+}
+
+function showModal()
+{
+    $('#myModal').modal('show');
+}
 
 </script>
 <style>
@@ -67,6 +103,10 @@ return false;
    		background-image: url('http://i375.photobucket.com/albums/oo197/Charles-Stanton_151515/rftgyhds_zpsajop0hvn.png');
    		border-radius:5px;
    	}
+    #ingred_list {
+      text-align:center;
+      margin-bottom:5px;
+    }
   
 </style>
 
@@ -136,7 +176,8 @@ return false;
 {% if forloop.counter0|divisibleby:10 %}<tr>
 <td>
 {% if my_prof %}
-<button class="btn btn-default btn-sm" id=type="button" onclick="removeItem('{{s}}')"><span class="glyphicon glyphicon-remove"></span></button>
+<button class="btn btn-default btn-sm" id=type="button" onclick="removeItem('{{s}}')"><span class="glyphicon glyphicon-remove-circle"></span></button>
+<button class="btn btn-default btn-sm" id=type="button" onclick="openIngreds('{{s}}')"><span class="glyphicon glyphicon-eye-open"></span></button>
 {% endif %}
 </td>
 {% endif %}
@@ -155,6 +196,23 @@ return false;
 {%endif%}
 </div>
 </div>
+
+
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title" id="myModalLabel"></h4>
+      </div>
+
+        <div id="ingred_list">
+        </div>
+      
+        
+    </div>
+  </div>
+</div>
+
 
 
 <script src="{{STATIC_URL}}/js/bootstrap.min.js"></script>
