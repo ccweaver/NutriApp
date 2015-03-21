@@ -546,8 +546,7 @@ def restaurant_profile(request, rid):
     SuClose = ""   
     print rid
     print request.user.username
-    if request.method == 'POST':
-        return HttpResponseRedirect('/add_dish/' + rid)
+    
     my_prof = False
 
     restaurant = Restaurant.objects.filter(id=rid)[0]
@@ -754,6 +753,22 @@ def restaurant_profile(request, rid):
       
     print strings
 
+
+    if request.method == 'POST':
+        if 'delete_key' in request.POST:
+            print request.POST['delete_key']
+            delete_item = Item.objects.filter(rest_id=rid).filter(valid=True).filter(name=request.POST['delete_key'])[0]
+            print delete_item
+            for add in delete_item.ingredients.all():
+                print add.id
+                add.delete()
+            delete_item.delete()
+
+            return render(request, 'rest_profile.html', {'my_prof':my_prof, 'uname':request.user.username, 'rest':restaurant, 'strings':strings, 'address':address, 'website':website, 'csz':city_st_zip, 'phone':phone, \
+            'MoOpen':MoOpen, 'TuOpen':TuOpen, 'WeOpen':WeOpen, 'ThOpen':ThOpen, 'FrOpen':FrOpen, 'SaOpen':SaOpen, 'SuOpen':SuOpen, 'MoClose':MoClose, 'TuClose':TuClose, 'WeClose':WeClose, 'ThClose':ThClose, 'FrClose':FrClose, 'SaClose':SaClose, 'SuClose':SuClose})
+
+
+        return HttpResponseRedirect('/add_dish/' + rid)
     
     return render(request, 'rest_profile.html', {'my_prof':my_prof, 'uname':request.user.username, 'rest':restaurant, 'strings':strings, 'address':address, 'website':website, 'csz':city_st_zip, 'phone':phone, \
         'MoOpen':MoOpen, 'TuOpen':TuOpen, 'WeOpen':WeOpen, 'ThOpen':ThOpen, 'FrOpen':FrOpen, 'SaOpen':SaOpen, 'SuOpen':SuOpen, 'MoClose':MoClose, 'TuClose':TuClose, 'WeClose':WeClose, 'ThClose':ThClose, 'FrClose':FrClose, 'SaClose':SaClose, 'SuClose':SuClose})

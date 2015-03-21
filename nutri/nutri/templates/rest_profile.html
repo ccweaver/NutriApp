@@ -8,6 +8,21 @@
 
 <script>
 
+//deleting a dish
+function removeItem(key) {
+$.ajax(
+    {
+        type: "post",
+        url: "",
+        data: {delete_key: key, csrfmiddlewaretoken:document.getElementsByName('csrfmiddlewaretoken')[0].value},
+        success: function (data)
+        {
+          location.reload();
+
+        }
+    });
+return false;
+};
 
 </script>
 <style>
@@ -23,7 +38,7 @@
 	 
 	    
 	    .menutitle {
-	    	margin-left:350px;
+	    	text-align:center;
 	    	padding-bottom:30px;
 	    	font-size:30px;
 	    }
@@ -48,16 +63,7 @@
    		padding:0;
    	}
    	.stuff{
-   		margin-left:200px;
-   		padding-left:150px;
-   		margin-right:200px;
-   		border-bottom:;
-   		border-top:;
-   		border-right:;
-   		border-left:;
-   		border-left-color:;
-   		border-right-color:;
-   		background-color:;
+   		text-align:center;
    		background-image: url('http://i375.photobucket.com/albums/oo197/Charles-Stanton_151515/rftgyhds_zpsajop0hvn.png');
    		border-radius:5px;
    	}
@@ -86,7 +92,7 @@
 <br><br><br><br><br>
 <div class="container">
 <div class="jumbotron" style="background-image: url(../static/marble2.jpg); background-size: 100%;">
-<div class="container">
+
 <div class="stuff">
 <h1>{{rest}}</h1>
 <h2>{{address}}<br>{{csz}}</h2>
@@ -107,16 +113,16 @@
 *Nutrition data used to build menu is from USDA
 </div>
 </div>
-</div>
+
 </div>
 
 <div class="menutitle">
 	<u>The <span id="shizzle">500 Calories and Under</span> Menu</u>
 </div>
 
-
 <table class="table" id="menu_table">
     
+    <th></th>
     <th><u>DISH</u></th>
     <th><font color=#1500fb>Calories</font></th>
     <th><font color="black">Protein (g)</font></th>
@@ -127,9 +133,13 @@
     <th><font color="black">Price</font></th>
     <th><font color="black">Description</font></th>
 {% for s in strings %}
-{% if forloop.counter0|divisibleby:9 %}<tr>{% endif %}
+{% if forloop.counter0|divisibleby:10 %}<tr>
+<td>
+<button class="btn btn-default btn-sm" id=type="button" onclick="removeItem('{{s}}')"><span class="glyphicon glyphicon-remove"></span></button>
+</td>
+{% endif %}
 <td><font color="black">{{ s }}</font></td>
-{% if forloop.counter|divisibleby:9 %}</tr>{% endif %}
+{% if forloop.counter|divisibleby:10 %}</tr>{% endif %}
 {% endfor %}
 </font>
 </table>
