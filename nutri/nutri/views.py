@@ -36,7 +36,7 @@ def sign_in(request):
                 restaurants = Restaurant.objects.all().order_by('zipcode')
                 rs = []
                 for r in restaurants:
-                    rs.append({'r':r.name, 'zipDist':abs(r.zipcode-int(term)), 'rid':r.id})
+                    rs.append({'r':r.name, 'zipDist':abs(int(r.zipcode)-int(term)), 'rid':r.id, 's':r.street, 't':r.number, 'u':r.city, 'v':r.state, 'w':r.zipcode})
                 r_zipSorted = sorted(rs, key=lambda r: r['zipDist'])
                 return render(request, 'search_results.html', {'rests':r_zipSorted})
 
@@ -147,9 +147,6 @@ def dish(request, rid):
     if request.method == 'POST':
         print request.POST
         if 'done' in request.POST:
-            print '******'
-            print request.POST['ingred_dish']
-            print '****'
             dish = Item.objects.filter(rest_id=rid).filter(name=request.POST['ingred_dish'])[0]
             dish.valid = True;
             dish.save()
@@ -336,9 +333,17 @@ def add_restaurant(request):
             error = 'Please enter the name of your restaurant'
 
         website = request.POST['website']
-        zRE = re.compile("^www\..+\....$")
+        zRE = re.compile("^(http://|https://)?(www\.)?.+\..{2,3}$")
         if not zRE.match(website) and not error:
             error = 'Please enter a valid website'
+        h = re.compile("^http:.*")
+        hs = re.compile("^https:.*")
+        w = re.compile("^www\..*")
+        if (not h.match(website)) and (not hs.match(website)):
+            if w.match(website):
+                website = "http://" + website
+            else:
+                website = "http://www." + website
 
 
         phone = request.POST['phone']
