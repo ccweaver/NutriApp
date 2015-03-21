@@ -1,0 +1,78 @@
+<html>
+<head>
+
+<link rel="stylesheet" type="text/css" href="{{STATIC_URL}}css/bootstrap.min.css"/>
+<!--<link rel="stylesheet" type="text/css" href="{{STATIC_URL}}css/bootstrap-responsive.min.css"/> 
+--> 
+
+
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+<script type="text/javascript" src="{{STATIC_URL}}js/bootstrap.min.js"></script>
+<script>
+</script>
+
+
+<style type="text/css">
+
+
+           
+        body {
+            background-image: url('http://i375.photobucket.com/albums/oo197/Charles-Stanton_151515/download_zpsqc62mtz0.jpg');
+        }
+        
+        .returns{
+            margin-top:40px;
+            background-image:url('http://i375.photobucket.com/albums/oo197/Charles-Stanton_151515/02_zpstvzysufp.jpg');
+            background-size:cover;
+            margin-left:10%;
+            margin-right:10%;
+            border-radius:3%;
+            border-style:solid;
+        }
+        #topnavbar{
+            background-image:url();
+            background-size:;
+        }
+</style>
+
+
+    <title>CALOSPOT</title>
+</head>
+<body>
+<div class="navbar navbar-inverse navbar-fixed-top" id="topnavbar">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="/">{% block navtitle %} <span style="color:#2efb00;opacity=.99;">CALO</span><span style="color:#1500fb;opacity=.99;">SPOT</span>{% endblock %}</a>          
+              
+          </div>
+          </div>
+          </div>
+
+<br><br><br><br><br>
+<div class="container">
+<div class="Seuss" style="font-size:30px; text-align:center;">
+<u>Oh, the Places You'll Go</u>
+</div>
+<div class="returns">
+
+{% for r in rests %}
+
+<ul style="padding-top:4%; font-size:20px; margin-left:10%;">
+<a href="/restaurant_profile/{{r.rid}}"; style="font-size:40px; color:#1500fb; font-weight:bold;">{{r.r}}</a> <br>{{r.t}} {{r.s}}, {{r.u}} {{r.v}}, {{r.w}}
+</ul>
+
+{% endfor %}
+
+</div>
+</div>
+
+
+<script src="{{STATIC_URL}}/js/bootstrap.min.js"></script>
+</body>
+</html>

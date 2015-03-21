@@ -70,12 +70,12 @@ WSGI_APPLICATION = 'nutri.wsgi.application'
 
 DATABASES = {
   'default': {
-    'ENGINE': 'django.db.backends.postgresql_psycopg2',
-    'NAME': 'ingredients',
-    'HOST': 'ccweaverdbinstance.cjqflsribv1h.us-west-2.rds.amazonaws.com',
+    'ENGINE': "django.db.backends.postgresql_psycopg2",
+    'NAME': "ingredients",
+    'HOST': "ccweaverdbinstance.cjqflsribv1h.us-west-2.rds.amazonaws.com",
     'PORT': 5432,
-    'USER': 'ccweaver',
-    'PASSWORD': '1234567890'
+    'USER': "ccweaver",
+    'PASSWORD': "1234567890"
   }
 }
 

@@ -119,9 +119,8 @@ $(document).on("click","#proflink",function(event)
         #buttons {
             width: 30%;
             height:35px;
-            margin-left: 850px;
-            margin-top: 25px;
-            background-color:#1500fb;
+            margin-left:850px;
+            margin-top: 25px;  
         }
         
         #login_button { width: 95%;
@@ -144,7 +143,7 @@ $(document).on("click","#proflink",function(event)
         #search{
           height: 50px;
           width: 80%;
-          margin-left: auto;
+          margin-left: 20px;
           margin-right: auto;
           margin-top: auto;
           margin-bottom: auto;
@@ -153,8 +152,8 @@ $(document).on("click","#proflink",function(event)
 
         #search_bar {
           height: 50px;
-          width: 70%;
-          margin-left: 150px;
+          width: 90%;
+          margin-left: 130px;
           margin-top: 0px;
         }
 
@@ -163,20 +162,24 @@ $(document).on("click","#proflink",function(event)
           margin-top: 10px;
         }
         
-        #SearchMessage {
-          margin-left: 100px;
-          font-size:25px;
+        .SearchMessage {
+          margin-left: 5%;
+          font-size:23px;
           padding-top:15px;
           padding-bottom: 15px;
         }
         .fizzle {
           color:#1500fb;
-          font-size:30px;
+          font-size:25px;
         }
         .jumbotron {
           margin-left:200px;
           margin-right:200px;
           border-radius:25px;
+        }
+         #topnavbar{
+            background-image:url('');
+            background-size:cover;
         }
 </style>
 
@@ -219,20 +222,23 @@ $(document).on("click","#proflink",function(event)
 
 <br><br><br><br>
 <div class = "container">
+<div class = "buttonz">
                 <button class="btn btn-danger"; style="width:200px; height:50px; white-space:normal;" onclick="showModal();">Restaurant Management: Create New Account</button>
-
+</div>
 <br><br><br><br>
-            <div class="jumbotron" style="background-image:url(http://i375.photobucket.com/albums/oo197/Charles-Stanton_151515/142549540133226_zpsl7tcwqvd.jpg); background-size: 100%;">
-              <div id=SearchMessage>
-              Restaurants post menus to this website. <br> All items on these menus are <span class="fizzle"><u>under 500 calories.</u></span><br> Search for them below.
+            <div class="jumbotron" style="background-image:url(http://i375.photobucket.com/albums/oo197/Charles-Stanton_151515/142626895585521_zpscfatpbf6.jpg); background-size: 100%;">
+              <div class ="SearchMessage">
+              Restaurants post menus to this website. All items on these menus are <span class="fizzle">under 500 calories.</span><br> Search for them below.
               </div>
             </div>
 <br><br><br><br>
 
               <div id="search">
+              <form method="GET">
               <font size="5" face="Calibri">
-              <input type="text" id="search_bar" placeholder="  Enter City or Zip to find menus near you! Local spots only, no chains.">
+              <input type="text" id="search_bar" name="search" placeholder="Enter City or Zip to find menus near you! Local spots only, no chains.">
               </font>
+              </form>
               </div>
 </div>
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">

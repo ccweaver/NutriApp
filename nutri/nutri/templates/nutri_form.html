@@ -193,11 +193,12 @@ function showModal() {
             width: 30%;
         }
         #iSelect {
-            width: 80%;
+            width: 62%;
             -webkit-border-radius: 5px;
             -moz-border-radius: 5px;
             border-radius: 5px;
             border-style: solid;
+            height:20%;
         }
         #amount {
             -webkit-border-radius: 5px;
@@ -229,7 +230,13 @@ function showModal() {
             width: 100%;
             height: 7%;
         }
-
+        
+        .instructions{
+            margin-left:100px;
+            font-weight:bold;
+        }
+       
+     
 
         </style>
 </head>
@@ -275,8 +282,19 @@ function showModal() {
     </button>
 
     <br><br>
-
+        
         <div id="reload">{% include 'select_temp.html' %}</div>
+   
+        
+        <div class="instructions">
+        <ul style="list-style-type:none; padding-left:0">
+         <li><u>Directions</u></li>
+         <li>1. Enter ingredient in Search, press Refresh List</li>
+         <li>2. Select ingredient from box above (by clicking on it)</li>
+         <li>3. Enter amount then press Add Ingredient</li>
+         <li>4. Repeat 1-3, then press Complete Dish</li>
+        </ul>
+        </div>
 
         <br><br>
         <label style="color: #555;">
@@ -299,10 +317,11 @@ function showModal() {
         </b>
         <br><br>
 
-        <a class="btn btn-primary" onclick="showModal()">Edit Name & Price</a>
+       
         <input type="button" class="btn btn-primary" value="Add Ingredient" id="add_ingredient" onclick="addIn(document.getElementById('iSelect').value, document.getElementById('amount').value, document.getElementById('unit').value)">
-        <input type="button" class="btn btn-danger" value="Complete Dish" onClick="submit()">
-
+        <input type="button" class="btn btn-danger" value="Complete Dish" onClick="submit()" style="margin-left:30px">
+    
+         <a class="btn btn-primary" onclick="showModal()" style="margin-left:300px">Edit Name & Price</a>
 
     
 </div>

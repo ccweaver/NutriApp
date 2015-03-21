@@ -25,8 +25,29 @@ def sign_in(request):
     print request.user
     print is_user
 
+    
+    if request.method == 'GET':
+        if 'search' in request.GET:
+            term = request.GET['search']
+            print term
+            
+            zRE = re.compile("^[0-9][0-9][0-9][0-9][0-9]$")
+            if zRE.match(term):
+                restaurants = Restaurant.objects.all().order_by('zipcode')
+                rs = []
+                for r in restaurants:
+                    rs.append({'r':r.name, 'zipDist':abs(r.zipcode-int(term)), 'rid':r.id})
+                r_zipSorted = sorted(rs, key=lambda r: r['zipDist'])
+                return render(request, 'search_results.html', {'rests':r_zipSorted})
+
+            else:
+                r_citySorted = Restaurant.objects.filter(city__icontains=term)
+                rs = []
+                for r in r_citySorted:
+                    rs.append({'r':r.name, 'rid':r.id, 's':r.street, 't':r.number, 'u':r.city, 'v':r.state, 'w':r.zipcode})
+                return render(request, 'search_results.html', {'rests':rs})
+
     if request.method == 'POST':
-        print request.POST
         if 'login_email' in request.POST:
             login_email = request.POST['login_email']
             login_pass = request.POST['login_pass']
@@ -165,11 +186,11 @@ def dish(request, rid):
             dish = Item.objects.filter(rest_id=rid).filter(name=request.POST['ingred_dish'])
 
             if not ingred_to_add:
-                error = "Please search for and select an ingredient"
+                error = "Please search for and select (by clicking on) an ingredient. Then enter an amount, and click Add Ingredient."
             elif not amount or float(amount) < 0:
                 error = 'Please input a valid amount'
             elif amount == '0':
-                error = 'Please input an amount'
+                error = 'Please input an amount. Then click Add Ingredient.'
 
 
             if error:
@@ -355,7 +376,6 @@ def add_restaurant(request):
         if not zRE.match(zipcode) and not error:
             error = 'Please enter a valid 5 digit zip code'
 
-
         #opening times
         rawTime = request.POST['MoOpen']
         split = rawTime.split(':')
@@ -526,8 +546,7 @@ def restaurant_profile(request, rid):
     SuClose = ""   
     print rid
     print request.user.username
-    if request.method == 'POST':
-        return HttpResponseRedirect('/add_dish/' + rid)
+    
     my_prof = False
 
     restaurant = Restaurant.objects.filter(id=rid)[0]
@@ -709,6 +728,7 @@ def restaurant_profile(request, rid):
         gcarb = 0
         gsug = 0 
         mgna = 0
+        description = str(item.description)
 
         for add in item.ingredients.all():
             ingred = Ingredient.objects.filter(id=add.ingred_id)[0]
@@ -729,9 +749,27 @@ def restaurant_profile(request, rid):
         strings.append("%.2f" % gsug)
         strings.append("%.2f" % mgna)
         strings.append(price)
+        strings.append(description)
       
     print strings
 
+
+    if request.method == 'POST':
+        if 'delete_key' in request.POST:
+            print request.POST['delete_key']
+            delete_item = Item.objects.filter(rest_id=rid).filter(valid=True).filter(name=request.POST['delete_key'])[0]
+            print delete_item
+            for add in delete_item.ingredients.all():
+                print add.id
+                add.delete()
+            delete_item.delete()
+
+            return render(request, 'rest_profile.html', {'my_prof':my_prof, 'uname':request.user.username, 'rest':restaurant, 'strings':strings, 'address':address, 'website':website, 'csz':city_st_zip, 'phone':phone, \
+            'MoOpen':MoOpen, 'TuOpen':TuOpen, 'WeOpen':WeOpen, 'ThOpen':ThOpen, 'FrOpen':FrOpen, 'SaOpen':SaOpen, 'SuOpen':SuOpen, 'MoClose':MoClose, 'TuClose':TuClose, 'WeClose':WeClose, 'ThClose':ThClose, 'FrClose':FrClose, 'SaClose':SaClose, 'SuClose':SuClose})
+
+
+        return HttpResponseRedirect('/add_dish/' + rid)
+    
     return render(request, 'rest_profile.html', {'my_prof':my_prof, 'uname':request.user.username, 'rest':restaurant, 'strings':strings, 'address':address, 'website':website, 'csz':city_st_zip, 'phone':phone, \
         'MoOpen':MoOpen, 'TuOpen':TuOpen, 'WeOpen':WeOpen, 'ThOpen':ThOpen, 'FrOpen':FrOpen, 'SaOpen':SaOpen, 'SuOpen':SuOpen, 'MoClose':MoClose, 'TuClose':TuClose, 'WeClose':WeClose, 'ThClose':ThClose, 'FrClose':FrClose, 'SaClose':SaClose, 'SuClose':SuClose})
 
