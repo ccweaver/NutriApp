@@ -334,17 +334,7 @@ def add_restaurant(request):
 
         website = request.POST['website']
         zRE = re.compile("^(http://|https://)?(www\.)?.+\..{2,3}$")
-        if not zRE.match(website) and not error:
-            error = 'Please enter a valid website'
-        h = re.compile("^http:.*")
-        hs = re.compile("^https:.*")
-        w = re.compile("^www\..*")
-        if (not h.match(website)) and (not hs.match(website)):
-            if w.match(website):
-                website = "http://" + website
-            else:
-                website = "http://www." + website
-
+        
 
         phone = request.POST['phone']
         zRE = re.compile("^(\+\d{1,2}\s)?\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4}$")
