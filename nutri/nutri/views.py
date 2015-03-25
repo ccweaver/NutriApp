@@ -36,7 +36,7 @@ def sign_in(request):
                 restaurants = Restaurant.objects.all().order_by('zipcode')
                 rs = []
                 for r in restaurants:
-                    rs.append({'r':r.name, 'zipDist':abs(r.zipcode-int(term)), 'rid':r.id})
+                    rs.append({'r':r.name, 'zipDist':abs(int(r.zipcode)-int(term)), 'rid':r.id, 's':r.street, 't':r.number, 'u':r.city, 'v':r.state, 'w':r.zipcode})
                 r_zipSorted = sorted(rs, key=lambda r: r['zipDist'])
                 return render(request, 'search_results.html', {'rests':r_zipSorted})
 
@@ -147,9 +147,6 @@ def dish(request, rid):
     if request.method == 'POST':
         print request.POST
         if 'done' in request.POST:
-            print '******'
-            print request.POST['ingred_dish']
-            print '****'
             dish = Item.objects.filter(rest_id=rid).filter(name=request.POST['ingred_dish'])[0]
             dish.valid = True;
             dish.save()
@@ -336,9 +333,16 @@ def add_restaurant(request):
             error = 'Please enter the name of your restaurant'
 
         website = request.POST['website']
-        zRE = re.compile("^www\..+\....$")
-        if not zRE.match(website) and not error:
-            error = 'Please enter a valid website'
+        zRE = re.compile("^(http://|https://)?(www\.)?.+\..{2,3}$")
+        h = re.compile("^http:.*")
+        hs = re.compile("^https:.*")
+        w = re.compile("^www\..*")
+        if (not h.match(website)) and (not hs.match(website)):
+            if w.match(website):
+                website = "http://" + website
+            else:
+                website = "http://www." + website
+
 
 
         phone = request.POST['phone']
@@ -552,6 +556,10 @@ def restaurant_profile(request, rid):
     restaurant = Restaurant.objects.filter(id=rid)[0]
     if restaurant.user.id == request.user.id:
         my_prof = True
+    else:
+        restaurant.hits = restaurant.hits + 1
+        restaurant.save()
+
     website = str(restaurant.website)
     address = str(restaurant.number) + ' ' + str(restaurant.street)
     city_st_zip = str(restaurant.city) + ', ' + str(restaurant.state) + ', ' + str(restaurant.zipcode)
@@ -764,12 +772,23 @@ def restaurant_profile(request, rid):
                 add.delete()
             delete_item.delete()
 
-            return render(request, 'rest_profile.html', {'my_prof':my_prof, 'uname':request.user.username, 'rest':restaurant, 'strings':strings, 'address':address, 'website':website, 'csz':city_st_zip, 'phone':phone, \
+            return render(request, 'rest_profile.html', {'hits':restaurant.hits, 'my_prof':my_prof, 'uname':request.user.username, 'rest':restaurant, 'strings':strings, 'address':address, 'website':website, 'csz':city_st_zip, 'phone':phone, \
             'MoOpen':MoOpen, 'TuOpen':TuOpen, 'WeOpen':WeOpen, 'ThOpen':ThOpen, 'FrOpen':FrOpen, 'SaOpen':SaOpen, 'SuOpen':SuOpen, 'MoClose':MoClose, 'TuClose':TuClose, 'WeClose':WeClose, 'ThClose':ThClose, 'FrClose':FrClose, 'SaClose':SaClose, 'SuClose':SuClose})
 
+        if 'ingred_dish' in request.POST:
+            print '*****************'
+            print request.POST['ingred_dish']
+            item = Item.objects.filter(rest_id=rid).filter(valid=True).filter(name=request.POST['ingred_dish'])[0]
+            ingreds = []
+            for i in item.ingredients.all():
+                ingreds.append(str(i.ingred) + ' ' + str(i.amount_grams) + 'g')
+            print ingreds
+
+            data = {'ingreds':ingreds, 'dish':request.POST['ingred_dish']}
+            return HttpResponse(json.dumps(data), content_type="application/json")
 
         return HttpResponseRedirect('/add_dish/' + rid)
     
-    return render(request, 'rest_profile.html', {'my_prof':my_prof, 'uname':request.user.username, 'rest':restaurant, 'strings':strings, 'address':address, 'website':website, 'csz':city_st_zip, 'phone':phone, \
+    return render(request, 'rest_profile.html', {'hits':restaurant.hits, 'my_prof':my_prof, 'uname':request.user.username, 'rest':restaurant, 'strings':strings, 'address':address, 'website':website, 'csz':city_st_zip, 'phone':phone, \
         'MoOpen':MoOpen, 'TuOpen':TuOpen, 'WeOpen':WeOpen, 'ThOpen':ThOpen, 'FrOpen':FrOpen, 'SaOpen':SaOpen, 'SuOpen':SuOpen, 'MoClose':MoClose, 'TuClose':TuClose, 'WeClose':WeClose, 'ThClose':ThClose, 'FrClose':FrClose, 'SaClose':SaClose, 'SuClose':SuClose})
 

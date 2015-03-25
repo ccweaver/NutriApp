@@ -7,7 +7,9 @@ class Restaurant(models.Model):
 	street = models.CharField(max_length=300)
 	city = models.CharField(max_length=300)
 	state = models.CharField(max_length=100)
-	zipcode = models.IntegerField()
+	#make this char field
+	zipcode = models.CharField(max_length=15)
+	hits = models.IntegerField(default=0)
 	user = models.ForeignKey(User)
 	website = models.CharField(max_length=300)
 	phone = models.BigIntegerField()
