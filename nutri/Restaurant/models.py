@@ -3,6 +3,8 @@ from django.contrib.auth.models import User
 
 class Restaurant(models.Model):
 	name = models.CharField(max_length=300)
+	cuisine = models.CharField(max_length=110)
+	seamless = models.CharField(max_length=100, default='No')
 	number = models.IntegerField()
 	street = models.CharField(max_length=300)
 	city = models.CharField(max_length=300)
