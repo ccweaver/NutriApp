@@ -33,7 +33,7 @@ def sign_in(request):
             
             zRE = re.compile("^[0-9][0-9][0-9][0-9][0-9]$")
             if zRE.match(term):
-                restaurants = Restaurant.objects.all().order_by('zipcode')
+                restaurants = Restaurant.objects.all().order_by('zipcode').order_by('street')
                 rs = []
                 for r in restaurants:
                     rs.append({'r':r.name, 'zipDist':abs(int(r.zipcode)-int(term)), 'rid':r.id, 's':r.street, 't':r.number, 'u':r.city, 'v':r.state, 'w':r.zipcode})
@@ -41,7 +41,7 @@ def sign_in(request):
                 return render(request, 'search_results.html', {'rests':r_zipSorted})
 
             else:
-                r_citySorted = Restaurant.objects.filter(city__icontains=term)
+                r_citySorted = Restaurant.objects.filter(city__icontains=term).order_by('street')
                 rs = []
                 for r in r_citySorted:
                     rs.append({'r':r.name, 'rid':r.id, 's':r.street, 't':r.number, 'u':r.city, 'v':r.state, 'w':r.zipcode})
@@ -300,6 +300,8 @@ def dish(request, rid):
 def add_restaurant(request):
     error = ""
     rest_name = ""
+    cuisine = "American, Chinese, Mexican, etc."
+    seamless = ""
     num_street = ""
     city = ""
     state = "--"
@@ -332,17 +334,26 @@ def add_restaurant(request):
         if not rest_name and not error:
             error = 'Please enter the name of your restaurant'
 
+        cuisine = request.POST['cuisine']
+        if not cuisine or cuisine == 'American, Chinese, Mexican, etc.' and not error:
+            error = 'Please enter a cuisine type'
+
+        seamless = request.POST['seamless']
+        
         website = request.POST['website']
-        zRE = re.compile("^(http://|https://)?(www\.)?.+\..{2,3}$")
+        zRE = re.compile("^.+\..{2,3}$")
         h = re.compile("^http:.*")
         hs = re.compile("^https:.*")
         w = re.compile("^www\..*")
-        if (not h.match(website)) and (not hs.match(website)):
+        if not website and not error:
+            error = "Please enter a valid website"
+        elif (not h.match(website)) and (not hs.match(website)):
             if w.match(website):
                 website = "http://" + website
-            else:
+            elif zRE.match(website):
                 website = "http://www." + website
-
+            elif not error:
+                error = "Please enter a valid website"
 
 
         phone = request.POST['phone']
@@ -524,14 +535,14 @@ def add_restaurant(request):
 
 
         if not error:
-            r = Restaurant(name=rest_name, number=num, street=street, city=city, state=state, zipcode=zipcode, website=website, phone=phoneNum, moopen=MoOpen, tuopen=TuOpen, weopen=WeOpen, thopen=ThOpen, fropen=FrOpen, saopen=SaOpen, suopen=SuOpen, moclose=MoClose, tuclose=TuClose, weclose=WeClose, thclose=ThClose, frclose=FrClose, saclose=SaClose, suclose=SuClose, user=request.user)
+            r = Restaurant(name=rest_name, cuisine=cuisine, seamless=seamless, number=num, street=street, city=city, state=state, zipcode=zipcode, website=website, phone=phoneNum, moopen=MoOpen, tuopen=TuOpen, weopen=WeOpen, thopen=ThOpen, fropen=FrOpen, saopen=SaOpen, suopen=SuOpen, moclose=MoClose, tuclose=TuClose, weclose=WeClose, thclose=ThClose, frclose=FrClose, saclose=SaClose, suclose=SuClose, user=request.user)
             r.save()
             rid = r.id
             print rid
             return HttpResponseRedirect('/restaurant_profile/' + str(rid))
 
 
-    return render(request, 'add_rest.html', {'error':error, 'rest_name':rest_name, 'num_street':num_street, 'city':city, 'state':state, 'zipcode':zipcode, 'website':website, 'phone':phone, 'MoOpen':MoOpen, 'TuOpen':TuOpen, 'WeOpen':WeOpen, 'ThOpen':ThOpen, 'FrOpen':FrOpen, 'SaOpen':SaOpen, 'SuOpen':SuOpen, 'MoClose':MoClose, 'TuClose':TuClose, 'WeClose':WeClose, 'ThClose':ThClose, 'FrClose':FrClose, 'SaClose':SaClose, 'SuClose':SuClose})
+    return render(request, 'add_rest.html', {'error':error, 'cuisine':cuisine, 'seamless':seamless, 'rest_name':rest_name, 'num_street':num_street, 'city':city, 'state':state, 'zipcode':zipcode, 'website':website, 'phone':phone, 'MoOpen':MoOpen, 'TuOpen':TuOpen, 'WeOpen':WeOpen, 'ThOpen':ThOpen, 'FrOpen':FrOpen, 'SaOpen':SaOpen, 'SuOpen':SuOpen, 'MoClose':MoClose, 'TuClose':TuClose, 'WeClose':WeClose, 'ThClose':ThClose, 'FrClose':FrClose, 'SaClose':SaClose, 'SuClose':SuClose})
     
 def restaurant_profile(request, rid):
     MoOpen = ""
@@ -552,6 +563,7 @@ def restaurant_profile(request, rid):
     print request.user.username
     
     my_prof = False
+    no_seamless = False
 
     restaurant = Restaurant.objects.filter(id=rid)[0]
     if restaurant.user.id == request.user.id:
@@ -559,6 +571,9 @@ def restaurant_profile(request, rid):
     else:
         restaurant.hits = restaurant.hits + 1
         restaurant.save()
+
+    if restaurant.seamless == 'No':
+        no_seamless = True
 
     website = str(restaurant.website)
     address = str(restaurant.number) + ' ' + str(restaurant.street)
@@ -645,7 +660,7 @@ def restaurant_profile(request, rid):
     else:
         SuOpen = str(hr) + str(':') + str(mi) + ' am'
 
-#closing times
+    #closing times
     hr = restaurant.moclose.hour
     mi = restaurant.moclose.minute
     if str(mi) == '0':
@@ -750,12 +765,12 @@ def restaurant_profile(request, rid):
             mgna = mgna + ingred.sodium*amount
         
         strings.append(item.name)
-        strings.append("%.2f" % cal)
-        strings.append("%.2f" % gpro)
-        strings.append("%.2f" % gfat)
-        strings.append("%.2f" % gcarb)
-        strings.append("%.2f" % gsug)
-        strings.append("%.2f" % mgna)
+        strings.append("%d" % cal)
+        strings.append("%d" % gpro)
+        strings.append("%d" % gfat)
+        strings.append("%d" % gcarb)
+        strings.append("%d" % gsug)
+        strings.append("%d" % mgna)
         strings.append(price)
         strings.append(description)
       
@@ -772,7 +787,7 @@ def restaurant_profile(request, rid):
                 add.delete()
             delete_item.delete()
 
-            return render(request, 'rest_profile.html', {'hits':restaurant.hits, 'my_prof':my_prof, 'uname':request.user.username, 'rest':restaurant, 'strings':strings, 'address':address, 'website':website, 'csz':city_st_zip, 'phone':phone, \
+            return render(request, 'rest_profile.html', {'no_seamless':no_seamless, 'hits':restaurant.hits, 'my_prof':my_prof, 'uname':request.user.username, 'rest':restaurant, 'strings':strings, 'address':address, 'website':website, 'csz':city_st_zip, 'phone':phone, \
             'MoOpen':MoOpen, 'TuOpen':TuOpen, 'WeOpen':WeOpen, 'ThOpen':ThOpen, 'FrOpen':FrOpen, 'SaOpen':SaOpen, 'SuOpen':SuOpen, 'MoClose':MoClose, 'TuClose':TuClose, 'WeClose':WeClose, 'ThClose':ThClose, 'FrClose':FrClose, 'SaClose':SaClose, 'SuClose':SuClose})
 
         if 'ingred_dish' in request.POST:
@@ -789,6 +804,6 @@ def restaurant_profile(request, rid):
 
         return HttpResponseRedirect('/add_dish/' + rid)
     
-    return render(request, 'rest_profile.html', {'hits':restaurant.hits, 'my_prof':my_prof, 'uname':request.user.username, 'rest':restaurant, 'strings':strings, 'address':address, 'website':website, 'csz':city_st_zip, 'phone':phone, \
+    return render(request, 'rest_profile.html', {'no_seamless':no_seamless, 'hits':restaurant.hits, 'my_prof':my_prof, 'uname':request.user.username, 'rest':restaurant, 'strings':strings, 'address':address, 'website':website, 'csz':city_st_zip, 'phone':phone, \
         'MoOpen':MoOpen, 'TuOpen':TuOpen, 'WeOpen':WeOpen, 'ThOpen':ThOpen, 'FrOpen':FrOpen, 'SaOpen':SaOpen, 'SuOpen':SuOpen, 'MoClose':MoClose, 'TuClose':TuClose, 'WeClose':WeClose, 'ThClose':ThClose, 'FrClose':FrClose, 'SaClose':SaClose, 'SuClose':SuClose})
 

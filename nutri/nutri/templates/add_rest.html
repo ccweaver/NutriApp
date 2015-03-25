@@ -124,6 +124,14 @@ $(window).load(function(){
             border-style: solid;
             width: 50%;
         }
+        #cuisine {
+            -webkit-border-radius: 5px;
+            -moz-border-radius: 5px;
+            border-radius: 5px;
+            border-style: solid;
+            width: 40%;
+        }
+
         #num_street {
             -webkit-border-radius: 5px;
             -moz-border-radius: 5px;
@@ -150,6 +158,15 @@ $(window).load(function(){
             border: 1px solid #000;
             font-style: bold;
         }
+
+        #seamless {
+            -webkit-border-radius: 5px;
+            -moz-border-radius: 5px;
+            border-radius: 5px;
+            border-style: solid;
+            width: 20%;
+        }
+
         #zipcode {
             -webkit-border-radius: 5px;
             -moz-border-radius: 5px;
@@ -207,13 +224,34 @@ $(window).load(function(){
 
         <label style="color: #555;">
             <font size="4">Restaurant Name:&nbsp;</font></label>
-        <input id="rest_name" type="text" name="rest_name" value='{{rest_name}}'>
-        <br><br>
+        <input id="rest_name" type="text" name="rest_name" value='{{rest_name}}' maxlength="200">
+        
 
         <div class="container">
+        <br>
+        <label style="color: #555;">
+        <font size="2">Cuisine Type:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        </font></label>
+        <input id="cuisine" type="text" name="cuisine" value='{{cuisine}}' maxlength="100">
+
+        <br>
+        <label style="color: #555;">
+        <font size="2">Seamless:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        </font></label>
+        <select id="seamless" name="seamless">
+        <option value="No">No</option>
+        <option value="t">Takeout Only</option>
+        <option value="td">Takeout and Delivery</option>
+        
+        </select>
+        
+        <br>
+        <br>
+
+        
         <label style= "color:#555";>
             <font size="2">Website:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font></label>
-        <input id="website" type="text" name="website" value='{{website}}'>
+        <input id="website" type="text" name="website" value='{{website}}' maxlength="300">
         <br>    
         
         <label style= "color:#555";>
@@ -341,19 +379,19 @@ $(window).load(function(){
 
         <label style="color: #555;">
             <font size="2">Number & Street:</font></label>
-        <input id="num_street" type="text" name="num_street" value='{{num_street}}'>
+        <input id="num_street" type="text" name="num_street" value='{{num_street}}' maxlength="100">
 
             <br>
 
         <label style="color: #555;">
             <font size="2">
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;City:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font></label>
-        <input id="city" type="text" name="city" value='{{city}}'>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;City:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font></label>
+        <input id="city" type="text" name="city" value='{{city}}' maxlength="100">
         &nbsp;&nbsp;&nbsp;&nbsp;
         <label style="color: #555;">
             <font size="2">
             State:&nbsp;</font></label>  
-        <select id="state" name="state">
+        <select id="state" name="state" value='{{state}}'>
         <option value="--">--</option>
         <option value="AL">AL</option>
         <option value="AK">AK</option>
