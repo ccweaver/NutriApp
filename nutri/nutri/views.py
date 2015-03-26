@@ -44,7 +44,7 @@ def sign_in(request):
                 r_citySorted = Restaurant.objects.filter(city__icontains=term).order_by('street')
                 rs = []
                 for r in r_citySorted:
-                    rs.append({'r':r.name, 'rid':r.id, 's':r.street, 't':r.number, 'u':r.city, 'v':r.state, 'w':r.zipcode})
+                    rs.append({'r':r.name, 'rid':r.id, 's':r.street, 't':r.number, 'u':r.city, 'v':r.state, 'w':r.zipcode, 'x':r.cuisine, 'y':r.seamless})
                 return render(request, 'search_results.html', {'rests':rs})
 
     if request.method == 'POST':
