@@ -345,8 +345,6 @@ def add_restaurant(request):
         h = re.compile("^http:.*")
         hs = re.compile("^https:.*")
         w = re.compile("^www\..*")
-        if not website and not error:
-            error = "Please enter a valid website"
         elif (not h.match(website)) and (not hs.match(website)):
             if w.match(website):
                 website = "http://" + website
