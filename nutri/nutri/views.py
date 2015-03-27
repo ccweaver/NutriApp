@@ -338,9 +338,12 @@ def add_restaurant(request):
         if not cuisine and not error:
             error = 'Please enter a cuisine type'
         print cuisine
-        c1 = cuisine[1]
-        c2 = cuisine[2]
-        c3 = cuisine[3]
+        if cuisine:
+            c1 = cuisine[0]
+            if len(cuisine) > 1:
+                c2 = cuisine[1]
+                if len(cuisine) > 2:
+                    c3 = cuisine[2]
 
         seamless = request.POST['seamless']
         
