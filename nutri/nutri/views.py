@@ -764,6 +764,9 @@ def restaurant_profile(request, rid):
             gsug = gsug + ingred.sugar*amount
             mgna = mgna + ingred.sodium*amount
         
+        calbyTen = cal/10
+        calbyTen = round(calbyTen)
+        cal = calbyTen*10
         strings.append(item.name)
         strings.append("%d" % cal)
         strings.append("%d" % gpro)
