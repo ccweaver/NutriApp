@@ -4,7 +4,7 @@ from Restaurant.models import Restaurant
 
 
 class RestAdmin(admin.ModelAdmin):
-    list_display = ('name', 'cuisine', 'user')
+    list_display = ('name', 'cuisine1', 'user')
     search_fields = ('name', 'user', 'city', 'zipcode')
     list_filter = ('name',)
 

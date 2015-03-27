@@ -3,7 +3,9 @@ from django.contrib.auth.models import User
 
 class Restaurant(models.Model):
 	name = models.CharField(max_length=300)
-	cuisine = models.CharField(max_length=110)
+	cuisine1 = models.CharField(max_length=110)
+	cuisine2 = models.CharField(max_length=110, null=True)
+	cuisine3 = models.CharField(max_length=110, null=True)
 	seamless = models.CharField(max_length=100, default='No')
 	number = models.IntegerField()
 	street = models.CharField(max_length=300)
