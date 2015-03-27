@@ -36,7 +36,15 @@ def sign_in(request):
                 restaurants = Restaurant.objects.all().order_by('zipcode').order_by('street')
                 rs = []
                 for r in restaurants:
-                    rs.append({'r':r.name, 'zipDist':abs(int(r.zipcode)-int(term)), 'rid':r.id, 's':r.street, 't':r.number, 'u':r.city, 'v':r.state, 'w':r.zipcode, 'x':r.cuisine, 'y':r.seamless})
+                    if r.cuisine2:
+                        if r.cuisine3:
+                            cuisine = r.cuisine1 + ', ' + r.cuisine2 + ', ' + r.cuisine3
+                        else:
+                            cuisine = r.cuisine1 + ', ' + r.cuisine2
+                    else:
+                        cuisine = cuisine1
+
+                    rs.append({'r':r.name, 'zipDist':abs(int(r.zipcode)-int(term)), 'rid':r.id, 's':r.street, 't':r.number, 'u':r.city, 'v':r.state, 'w':r.zipcode, 'x':cuisine, 'y':r.seamless})
                 r_zipSorted = sorted(rs, key=lambda r: r['zipDist'])
                 return render(request, 'search_results.html', {'rests':r_zipSorted})
 
@@ -44,7 +52,14 @@ def sign_in(request):
                 r_citySorted = Restaurant.objects.filter(city__icontains=term).order_by('street')
                 rs = []
                 for r in r_citySorted:
-                    rs.append({'r':r.name, 'rid':r.id, 's':r.street, 't':r.number, 'u':r.city, 'v':r.state, 'w':r.zipcode, 'x':r.cuisine, 'y':r.seamless})
+                    if r.cuisine2:
+                        if r.cuisine3:
+                            cuisine = r.cuisine1 + ', ' + r.cuisine2 + ', ' + r.cuisine3
+                        else:
+                            cuisine = r.cuisine1 + ', ' + r.cuisine2
+                    else:
+                        cuisine = r.cuisine1
+                    rs.append({'r':r.name, 'rid':r.id, 's':r.street, 't':r.number, 'u':r.city, 'v':r.state, 'w':r.zipcode, 'x':cuisine, 'y':r.seamless})
                 return render(request, 'search_results.html', {'rests':rs})
 
     if request.method == 'POST':
