@@ -300,11 +300,11 @@ def dish(request, rid):
 def add_restaurant(request):
     error = ""
     rest_name = ""
-    cuisine = "American, Chinese, Mexican, etc."
+    cuisine = "Chinese"
     seamless = ""
     num_street = ""
     city = ""
-    state = "--"
+    state = "No Selection"
     zipcode = ""
     website = ""
     phone = ""
@@ -334,9 +334,13 @@ def add_restaurant(request):
         if not rest_name and not error:
             error = 'Please enter the name of your restaurant'
 
-        cuisine = request.POST['cuisine']
-        if not cuisine or cuisine == 'American, Chinese, Mexican, etc.' and not error:
+        cuisine = request.POST.getlist('cuisine[]')
+        if not cuisine and not error:
             error = 'Please enter a cuisine type'
+        print cuisine
+        c1 = cuisine[1]
+        c2 = cuisine[2]
+        c3 = cuisine[3]
 
         seamless = request.POST['seamless']
         
@@ -382,8 +386,8 @@ def add_restaurant(request):
         if not city and not error:
             error = 'Please enter a city'
         
-        state = request.POST['state']
-        if state == '--' and not error:
+        state = request.POST.get('state', None)
+        if state == None and not error:
             error = 'Please select a state'
 
         zipcode = request.POST['zipcode']
@@ -535,14 +539,14 @@ def add_restaurant(request):
 
 
         if not error:
-            r = Restaurant(name=rest_name, cuisine=cuisine, seamless=seamless, number=num, street=street, city=city, state=state, zipcode=zipcode, website=website, phone=phoneNum, moopen=MoOpen, tuopen=TuOpen, weopen=WeOpen, thopen=ThOpen, fropen=FrOpen, saopen=SaOpen, suopen=SuOpen, moclose=MoClose, tuclose=TuClose, weclose=WeClose, thclose=ThClose, frclose=FrClose, saclose=SaClose, suclose=SuClose, user=request.user)
+            r = Restaurant(name=rest_name, cuisine1=c1, cuisine2=c2, cuisine3=c3, seamless=seamless, number=num, street=street, city=city, state=state, zipcode=zipcode, website=website, phone=phoneNum, moopen=MoOpen, tuopen=TuOpen, weopen=WeOpen, thopen=ThOpen, fropen=FrOpen, saopen=SaOpen, suopen=SuOpen, moclose=MoClose, tuclose=TuClose, weclose=WeClose, thclose=ThClose, frclose=FrClose, saclose=SaClose, suclose=SuClose, user=request.user)
             r.save()
             rid = r.id
             print rid
             return HttpResponseRedirect('/restaurant_profile/' + str(rid))
 
 
-    return render(request, 'add_rest.html', {'error':error, 'cuisine':cuisine, 'seamless':seamless, 'rest_name':rest_name, 'num_street':num_street, 'city':city, 'state':state, 'zipcode':zipcode, 'website':website, 'phone':phone, 'MoOpen':MoOpen, 'TuOpen':TuOpen, 'WeOpen':WeOpen, 'ThOpen':ThOpen, 'FrOpen':FrOpen, 'SaOpen':SaOpen, 'SuOpen':SuOpen, 'MoClose':MoClose, 'TuClose':TuClose, 'WeClose':WeClose, 'ThClose':ThClose, 'FrClose':FrClose, 'SaClose':SaClose, 'SuClose':SuClose})
+    return render(request, 'add_rest.html', {'error':error, 'seamless':seamless, 'rest_name':rest_name, 'num_street':num_street, 'city':city, 'state':state, 'zipcode':zipcode, 'website':website, 'phone':phone, 'MoOpen':MoOpen, 'TuOpen':TuOpen, 'WeOpen':WeOpen, 'ThOpen':ThOpen, 'FrOpen':FrOpen, 'SaOpen':SaOpen, 'SuOpen':SuOpen, 'MoClose':MoClose, 'TuClose':TuClose, 'WeClose':WeClose, 'ThClose':ThClose, 'FrClose':FrClose, 'SaClose':SaClose, 'SuClose':SuClose})
     
 def restaurant_profile(request, rid):
     MoOpen = ""

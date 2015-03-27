@@ -1,13 +1,22 @@
 <html>
 <head>
 
-<link rel="stylesheet" type="text/css" href="{{STATIC_URL}}css/bootstrap.min.css"/>
+
 <!--<link rel="stylesheet" type="text/css" href="{{STATIC_URL}}css/bootstrap-responsive.min.css"/> 
 --> 
 
 
-<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 <script type="text/javascript" src="{{STATIC_URL}}js/bootstrap.min.js"></script>
+<script src="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.1/js/bootstrap.min.js"></script>
+<link rel="stylesheet" type="text/css" href="{{STATIC_URL}}css/bootstrap.min.css"/>
+
+
+<script type="text/javascript" src="{{STATIC_URL}}silviomoreto-bootstrap-select-83d5a1b/dist/js/bootstrap-select.min.js"></script>
+<link rel="stylesheet" type="text/css" href="{{STATIC_URL}}silviomoreto-bootstrap-select-83d5a1b/dist/css/bootstrap-select.min.css"></script>
+
+
+
 <script>
 //  handles submitting the newuser form
 function newUserForm(dish_name, dish_price) {
@@ -96,28 +105,32 @@ $(window).load(function(){
         }
 
     }
-
-
 });
-$(document).ready(function() 
-{
-    $('cuisine').click(function() 
-    {
-        var items = $(this).parent().val();
-        if (items.length > 3) {
-                       alert("You can only select 3 values at a time");
-           $(this).removeAttr("selected");
+     
+    $(document).ready(function(e) {
+        $('.selectpicker').selectpicker();
+ 
+    });
+
+    $("#seamless").change(function() {
+        $("#seam_site").html('HIIIII');
+        var $seam_site = $("#seam_site");
+        var $rest_site = $("#rest_site");
+        var $seamless = $("#seamless");
+        if ($seamless.value == 'No') {
+            $seam_site.html('');
+            $rest_site.html("<label style= 'color:#555';><font size='2'>Restaurant Website:</font></label><input id='website' type='text' name='website' value='{{website}}' maxlength='300'>");
+        }
+        else {
+            $seam_site.html('<label style= "color:#555";><font size="2">Link to Your Seamless Page:</font></label><input id="website" type="text" name="website" value="{{website}}"" maxlength="300"><br>');
+            $rest_site.html("");
         }
     });
-   });
 
 </script>
 
 
-<style type="text/css">
-
-
-           
+<style type="text/css">           
         body {
             background-image: url('../static/restaurant2.JPG');
         }
@@ -136,13 +149,7 @@ $(document).ready(function()
             border-style: solid;
             width: 50%;
         }
-        #cuisine {
-            -webkit-border-radius: 5px;
-            -moz-border-radius: 5px;
-            border-radius: 5px;
-            border-style: solid;
-            width: 40%;
-        }
+
 
         #num_street {
             -webkit-border-radius: 5px;
@@ -165,18 +172,6 @@ $(document).ready(function()
         #state {
             width: 75px;
             height: 25px;
-            overflow: hidden;
-            background-color: white;
-            border: 1px solid #000;
-            font-style: bold;
-        }
-
-        #seamless {
-            -webkit-border-radius: 5px;
-            -moz-border-radius: 5px;
-            border-radius: 5px;
-            border-style: solid;
-            width: 20%;
         }
 
         #zipcode {
@@ -198,13 +193,7 @@ $(document).ready(function()
             border-style: solid;
             width: 80%;
         }
-        
-         #topnavbar{
-            background-image:url('http://i375.photobucket.com/albums/oo197/Charles-Stanton_151515/M701_White_Carrara_zps6ag0dbxr.jpg');
-            background-size:cover;
-        
 
-        }
 </style>
 
 
@@ -231,7 +220,7 @@ $(document).ready(function()
 <div class="jumbotron" style="background-image: url(../static/marble2.jpg); background-size: 100%;">
 <div class="container">
 
-    <form id="RestForm" method="post">
+    <form id="RestForm" method="post"  enctype="multipart/form-data">
         {% csrf_token %}
         <font size="5" color="A22;" style="bold;">{{error}}</font>
         <br><br>
@@ -244,10 +233,9 @@ $(document).ready(function()
         <div class="container">
         <br>
         <label style="color: #555;">
-        <font size="2">Cuisine Type:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <font size="2">Cuisine Type (up to 3):&nbsp;&nbsp;
         </font></label>
-        <select multiple id="cuisine" name="cuisine" value='{{cuisine}}'>
-        <option value="--">--</option>
+        <select data-size="10" class="selectpicker" multiple data-max-options="3" id="cuisine" name="cuisine[]" value='{{cuisine}}'>
         <option value="American">American</option>
         <option value="Bagels">Bagels</option>
         <option value="BBQ">BBQ</option>
@@ -301,25 +289,32 @@ $(document).ready(function()
         <option value="Vietnamese">Vietnamese</option>
         <option value="Wings">Wings</option>
         </select>
+        
+   
+  
 
         <br>
         <label style="color: #555;">
         <font size="2">Seamless:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-        </font></label>
-        <select id="seamless" name="seamless">
-        <option value="No">No</option>
-        <option value="Takeout Only">Takeout Only</option>
-        <option value="Takeout and Delivery">Takeout and Delivery</option>
+                </font></label>
+        <select id="seamless" name="seamless" class="selectpicker">
+        <option>No</option>
+        <option>Takeout Only</option>
+        <option>Takeout and Delivery</option>
         
         </select>
         
         <br>
         <br>
 
-        
+        <div id="seam_site">
+        </div>
+
+        <div id="rest_site">
         <label style= "color:#555";>
-            <font size="2">Link to Seamless Menu<br>(If not on Seamless, post link to your website/menu):</font></label>
+            <font size="2">Restaurant Website:</font></label>
         <input id="website" type="text" name="website" value='{{website}}' maxlength="300">
+        </div>
         <br>    
         
         <label style= "color:#555";>
@@ -459,8 +454,7 @@ $(document).ready(function()
         <label style="color: #555;">
             <font size="2">
             State:&nbsp;</font></label>  
-        <select id="state" name="state" value='{{state}}'>
-        <option value="--">--</option>
+        <select data-size="10" multiple data-max-options="1" class="selectpicker" id="state" name="state" value='{{state}}'>
         <option value="AL">AL</option>
         <option value="AK">AK</option>
         <option value="AZ">AZ</option>
@@ -525,7 +519,7 @@ $(document).ready(function()
 
         <br><br>
 
-        <input class="btn btn-default" value="Cancel" style="width: 20%;"> 
+        <input id="cancel" class="btn btn-default" value="Cancel" style="width: 20%;"> 
         <input type="submit" class="btn btn-danger" value="Save" style="width: 20%;">
         </div>
     </form>
