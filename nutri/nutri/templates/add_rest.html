@@ -99,6 +99,18 @@ $(window).load(function(){
 
 
 });
+$(document).ready(function() 
+{
+    $('cuisine').click(function() 
+    {
+        var items = $(this).parent().val();
+        if (items.length > 3) {
+                       alert("You can only select 3 values at a time");
+           $(this).removeAttr("selected");
+        }
+    });
+   });
+
 </script>
 
 
@@ -190,6 +202,8 @@ $(window).load(function(){
          #topnavbar{
             background-image:url('http://i375.photobucket.com/albums/oo197/Charles-Stanton_151515/M701_White_Carrara_zps6ag0dbxr.jpg');
             background-size:cover;
+        
+
         }
 </style>
 
@@ -232,7 +246,61 @@ $(window).load(function(){
         <label style="color: #555;">
         <font size="2">Cuisine Type:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
         </font></label>
-        <input id="cuisine" type="text" name="cuisine" value='{{cuisine}}' maxlength="100">
+        <select multiple id="cuisine" name="cuisine" value='{{cuisine}}'>
+        <option value="--">--</option>
+        <option value="American">American</option>
+        <option value="Bagels">Bagels</option>
+        <option value="BBQ">BBQ</option>
+        <option value="Brazilian">Brazilian</option>
+        <option value="Breakfast">Breakfast</option>
+        <option value="Brunch">Brunch</option>
+        <option value="Burgers">Burgers</option>
+        <option value="Caribbean">Caribbean</option>
+        <option value="Chinese">Chinese</option>
+        <option value="Crepes">Crepes</option>
+        <option value="Cuban">Cuban</option>
+        <option value="Deli">Deli</option>
+        <option value="Dessert">Dessert</option>
+        <option value="Dim Sum">Dim Sum</option>
+        <option value="Diner">Diner</option>
+        <option value="French">French</option>
+        <option value="Gluten Free">Gluten Free</option>
+        <option value="Greek">Greek</option>
+        <option value="Grocery">Grocery</option>
+        <option value="Halal">Halal</option>
+        <option value="Healthy">Healthy</option>
+        <option value="Indian">Indian</option>
+        <option value="Irish">Irish</option>
+        <option value="Italian">Italian</option>
+        <option value="Japanese">Japanese</option>
+        <option value="Juices">Juices</option>
+        <option value="Korean">Korean</option>
+        <option value="Kosher">Kosher</option>
+        <option value="Latin American">Latin American</option>
+        <option value="Malaysian">Malaysian</option>
+        <option value="Mediterranean">Mediterranean</option>
+        <option value="Mexican">Mexican</option>
+        <option value="Middle Eastern">Middle Eastern</option>
+        <option value="Noodles">Noodles</option>
+        <option value="Organic">Organic</option>
+        <option value="Pakistani">Pakistani</option>
+        <option value="Pizza">Pizza</option>
+        <option value="Salads">Salads</option>
+        <option value="Sandwiches">Sandwiches</option>
+        <option value="Seafood">Seafood</option>
+        <option value="Smoothies and Shakes">Smoothies and Shakes</option>
+        <option value="Soups">Soups</option>
+        <option value="Southern and Soul Food">Southern and Soul Food</option>
+        <option value="Spanish/Tapas">Spanish/Tapas</option>
+        <option value="Steakhouse">Steakhouse</option>
+        <option value="Sushi">Sushi</option>
+        <option value="Thai">Thai</option>
+        <option value="Turkish">Turkish</option>
+        <option value="Vegan">Vegan</option>
+        <option value="Vegetarian">Vegetarian</option>
+        <option value="Vietnamese">Vietnamese</option>
+        <option value="Wings">Wings</option>
+        </select>
 
         <br>
         <label style="color: #555;">
