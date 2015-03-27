@@ -766,6 +766,7 @@ def restaurant_profile(request, rid):
         
         calbyTen = cal/10
         calbyTen = round(calbyTen)
+
         cal = calbyTen*10
         strings.append(item.name)
         strings.append("%d" % cal)
