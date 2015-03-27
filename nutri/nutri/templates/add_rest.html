@@ -169,6 +169,10 @@ $(window).load(function(){
         #state {
             width: 75px;
             height: 25px;
+            overflow: hidden;
+            background-color: white;
+            border: 1px solid #000;
+            font-style: bold;
         }
 
         #zipcode {
@@ -447,7 +451,8 @@ $(window).load(function(){
         <label style="color: #555;">
             <font size="2">
             State:&nbsp;</font></label>  
-        <select data-size="10" multiple data-max-options="1" class="selectpicker" id="state" name="state" value='{{state}}'>
+        <select id="state" name="state" value='{{state}}'>
+        <option value="--">--</option>
         <option value="AL">AL</option>
         <option value="AK">AK</option>
         <option value="AZ">AZ</option>

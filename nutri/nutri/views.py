@@ -390,7 +390,7 @@ def add_restaurant(request):
             error = 'Please enter a city'
         
         state = request.POST.get('state', None)
-        if state == None and not error:
+        if state == '--' and not error:
             error = 'Please select a state'
 
         zipcode = request.POST['zipcode']
