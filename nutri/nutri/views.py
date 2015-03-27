@@ -36,7 +36,7 @@ def sign_in(request):
                 restaurants = Restaurant.objects.all().order_by('zipcode').order_by('street')
                 rs = []
                 for r in restaurants:
-                    rs.append({'r':r.name, 'zipDist':abs(int(r.zipcode)-int(term)), 'rid':r.id, 's':r.street, 't':r.number, 'u':r.city, 'v':r.state, 'w':r.zipcode 'x':r.cuisine, 'y':r.seamless})
+                    rs.append({'r':r.name, 'zipDist':abs(int(r.zipcode)-int(term)), 'rid':r.id, 's':r.street, 't':r.number, 'u':r.city, 'v':r.state, 'w':r.zipcode, 'x':r.cuisine, 'y':r.seamless})
                 r_zipSorted = sorted(rs, key=lambda r: r['zipDist'])
                 return render(request, 'search_results.html', {'rests':r_zipSorted})
 
