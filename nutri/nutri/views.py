@@ -315,7 +315,10 @@ def dish(request, rid):
 def add_restaurant(request):
     error = ""
     rest_name = ""
-    cuisine = "Chinese"
+    cuisine = ""
+    c1 = ""
+    c2 = ""
+    c3 = ""
     seamless = ""
     num_street = ""
     city = ""
