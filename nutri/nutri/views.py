@@ -802,8 +802,12 @@ def restaurant_profile(request, rid):
         
         calbyTen = cal/10
         calbyTen = round(calbyTen)
-
+        mgnabyTen = mgna/10
+        mgnabyTen = round(mgnabyTen)
+        
+        
         cal = calbyTen*10
+        mgna = mgnabyTen*10
         strings.append(item.name)
         strings.append("%d" % cal)
         strings.append("%d" % gpro)
