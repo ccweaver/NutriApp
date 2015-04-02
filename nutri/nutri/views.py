@@ -185,8 +185,6 @@ def dish(request, rid):
                 ingreds = []
                 print 'hi'
                 for i in ingred_list:
-                    print str(i).lower()
-                    print str(i).lower().index(terms[0].lower())
                     tup = (i, str(i).lower().index(terms[0].lower()))
                     ingreds.append(tup)
                 ingreds = sorted(ingreds, key=itemgetter(1))
