@@ -180,11 +180,14 @@ def dish(request, rid):
                 ingred_list = Ingredient.objects.filter(ingredient__icontains=terms[0]).filter(ingredient__icontains=terms[1]).filter(ingredient__icontains=terms[2]).order_by('ingredient')
             if len(terms) == 4:
                 ingred_list = Ingredient.objects.filter(ingredient__icontains=terms[0]).filter(ingredient__icontains=terms[1]).filter(ingredient__icontains=terms[2]).filter(ingredient__icontains=terms[3]).order_by('ingredient')
-            
+            print ingred_list
             if ingred_list:
                 ingreds = []
+                print 'hi'
                 for i in ingred_list:
-                    tup = (i, str(i).index(terms[0]))
+                    print str(i).lower()
+                    print str(i).lower().index(terms[0].lower())
+                    tup = (i, str(i).lower().index(terms[0].lower()))
                     ingreds.append(tup)
                 ingreds = sorted(ingreds, key=itemgetter(1))
                 ingreds_sorted = []
