@@ -12,6 +12,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth import logout
 from django.contrib import auth
 from datetime import datetime
+from operator import itemgetter
 
     
 def sign_in(request):
@@ -179,17 +180,26 @@ def dish(request, rid):
                 ingred_list = Ingredient.objects.filter(ingredient__icontains=terms[0]).filter(ingredient__icontains=terms[1]).filter(ingredient__icontains=terms[2]).order_by('ingredient')
             if len(terms) == 4:
                 ingred_list = Ingredient.objects.filter(ingredient__icontains=terms[0]).filter(ingredient__icontains=terms[1]).filter(ingredient__icontains=terms[2]).filter(ingredient__icontains=terms[3]).order_by('ingredient')
+            
+            if ingred_list:
+                ingreds = []
+                for i in ingred_list:
+                    tup = (i, str(i).index(terms[0]))
+                    ingreds.append(tup)
+                ingreds = sorted(ingreds, key=itemgetter(1))
+                ingreds_sorted = []
+                for x in ingreds:
+                    ingreds_sorted.append(x[0])
 
-
-            if not ingred_list:
-                ingred_list = ['Sorry, no ingredient found']
+            elif not ingred_list:
+                ingreds_sorted = ['Sorry, no ingredient found']
             if not request.POST['term']:
-                ingred_list = []
+                ingreds_sorted = []
             
             #count = 10
             #for x in range(0,count):
             #   print ingred_list[x].id
-            return render(request, 'select_temp.html', {'ingred_list':ingred_list, 'error':error, 'added_ingreds':add_i})
+            return render(request, 'select_temp.html', {'ingred_list':ingreds_sorted, 'error':error, 'added_ingreds':add_i})
         
         if 'amount' in request.POST:
             ingred_to_add = request.POST['ingred_to_add']
@@ -269,7 +279,7 @@ def dish(request, rid):
             d_description = request.POST['dish_description']
             if not d_name:
                 error = 'Please enter a dish name'
-            elif Item.objects.filter(name=d_name).filter(rest_id=rid):
+            elif Item.objects.filter(name=d_name).filter(rest_id=rid).filter(valid=True):
                 error = 'Dish already exists on this menu'
             elif not d_price:
                 error = "Please enter a dish price"
