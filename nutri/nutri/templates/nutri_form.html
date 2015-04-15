@@ -291,8 +291,8 @@ function showModal() {
          <li><u>Directions</u></li>
          <li>1. Enter ingredient in Search, press Refresh List</li>
          <li>2. Select ingredient from box above (by clicking on it)</li>
-         <li>3. Enter amount then press Add Ingredient</li>
-         <li>4. Repeat 1-3, then press Complete Dish</li>
+         <li>3. Once ingredient is highlighted, enter amount then press Add Ingredient</li>
+         <li>4. Repeat steps 1-3 for each ingredient, then press Complete Dish</li>
         </ul>
         </div>
 
@@ -321,7 +321,9 @@ function showModal() {
         <input type="button" class="btn btn-primary" value="Add Ingredient" id="add_ingredient" onclick="addIn(document.getElementById('iSelect').value, document.getElementById('amount').value, document.getElementById('unit').value)">
         <input type="button" class="btn btn-danger" value="Complete Dish" onClick="submit()" style="margin-left:30px">
     
-        
+       <div id="USDA">
+Note: Nutrition data used to build menu is from USDA. 
+</div> 
 
     
 </div>
