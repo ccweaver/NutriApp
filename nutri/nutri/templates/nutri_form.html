@@ -236,6 +236,9 @@ function showModal() {
             font-weight:bold;
         }
        
+       .USDA {
+           font-weight:bold;
+       }
      
 
         </style>
@@ -321,8 +324,8 @@ function showModal() {
         <input type="button" class="btn btn-primary" value="Add Ingredient" id="add_ingredient" onclick="addIn(document.getElementById('iSelect').value, document.getElementById('amount').value, document.getElementById('unit').value)">
         <input type="button" class="btn btn-danger" value="Complete Dish" onClick="submit()" style="margin-left:30px">
     
-       <div id="USDA">
-Note: Nutrition data used to build menu is from USDA. 
+       <div class="USDA">
+Note: Nutrition data used to build menu is from USDA, with a small number of ingredients coming from outside, indepedent sources. These ingredients are marked with a * sign. 
 </div> 
 
     
