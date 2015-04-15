@@ -324,12 +324,15 @@ function showModal() {
         <input type="button" class="btn btn-primary" value="Add Ingredient" id="add_ingredient" onclick="addIn(document.getElementById('iSelect').value, document.getElementById('amount').value, document.getElementById('unit').value)">
         <input type="button" class="btn btn-danger" value="Complete Dish" onClick="submit()" style="margin-left:30px">
     
-       <div class="USDA">
-Note #1: Nutrition data used to build menu is from USDA, with a small number of ingredients coming from outside, indepedent sources. These ingredients are marked with a * sign.<br>
-Note #2: For ingredients that are more difficult to weigh on a scale (examples: rice, yogurt, etc), simply place those ingrdients inside a cup, weight it, then subtract the weight of the cup to get correct amount in grams. 
-Note #3: 
-Note #4:
-</div> 
+        <div class="USDA">
+        <ul style="list-style-type:none; padding-left:0">
+         <li><u>Notes for Restaurants</u></li>
+        <li>Note #1: Nutrition data used to build menu is from USDA, with a small number of ingredients coming from outside, indepedent sources. These ingredients are marked with a * sign.</li>
+        <li>Note #2: For ingredients that are more difficult to weigh on a scale (examples: rice, yogurt, etc), place those ingrdients inside a cup, weight cup with ingredients, then subtract the weight of the cup w/out ingredients to get correct amount in grams.</li> 
+        <li>Note #3: Remember that you can always take an existing item from your menu and make the portion sizes smaller to get that dish under 600 calories, you just need to name it something new!</li>  
+        <li>Note #4: Please contact Charles.Stanton1515@gmail.com for questions/comments/feedback, and if you have an ingredient not in our database, let us know and we'll add it for you.</li> 
+        </ul>
+        </div> 
 
     
 </div>
