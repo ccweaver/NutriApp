@@ -9,6 +9,7 @@ class Ingredient(models.Model):
 	sugar = models.DecimalField(max_digits=10, decimal_places=2)
 	sodium = models.DecimalField(max_digits=10, decimal_places=2)
 	food_group = models.CharField(max_length=100)
+	g_per_ml = models.DecimalField(max_digits=10, decimal_places=9, default=1.0)
 
 	def __unicode__(self):
 		return u'%s' % (self.ingredient)

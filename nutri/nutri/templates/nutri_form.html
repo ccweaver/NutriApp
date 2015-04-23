@@ -17,7 +17,7 @@ $.ajax(
     {
         type: "post",
         url: "",
-        data: {done:'true', csrfmiddlewaretoken:document.getElementsByName('csrfmiddlewaretoken')[0].value},
+        data: {done:'true', ingred_dish:d_name, csrfmiddlewaretoken:document.getElementsByName('csrfmiddlewaretoken')[0].value},
         success: function (data)
         {
             location.href = "/restaurant_profile/" + data.rid;
@@ -69,7 +69,10 @@ $.ajax(
             var list = "";
             for (key in data) {
                 if (key != "d_name" && key !="error") {
-                    list += "* " + data[key] + "<br>";
+                    list += '<button class="btn btn-default btn-sm" id="' + key;
+                    list += 'type="button" onclick="removeIngred(' + key + ')">'
+                    list += '<span class="glyphicon glyphicon-remove"></span></button>';
+                    list += data[key] + "<br>";
                 }
             }
             document.getElementById('list_ingred').innerHTML = list;
@@ -85,13 +88,44 @@ $.ajax(
 return false;
 };
 
-//  handles submitting the newdish form
-function newDishForm(dish_name, dish_price) {
+//canceling an added ingredient
+function removeIngred(key) {
 $.ajax(
     {
         type: "post",
         url: "",
-        data: {dish_name:dish_name, dish_price:dish_price, csrfmiddlewaretoken:document.getElementsByName('csrfmiddlewaretoken')[0].value},
+        data: {delete_key: key, ingred_dish:d_name, csrfmiddlewaretoken:document.getElementsByName('csrfmiddlewaretoken')[0].value},
+        success: function (data)
+        {
+        if (data.error) {
+            document.getElementById('error_wrapper').innerHTML = data.error;
+        }
+        else {
+            document.getElementById('error_wrapper').innerHTML = "";
+
+            var list = "";
+            for (key in data) {
+                if (key != "d_name" && key !="error") {
+                    list += '<button class="btn btn-default btn-sm" id="' + key;
+                    list += 'type="button" onclick="removeIngred(' + key + ')">'
+                    list += '<span class="glyphicon glyphicon-remove"></span></button>';
+                    list += data[key] + "<br>";
+                }
+            }
+            document.getElementById('list_ingred').innerHTML = list;
+        }
+    }
+    });
+return false;
+};
+
+//  handles submitting the newdish form
+function newDishForm(dish_name, dish_price, dish_description) {
+$.ajax(
+    {
+        type: "post",
+        url: "",
+        data: {dish_name:dish_name, dish_price:dish_price, dish_description:dish_description, csrfmiddlewaretoken:document.getElementsByName('csrfmiddlewaretoken')[0].value},
         success: function (data)
         {
         if (data.error) {
@@ -133,7 +167,7 @@ function showModal() {
 
 </script>
 
-    <title>Calo</title>
+    <title>CALOSPOT</title>
     <style type="text/css">
         body {
             background-image: url('../static/food.jpg');
@@ -159,11 +193,12 @@ function showModal() {
             width: 30%;
         }
         #iSelect {
-            width: 80%;
+            width: 62%;
             -webkit-border-radius: 5px;
             -moz-border-radius: 5px;
             border-radius: 5px;
             border-style: solid;
+            height:20%;
         }
         #amount {
             -webkit-border-radius: 5px;
@@ -187,7 +222,25 @@ function showModal() {
             border: 1px solid #000;
             font-style: bold;
         }
-
+        #dish_description {
+            -webkit-border-radius: 5px;
+            -moz-border-radius: 5px;
+            border-radius: 5px;
+            border-style: solid;
+            width: 100%;
+            height: 7%;
+        }
+        
+        .instructions{
+            margin-left:100px;
+            font-weight:bold;
+        }
+       
+       .USDA {
+           font-weight:bold;
+           padding-top:5%;
+       }
+     
 
         </style>
 </head>
@@ -201,7 +254,7 @@ function showModal() {
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="/">{% block navtitle %} <span style="color:#12AA34;opacity=.99;">C</span><span style="color:#BB9977;opacity=.99;">a</span><span style="color:#12AA34;opacity=.99;">l</span><span style="color:#BB9977;opacity=.99;">o</span>{% endblock %}</a>
+          <a class="navbar-brand" href="/">{% block navtitle %} <span style="color:#2efb00;opacity=.99;">CALO</span><span style="color:#1500fb;opacity=.99;">SPOT</span>{% endblock %}</a>
           </div>
           </div>
           </div>
@@ -233,8 +286,20 @@ function showModal() {
     </button>
 
     <br><br>
-
+        
         <div id="reload">{% include 'select_temp.html' %}</div>
+   
+        
+        <div class="instructions">
+        <ul style="list-style-type:none; padding-left:0">
+         <li><u>Directions</u></li>
+         <li>1. Enter ingredient in Search, press Refresh List.</li>
+         <li>2. Select ingredient from box above (by clicking on it).</li>
+         <li>3. Once ingredient is highlighted, enter amount below then press Add Ingredient.</li>
+         <li>4. Repeat steps 1-3 for each ingredient, then press Complete Dish.</li>
+         <li>(We make all volume conversions. Scroll down to bottom of page for notes on ingredient database.)</li>
+        </ul>
+        </div>
 
         <br><br>
         <label style="color: #555;">
@@ -245,7 +310,6 @@ function showModal() {
         <select id="unit" name="unit">
         <option value="g">g</option>
         <option value="oz">oz</option>
-        <option value="mL">mL</option>
         <option value="tsp">tsp</option>
         <option value="tblspn">tblspn</option>
         </select>
@@ -257,10 +321,21 @@ function showModal() {
         </b>
         <br><br>
 
-        <a class="btn btn-primary" onclick="showModal()">Edit Name & Price</a>
+       
         <input type="button" class="btn btn-primary" value="Add Ingredient" id="add_ingredient" onclick="addIn(document.getElementById('iSelect').value, document.getElementById('amount').value, document.getElementById('unit').value)">
-        <input type="button" class="btn btn-danger" value="Complete Dish" onClick="submit()">
-
+        <input type="button" class="btn btn-danger" value="Complete Dish" onClick="submit()" style="margin-left:30px">
+    
+        <div class="USDA">
+        <ul style="list-style-type:none; padding-left:0">
+         <li><u>Tips/Notes for Restaurants</u></li>
+        <li>#1: Nutrition data for each ingredient is from the U.S. Department of Agriculture, with a small number of ingredients coming from outside, indepedent sources. These ingredients are marked with a * sign.</li>
+        <li>#2: You can check the nutritional breakdown for each ingredient by creating a sample dish with just that one ingredient, using whatever amount in grams is relevant (100 is probably easiest). Then just delete dish from menu when finished.</li>
+        <li>#3: The ingredients in each dish (and their corresponding amounts) are only seen by you and are confidental. </li>
+        <li>#4: For ingredients that are more difficult to weigh on a scale (examples: rice, yogurt, etc), place those ingredients inside a cup, weight cup with ingredients, then subtract the weight of the cup (without ingredients) to get correct amount in grams.</li> 
+        <li>#5: Remember that you can always take an existing item from your regular menu and make the portion sizes smaller to get that dish under 600 calories, you just need to name it something new!</li>  
+        <li>#6: Please contact Charles.Stanton1515@gmail.com for questions/comments/feedback, and if you have an ingredient not in our database, let us know and we'll add it for you.</li> 
+        </ul>
+        </div> 
 
     
 </div>
@@ -291,7 +366,12 @@ function showModal() {
         <br>
         <label style="color: #555;">
         <font size="4">Price:&nbsp;&nbsp;</font></label>
-        <input id="dish_price" type="number" name="dish_price">  
+        <input id="dish_price" type="number" name="dish_price">
+
+        <br>
+        <label style="color: #555;">
+        <font size="4">Description:&nbsp;</font></label>
+        <input id="dish_description" type="text" name="dish_description">  
       
 
 
@@ -299,7 +379,7 @@ function showModal() {
         </div>
         <div class="modal-footer">
             <div id="close_button">
-            <button class="btn btn-danger btn-sm" id="refresh_button" type="button" onclick="newDishForm(document.getElementById('dish_name').value, document.getElementById('dish_price').value)">
+            <button class="btn btn-danger btn-sm" id="refresh_button" type="button" onclick="newDishForm(document.getElementById('dish_name').value, document.getElementById('dish_price').value, document.getElementById('dish_description').value)">
                 <span class="glyphicon glyphicon-ok"></span>Done</button> 
             </div>
         </form>
