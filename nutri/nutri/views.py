@@ -222,17 +222,20 @@ def dish(request, rid):
             if not error:
                 i_t_a = Ingredient.objects.filter(ingredient=ingred_to_add)
                 
+                density = float(i_t_a.values_list('g_per_ml')[0][0])
+                
+                #unit conversions
                 if unit == 'g':
                     amnt_grams = float(amount)
                 elif unit == 'oz':
                     amnt_grams = float(amount) * 28.3495
                 elif unit == 'tsp':
-                    amnt_grams = float(amount) * 4.92892
+                    amnt_grams = float(amount) * 4.92892 * density
                 elif unit == 'tblspn':
-                    amnt_grams = float(amount) * 14.78676
+                    amnt_grams = float(amount) * 14.78676 * density
                 elif unit == 'Fl. Oz':
-                    amnt_grams = float(amount) * 30
-                
+                    amnt_grams = float(amount) * 30 * density
+
                 amnt_grams = "{0:.2f}".format(round(amnt_grams,2))
                 
                 i_t_a_id = i_t_a.values_list('id')[0][0]
