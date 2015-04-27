@@ -156,6 +156,7 @@ function hideModal()
 
 $(window).load(function(){
     $('#myModal').modal('show');
+    
 });
 
 function showModal() {
@@ -164,6 +165,7 @@ function showModal() {
     document.getElementById('close_button').innerHTML = '<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>';
 
 }
+
 
 </script>
 
@@ -178,6 +180,10 @@ function showModal() {
             color: red;
             display: block;
             font-size: 12px;
+        }
+        #info_button {
+            margin-right: 5%;
+            margin-left: 90%;
         }
         #searchbox {
             -webkit-border-radius: 5px;
@@ -270,11 +276,19 @@ function showModal() {
 
 <font size="5" style="bold;"><div id='name_wrapper'></div></font>
     
+    <div id='info_button'>
+    
+   
+    <button class="btn btn-primary btn-sm" type="button">
+                <span class="glyphicon glyphicon-info-sign"></span></button> 
+    
+    </div>
+
     <font size="4" color="A22;" style="bold;">
     <div id="error_wrapper"></div>
 
     </font>
-    <br><br>
+    <br>
     
     <label style="color: #555;">
             <font size="2">Search for ingredients:&nbsp;
@@ -325,25 +339,12 @@ function showModal() {
         <input type="button" class="btn btn-primary" value="Add Ingredient" id="add_ingredient" onclick="addIn(document.getElementById('iSelect').value, document.getElementById('amount').value, document.getElementById('unit').value)">
         <input type="button" class="btn btn-danger" value="Complete Dish" onClick="submit()" style="margin-left:30px">
     
-        <div class="USDA">
-        <ul style="list-style-type:none; padding-left:0">
-         <li><u>Tips/Notes for Restaurants</u></li>
-        <li>#1: Nutrition data for each ingredient is from the U.S. Department of Agriculture, with a small number of ingredients coming from outside, indepedent sources. These ingredients are marked with a * sign.</li>
-        <li>#2: You can check the nutritional breakdown for each ingredient by creating a sample dish with just that one ingredient, using whatever amount in grams is relevant (100 is probably easiest). Then just delete dish from menu when finished.</li>
-        <li>#3: The ingredients in each dish (and their corresponding amounts) are only seen by you and are confidental. </li>
-        <li>#4: For ingredients that are more difficult to weigh on a scale (examples: rice, yogurt, etc), place those ingredients inside a cup, weight cup with ingredients, then subtract the weight of the cup (without ingredients) to get correct amount in grams.</li> 
-        <li>#5: Remember that you can always take an existing item from your regular menu and make the portion sizes smaller to get that dish under 600 calories, you just need to name it something new!</li>  
-        <li>#6: Please contact Charles.Stanton1515@gmail.com for questions/comments/feedback, and if you have an ingredient not in our database, let us know and we'll add it for you.</li> 
-        </ul>
-        </div> 
-
     
 </div>
 </div>  
 </div>
 
-<!-- Modal -->
-<div data-backdrop="static" class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div data-backdrop="static" data-keyboard="false" class="modal" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
@@ -386,10 +387,7 @@ function showModal() {
     </div>
   </div>
 </div>
-    
 
 
-
-<script src="{{STATIC_URL}}/js/bootstrap.min.js"></script>
 </body>
 </html>
