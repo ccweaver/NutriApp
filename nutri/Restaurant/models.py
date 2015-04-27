@@ -16,6 +16,7 @@ class Restaurant(models.Model):
 	hits = models.IntegerField(default=0)
 	user = models.ForeignKey(User)
 	website = models.CharField(max_length=300)
+	yelp = models.CharField(max_length=300, default="")
 	phone = models.BigIntegerField()
 	moopen = models.DateTimeField()
 	moclose = models.DateTimeField()
