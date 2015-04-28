@@ -227,6 +227,8 @@ Restaurants: Add however many dishes you'd like! As long as they are under 600 c
 {%endif%}
 
 {%if no_yelp%}
+
+{%else%}
 <h4><span>To check out this restaurant on Yelp:</span><a onclick='redirect("{{yelp}}")'>{{yelp}}</a> </h4>
 {%endif%}
 </div>
