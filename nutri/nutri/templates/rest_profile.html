@@ -159,7 +159,7 @@ function showModal()
 <h2>{{address}}<br>{{csz}}</h2>
 <h4 style="font-size:15px">{{phone}}
 <br>
-<a onclick='redirect("{{yelp}}")'>{{yelp}}</a>
+
 </h4>
 
 <div class="lister">
@@ -224,6 +224,10 @@ Restaurants: Add however many dishes you'd like! As long as they are under 600 c
 
 {%else%}
 <h4><span style=>To order these dishes for Takeout or Delivery: </span><a onclick='redirect("{{website}}")'>{{website}}</a></h4>
+{%endif%}
+
+{%if no_yelp%}
+<h4><span>To check out this restaurant on Yelp:</span><a onclick='redirect("{{yelp}}")'>{{yelp}}</a> </h4>
 {%endif%}
 </div>
 </div>
