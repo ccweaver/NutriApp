@@ -397,8 +397,7 @@ def add_restaurant(request):
 
         yelp = request.POST['yelp']
         zRE = re.compile("^.+yelp\..+$")
-        if not zRE.match(yelp):
-            error = "Please enter a valid yelp page"
+  
 
         phone = request.POST['phone']
         zRE = re.compile("^(\+\d{1,2}\s)?\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4}$")
