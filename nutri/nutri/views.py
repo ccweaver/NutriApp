@@ -397,7 +397,14 @@ def add_restaurant(request):
 
         yelp = request.POST['yelp']
         zRE = re.compile("^.+yelp\..+$")
-  
+        jk = re.compile("^http:.*")
+        kk = re.compile("^https:.*")
+        lm = re.compile("^www\..*")
+        elif (not jk.match(yelp)) and (not kk.match(website)):
+            if lm.match(yelp):
+                yelp = "http://" + yelp 
+            elif zRE.match(yelp):
+                yelp = "http://www." + yelp
 
         phone = request.POST['phone']
         zRE = re.compile("^(\+\d{1,2}\s)?\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4}$")
