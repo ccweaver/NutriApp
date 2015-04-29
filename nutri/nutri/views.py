@@ -400,7 +400,7 @@ def add_restaurant(request):
         jk = re.compile("^http:.*")
         kk = re.compile("^https:.*")
         lm = re.compile("^www\..*")
-        elif (not jk.match(yelp)) and (not kk.match(yelp)):
+        if (not jk.match(yelp)) and (not kk.match(yelp)):
             if lm.match(yelp):
                 yelp = "http://" + yelp 
             elif zRE.match(yelp):
