@@ -247,6 +247,10 @@ function showModal() {
            padding-top:5%;
        }
      
+        .thenotes{
+            font-weight:bold;
+            padding-top:20%;
+        }
 
         </style>
 </head>
@@ -333,7 +337,10 @@ function showModal() {
         <input type="button" class="btn btn-primary" value="Add Ingredient" id="add_ingredient" onclick="addIn(document.getElementById('iSelect').value, document.getElementById('amount').value, document.getElementById('unit').value)">
         <input type="button" class="btn btn-danger" value="Complete Dish" onClick="submit()" style="margin-left:30px">
     
-    
+    <div class="thenotes">
+    <u>Notes for Restaurants</u><br>1. Ingredient data is from U.S. Department of Agriculture, with a smaller number of ingredients coming from other indepedent sources. They are marked with a * sign.<br>2. For ingredients that are more difficult to weigh (examples: rice or yogurt), place ingredient inside cup and measure the total weight (with the cup), then subtract weight of empty cup to get weight of ingredients in grams.<br>3. Please email CharlieStanton@Calospot.com to let us know if we are missing any ingredients in our database, and we'll add them for you right away.   
+    </div>                                
+        
 </div>
 </div>  
 </div>
