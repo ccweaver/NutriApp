@@ -390,8 +390,7 @@ def add_restaurant(request):
                 website = "http://" + website
             elif zRE.match(website):
                 website = "http://www." + website
-            elif not error:
-                error = "Please enter a valid website"
+            
 
         yelp = request.POST['yelp']
         zRE = re.compile("^.+yelp\..+$")
