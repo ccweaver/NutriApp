@@ -206,7 +206,7 @@ def dish(request, rid):
             ingred_to_add = request.POST['ingred_to_add']
             amount = request.POST['amount']
             unit = request.POST['unit']
-            dish = Item.objects.filter(rest_id=rid).filter(name=request.POST['ingred_dish']).filter(valid=True)
+            dish = Item.objects.filter(rest_id=rid).filter(name=request.POST['ingred_dish'])
 
             if not ingred_to_add:
                 error = "Please search for and select (by clicking on) an ingredient. Then enter an amount, and click Add Ingredient."
@@ -241,6 +241,7 @@ def dish(request, rid):
                 i_t_a_id = i_t_a.values_list('id')[0][0]
                 
                 added_ingred_ids = dish.values_list('ingredients')
+
                 for ind in range(0, len(added_ingred_ids)):       
                     index = added_ingred_ids[ind][0]
                     if index != None:
@@ -256,6 +257,7 @@ def dish(request, rid):
                     addition = Addition(amount_grams=amnt_grams)
                     addition.ingred_id = i_t_a_id 
                     addition.save()     
+                    print dish[0]
                     dish[0].ingredients.add(addition)
 
 
