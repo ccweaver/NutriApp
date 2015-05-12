@@ -7,6 +7,7 @@ class Restaurant(models.Model):
 	cuisine2 = models.CharField(max_length=110, null=True)
 	cuisine3 = models.CharField(max_length=110, null=True)
 	seamless = models.CharField(max_length=100, default='No')
+	delivery_min = models.IntegerField(default=0)
 	number = models.IntegerField()
 	street = models.CharField(max_length=300)
 	city = models.CharField(max_length=300)
