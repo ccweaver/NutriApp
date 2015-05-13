@@ -371,8 +371,7 @@ def add_restaurant(request):
             error = 'Please enter the name of your restaurant'
         
         deliv = request.POST['deliv']
-        if not deliv and not error:
-            error = 'Please enter a vaild delivery minimum'
+       
         
         cuisine = request.POST.getlist('cuisine[]')
         if not cuisine and not error:
