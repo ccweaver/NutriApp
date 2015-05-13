@@ -597,7 +597,7 @@ def add_restaurant(request):
             rid = r.id
             print rid
             return HttpResponseRedirect('/restaurant_profile/' + str(rid))
-
+    
 
     return render(request, 'add_rest.html', {'error':error, 'cuisine':cuisine, 'seamless':seamless, 'rest_name':rest_name, 'deliv':deliv, 'num_street':num_street, 'city':city, 'state':state, 'zipcode':zipcode, 'website':website, 'yelp':yelp, 'phone':phone, 'MoOpen':MoOpen, 'TuOpen':TuOpen, 'WeOpen':WeOpen, 'ThOpen':ThOpen, 'FrOpen':FrOpen, 'SaOpen':SaOpen, 'SuOpen':SuOpen, 'MoClose':MoClose, 'TuClose':TuClose, 'WeClose':WeClose, 'ThClose':ThClose, 'FrClose':FrClose, 'SaClose':SaClose, 'SuClose':SuClose})
     
@@ -622,7 +622,8 @@ def restaurant_profile(request, rid):
     my_prof = False
     no_seamless = False
     no_yelp = False
-
+    no_deliv = False
+    
     restaurant = Restaurant.objects.filter(id=rid)[0]
     if restaurant.user.id == request.user.id:
         my_prof = True
@@ -635,6 +636,9 @@ def restaurant_profile(request, rid):
     
     if restaurant.yelp == '':
         no_yelp = True
+    
+    if restaurant.deliv == '':
+        no_deliv = True
         
     website = str(restaurant.website)
     yelp = str(restaurant.yelp)
