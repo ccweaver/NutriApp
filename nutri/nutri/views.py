@@ -622,7 +622,7 @@ def restaurant_profile(request, rid):
     my_prof = False
     no_seamless = False
     no_yelp = False
-    no_deliv = False
+   
     
     restaurant = Restaurant.objects.filter(id=rid)[0]
     if restaurant.user.id == request.user.id:
@@ -637,8 +637,6 @@ def restaurant_profile(request, rid):
     if restaurant.yelp == '':
         no_yelp = True
     
-    if restaurant.delivery_min == '':
-        no_deliv = True
         
     website = str(restaurant.website)
     yelp = str(restaurant.yelp)
