@@ -370,7 +370,7 @@ def add_restaurant(request):
         if not rest_name and not error:
             error = 'Please enter the name of your restaurant'
         
-        deliv = request.POST['deliv']
+        deliv = request.POST.get['deliv']
        
         
         cuisine = request.POST.getlist('cuisine[]')
