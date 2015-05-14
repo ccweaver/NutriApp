@@ -637,7 +637,7 @@ def restaurant_profile(request, rid):
     if restaurant.yelp == '':
         no_yelp = True
     
-    if restaurant.delivery_min == '0':
+    if restaurant.delivery_min == 0:
         no_delivery = True
         
     website = str(restaurant.website)
