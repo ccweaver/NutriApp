@@ -45,7 +45,7 @@ def sign_in(request):
                     else:
                         cuisine = r.cuisine1
 
-                    rs.append({'r':r.name, 'zipDist':abs(int(r.zipcode)-int(term)), 'rid':r.id, 's':r.street, 't':r.number, 'u':r.city, 'v':r.state, 'w':r.zipcode, 'x':cuisine, 'y':r.seamless, 'z':r.delivery_min})
+                    rs.append({'r':r.name, 'zipDist':abs(int(r.zipcode)-int(term)), 'rid':r.id, 's':r.street, 't':r.number, 'u':r.city, 'v':r.state, 'w':r.zipcode, 'x':cuisine, 'y':r.seamless})
                 r_zipSorted = sorted(rs, key=lambda r: r['zipDist'])
                 return render(request, 'search_results.html', {'rests':r_zipSorted})
 
@@ -60,7 +60,7 @@ def sign_in(request):
                             cuisine = r.cuisine1 + ', ' + r.cuisine2
                     else:
                         cuisine = r.cuisine1
-                    rs.append({'r':r.name, 'rid':r.id, 's':r.street, 't':r.number, 'u':r.city, 'v':r.state, 'w':r.zipcode, 'x':cuisine, 'y':r.seamless, 'z':r.delivery_min})
+                    rs.append({'r':r.name, 'rid':r.id, 's':r.street, 't':r.number, 'u':r.city, 'v':r.state, 'w':r.zipcode, 'x':cuisine, 'y':r.seamless})
                 return render(request, 'search_results.html', {'rests':rs})
 
     if request.method == 'POST':
