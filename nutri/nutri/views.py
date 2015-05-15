@@ -331,7 +331,6 @@ def dish(request, rid):
 def add_restaurant(request):
     error = ""
     rest_name = ""
-    deliv = ""
     cuisine = ""
     c1 = ""
     c2 = ""
