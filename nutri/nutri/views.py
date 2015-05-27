@@ -32,11 +32,13 @@ def sign_in(request):
             term = request.GET['search']
             print term
             
+            
             zRE = re.compile("^[0-9][0-9][0-9][0-9][0-9]$")
             if zRE.match(term):
                 restaurants = Restaurant.objects.all().order_by('zipcode').order_by('street')
                 rs = []
                 for r in restaurants:
+                    bool_dm = False
                     if r.cuisine2:
                         if r.cuisine3:
                             cuisine = r.cuisine1 + ', ' + r.cuisine2 + ', ' + r.cuisine3
@@ -44,8 +46,10 @@ def sign_in(request):
                             cuisine = r.cuisine1 + ', ' + r.cuisine2
                     else:
                         cuisine = r.cuisine1
-
-                    rs.append({'r':r.name, 'zipDist':abs(int(r.zipcode)-int(term)), 'rid':r.id, 's':r.street, 't':r.number, 'u':r.city, 'v':r.state, 'w':r.zipcode, 'x':cuisine, 'y':r.seamless})
+                    if r.delivery_min != 0:
+                        bool_dm = True
+                    print bool_dm
+                    rs.append({'r':r.name, 'zipDist':abs(int(r.zipcode)-int(term)), 'rid':r.id, 's':r.street, 't':r.number, 'u':r.city, 'v':r.state, 'w':r.zipcode, 'x':cuisine, 'y':r.seamless, 'z':r.delivery_min, 'bool_dm':bool_dm})
                 r_zipSorted = sorted(rs, key=lambda r: r['zipDist'])
                 return render(request, 'search_results.html', {'rests':r_zipSorted})
 
@@ -53,6 +57,7 @@ def sign_in(request):
                 r_citySorted = Restaurant.objects.filter(city__icontains=term).order_by('street')
                 rs = []
                 for r in r_citySorted:
+                    bool_dm = False
                     if r.cuisine2:
                         if r.cuisine3:
                             cuisine = r.cuisine1 + ', ' + r.cuisine2 + ', ' + r.cuisine3
@@ -60,7 +65,9 @@ def sign_in(request):
                             cuisine = r.cuisine1 + ', ' + r.cuisine2
                     else:
                         cuisine = r.cuisine1
-                    rs.append({'r':r.name, 'rid':r.id, 's':r.street, 't':r.number, 'u':r.city, 'v':r.state, 'w':r.zipcode, 'x':cuisine, 'y':r.seamless})
+                    if r.delivery_min != 0:
+                        bool_dm = True
+                    rs.append({'r':r.name, 'rid':r.id, 's':r.street, 't':r.number, 'u':r.city, 'v':r.state, 'w':r.zipcode, 'x':cuisine, 'y':r.seamless, 'z':r.delivery_min, 'bool_dm':bool_dm})
                 return render(request, 'search_results.html', {'rests':rs})
 
     if request.method == 'POST':
@@ -328,6 +335,13 @@ def dish(request, rid):
 
     return render(request, 'nutri_form.html', {'ingred_list':ingred_list, 'error':error})
 
+def is_number(s):
+    try:
+        float(s)
+        return True
+    except ValueError:
+        return False
+
 def add_restaurant(request):
     error = ""
     rest_name = ""
@@ -336,6 +350,7 @@ def add_restaurant(request):
     c2 = ""
     c3 = ""
     seamless = ""
+    deliv_min = "0.00"
     num_street = ""
     city = ""
     state = "No Selection"
@@ -383,7 +398,11 @@ def add_restaurant(request):
                     c3 = cuisine[2]
 
         seamless = request.POST['seamless']
-        
+
+        deliv_min = request.POST['deliv_min']
+        if not is_number(deliv_min) and not error:
+            error = "Please enter a valid Delivery Minimum"
+
         website = request.POST['website']
         zRE = re.compile("^.+\..{2,3}$")
         h = re.compile("^http:.*")
@@ -590,14 +609,14 @@ def add_restaurant(request):
 
 
         if not error:
-            r = Restaurant(name=rest_name, cuisine1=c1, cuisine2=c2, cuisine3=c3, seamless=seamless, number=num, street=street, city=city, state=state, zipcode=zipcode, website=website, yelp=yelp, phone=phoneNum, moopen=MoOpen, tuopen=TuOpen, weopen=WeOpen, thopen=ThOpen, fropen=FrOpen, saopen=SaOpen, suopen=SuOpen, moclose=MoClose, tuclose=TuClose, weclose=WeClose, thclose=ThClose, frclose=FrClose, saclose=SaClose, suclose=SuClose, user=request.user)
+            r = Restaurant(name=rest_name, cuisine1=c1, cuisine2=c2, cuisine3=c3, seamless=seamless, delivery_min=deliv_min, number=num, street=street, city=city, state=state, zipcode=zipcode, website=website, yelp=yelp, phone=phoneNum, moopen=MoOpen, tuopen=TuOpen, weopen=WeOpen, thopen=ThOpen, fropen=FrOpen, saopen=SaOpen, suopen=SuOpen, moclose=MoClose, tuclose=TuClose, weclose=WeClose, thclose=ThClose, frclose=FrClose, saclose=SaClose, suclose=SuClose, user=request.user)
             r.save()
             rid = r.id
             print rid
             return HttpResponseRedirect('/restaurant_profile/' + str(rid))
     
 
-    return render(request, 'add_rest.html', {'error':error, 'cuisine':cuisine, 'seamless':seamless, 'rest_name':rest_name, 'num_street':num_street, 'city':city, 'state':state, 'zipcode':zipcode, 'website':website, 'yelp':yelp, 'phone':phone, 'MoOpen':MoOpen, 'TuOpen':TuOpen, 'WeOpen':WeOpen, 'ThOpen':ThOpen, 'FrOpen':FrOpen, 'SaOpen':SaOpen, 'SuOpen':SuOpen, 'MoClose':MoClose, 'TuClose':TuClose, 'WeClose':WeClose, 'ThClose':ThClose, 'FrClose':FrClose, 'SaClose':SaClose, 'SuClose':SuClose})
+    return render(request, 'add_rest.html', {'error':error, 'cuisine':cuisine, 'seamless':seamless, 'deliv_min':deliv_min, 'rest_name':rest_name, 'num_street':num_street, 'city':city, 'state':state, 'zipcode':zipcode, 'website':website, 'yelp':yelp, 'phone':phone, 'MoOpen':MoOpen, 'TuOpen':TuOpen, 'WeOpen':WeOpen, 'ThOpen':ThOpen, 'FrOpen':FrOpen, 'SaOpen':SaOpen, 'SuOpen':SuOpen, 'MoClose':MoClose, 'TuClose':TuClose, 'WeClose':WeClose, 'ThClose':ThClose, 'FrClose':FrClose, 'SaClose':SaClose, 'SuClose':SuClose})
     
 def restaurant_profile(request, rid):
     MoOpen = ""
@@ -637,7 +656,7 @@ def restaurant_profile(request, rid):
         no_yelp = True
     
   
-        
+    
     website = str(restaurant.website)
     yelp = str(restaurant.yelp)
     address = str(restaurant.number) + ' ' + str(restaurant.street)
