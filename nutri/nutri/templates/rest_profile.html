@@ -84,7 +84,7 @@ function showModal()
 	    }
 	
 	#shizzle {
-		color:#9900cc
+		color:#990099;
 	}
   #hits {
     text-align:right;
@@ -121,7 +121,12 @@ function showModal()
     	text-align:center;
     }
     
-    	
+    .notice{
+    	padding-bottom:3%;
+    	text-align:;
+    }
+    
+    
   
 </style>
 
@@ -153,7 +158,10 @@ function showModal()
 
 <h1>{{rest}}</h1>
 <h2>{{address}}<br>{{csz}}</h2>
-<h4 style="font-size:15px">{{phone}}</h4>
+<h4 style="font-size:15px">{{phone}}
+<br>
+
+</h4>
 
 <div class="lister">
 <ul style="list-style-type:none; padding-left:0">
@@ -163,10 +171,6 @@ function showModal()
    <li> <b>Th:</b> {{ThOpen}} to {{ThClose}}</li>
 
 </ul>
-</div>
-
-<div id="USDA">
-*Nutrition data used to build menu is from USDA
 </div>
 
 </div>
@@ -181,7 +185,7 @@ function showModal()
     
     <th></th>
     <th><u>DISH</u></th>
-    <th><font color=#9900cc>Calories</font></th>
+    <th><font color="#990099">Calories</font></th>
     <th><font color="black">Protein (g)</font></th>
     <th><font color="black">Fat(g)</font></th>
     <th><font color="black">Carbs (g)</font></th>
@@ -210,6 +214,9 @@ function showModal()
     <input type="submit" class="btn btn-default" value="Add Dish" 
          name="Submit">
 </form>
+<div class="notice">
+<i>Add as many dishes as you like! As long as they are under 600 calories. If you create dish and it comes out to be over 600 calories, please remove, adjust ingredients in dish, repost.</i> 
+</div>
 {%endif%}
 <div class="lastone">
 
@@ -217,7 +224,13 @@ function showModal()
 <h4><span>You can also find these dishes and the full menu on their website: </span><a onclick='redirect("{{website}}")'>{{website}}</a></h4>
 
 {%else%}
-<h4><span style=>To order these dishes for Takeout or Delivery: </span><a onclick='redirect("{{website}}")'>{{website}}</a></h4>
+<h4><span style=>To order these dishes for takeout or delivery on Seamless: </span><a onclick='redirect("{{website}}")'>{{website}}</a></h4>
+{%endif%}
+
+{%if no_yelp%}
+
+{%else%}
+<h4><span>To check out this restaurant on Yelp:</span><a onclick='redirect("{{yelp}}")'>{{yelp}}</a> </h4>
 {%endif%}
 </div>
 </div>

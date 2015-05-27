@@ -105,6 +105,8 @@ $(window).load(function(){
         }
 
     }
+    
+
 });
      
     $(document).ready(function(e) {
@@ -113,14 +115,13 @@ $(window).load(function(){
     });
 
     function seamChange() {
-        $("#site").html('HIIIII');
         var $site = $("#site");
         var $seamless = $("#seamless");
         if ($seamless.val() == 'No') {
-            $site.html('Restaurant Website:&nbsp;');
+            $site.html('Link to Your Website:&nbsp;');
         }
         else {
-            $site.html('Your Seamless Page:');
+            $site.html('Link to Your Seamless Page:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;');
         }
     }
 
@@ -147,14 +148,13 @@ $(window).load(function(){
             width: 50%;
         }
 
-
         #num_street {
             -webkit-border-radius: 5px;
             -moz-border-radius: 5px;
             border-radius: 5px;
             border-style: solid;
             width: 50%;
-            margin-left: 38px;
+         
             
         }
         #city {
@@ -163,12 +163,12 @@ $(window).load(function(){
             border-radius: 5px;
             border-style: solid;
             width: 30%;
-            margin-left:30px;
+            
             
         }
         #state {
             width: 75px;
-            height: 25px;
+            height: 20px;
             overflow: hidden;
             background-color: white;
             border: 1px solid #000;
@@ -181,20 +181,23 @@ $(window).load(function(){
             border-radius: 5px;
             border-style: solid;
             width: 20%;
-            margin-left:34px;
+            
         }
-        #website { 
-            margin-left: 52px;
+        #website, #yelp { 
             width:50%;}
 
         #MoOpen, #MoClose, #TuOpen, #TuClose, #WeOpen, #WeClose, #ThOpen, #ThClose, #FrOpen, #FrClose, #SaOpen, #SaClose, #SuOpen, #SuClose {
-            -webkit-border-radius: 5px;
-            -moz-border-radius: 5px;
-            border-radius: 5px;
-            border-style: solid;
-            width: 80%;
+            width: 89%;
+            height: 20px;
+            overflow: hidden;
+            background-color: white;
+            border: 1px solid #000;
+            font-style: bold;
         }
-
+        
+        #delivery
+            {width:5%;
+            }
 </style>
 
 
@@ -227,14 +230,14 @@ $(window).load(function(){
         <br><br>
 
         <label style="color: #555;">
-            <font size="4">Restaurant Name:&nbsp;</font></label>
+            <font size="4">Restaurant Name:</font></label>
         <input id="rest_name" type="text" name="rest_name" value='{{rest_name}}' maxlength="200">
         
 
         <div class="container">
         <br>
-        <label style="color: #555;">
-        <font size="2">Cuisine Type (up to 3):&nbsp;&nbsp;
+        <label style="color: #555; padding-right:0%;">
+        <font size="2">Cuisine Type (up to 3):
         </font></label>
         <select data-size="10" class="selectpicker" multiple data-max-options="3" id="cuisine" name="cuisine[]" value='{{cuisine}}'>
         <option value="American">American</option>
@@ -290,13 +293,13 @@ $(window).load(function(){
         <option value="Vietnamese">Vietnamese</option>
         <option value="Wings">Wings</option>
         </select>
-        
+       
    
   
 
         <br>
-        <label style="color: #555;">
-        <font size="2">Seamless:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <label style="color: #555; padding-right:0%; margin-left:15%">
+        <font size="2">Seamless:
                 </font></label>
         <select id="seamless" name="seamless" class="selectpicker" onchange="seamChange()">
         <option>No</option>
@@ -308,17 +311,23 @@ $(window).load(function(){
         <br>
         <br>
 
-        <label style= "color:#555";>
-
-            <font size="2"><div id="site">Restaurant Website:&nbsp;</div></font></label>
+        <label style= "color:#555; padding-right:1%;">
+        <font size="2"><div id="site">Link to Your Website:</div></font></label>
         <input id="website" type="text" name="website" value='{{website}}' maxlength="300">
+        <br>
+
+        <label style= "color:#555";>
+        <font size="2"><div id="site">Link to Your Yelp Page (Optional):</div></font></label>
+        <input id="yelp" type="text" name="yelp" value='{{yelp}}' maxlength="300">
         <br>    
         
-        <label style= "color:#555";>
-            <font size="2">Phone Number:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font></label>
+        
+        <label style= "color:#555; padding-right:%;">
+            <font size="2">Phone Number:</font></label>
         <input id="phone" type="text" name="phone" value='{{phone}}'>
         <br>    
-      
+        <hr>
+
       </div>  
         <table>
         <th>
@@ -435,19 +444,20 @@ $(window).load(function(){
         <br>
         <input class="btn btn-default" value="Set All times as Monday" style="width: 200px;" onclick="setTimes()"> 
         
+        <hr color='black'>
         <br><br>
 
-        <label style="color: #555;">
+        <label style="color: #555; padding-right:2%;">
             <font size="2">Number & Street:</font></label>
         <input id="num_street" type="text" name="num_street" value='{{num_street}}' maxlength="100">
 
             <br>
 
-        <label style="color: #555;">
+        <label style="color: #555; padding-right:2%; margin-left:15%">
             <font size="2">
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;City:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font></label>
+           City:&nbsp;</font></label>
         <input id="city" type="text" name="city" value='{{city}}' maxlength="100">
-        &nbsp;&nbsp;&nbsp;&nbsp;
+       
         <label style="color: #555;">
             <font size="2">
             State:&nbsp;</font></label>  
@@ -507,9 +517,9 @@ $(window).load(function(){
         </select>
 
         <br>
-        <label style="color: #555;">
+        <label style="color: #555; padding-right:2%; margin-left:20%;">
             <font size="2">
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Zip Code:&nbsp;</font></label>    
+            Zip Code:</font></label>    
         <input id="zipcode" type="text" name="zipcode" value="{{zipcode}}">
         
         

@@ -132,9 +132,9 @@ $(document).on("click","#proflink",function(event)
         }   
 
         input[type="text"],input[type="password"] {
-            -webkit-border-radius: 5px;
-            -moz-border-radius: 5px;
-            border-radius: 10px;
+            -webkit-border-radius: ;
+            -moz-border-radius: ;
+            border-radius: ;
             border-style: solid;
             height: 30px;
             display: inline;
@@ -153,7 +153,7 @@ $(document).on("click","#proflink",function(event)
         #search_bar {
           height: 50px;
           width: 90%;
-          margin-left: 130px;
+          margin-left:15%;
           margin-top: 0px;
         }
 
@@ -173,15 +173,23 @@ $(document).on("click","#proflink",function(event)
           font-size:25px;
         }
         .jumbotron {
-          margin-left:200px;
-          margin-right:200px;
+          margin-left:20%;
+          margin-right:20%;
           border-radius:25px;
         }
          #topnavbar{
             background-image:url('');
             background-size:cover;
         }
+        .comby{
+          margin-right:25%;
+          background-color:white;
+        }
         
+        .contactme{
+          margin-left:80%;
+          font-weight:bold;
+        }
      
 </style>
 
@@ -224,15 +232,19 @@ $(document).on("click","#proflink",function(event)
 
 <br><br><br><br>
 <div class = "container">
+  <div class="contactme">
+  Contact: charlie@calospot.com
+</div>
 <div class = "buttonz">
                 {% if not is_user %}
-                <button class="btn btn-danger"; style="width:200px; height:50px; white-space:normal; background-color:#0066ff; border:none" onclick="showModal();">Restaurant Management: Create New Account</button>
+                <button class="btn btn-danger"; style="width:200px; height:50px; white-space:normal; background-color:#0066ff; border:none; margin-bottom:2%" onclick="showModal();">Restaurant Management: Create New Account</button>
                 {% endif %}
 </div>
+
 <br><br><br><br>
             <div class="jumbotron" style="background-image:url(http://i375.photobucket.com/albums/oo197/Charles-Stanton_151515/142626895585521_zpscfatpbf6.jpg); background-size: 100%;">
               <div class ="SearchMessage">
-              Restaurants post menus to this website. <br>All items on these menus are <span class="fizzle"><u>under 600 calories.</u></span><br> Search for them below.
+              Local restaurants post menus to this website. <br>All items on these menus are <span class="fizzle"><u>under 600 calories.</u></span><br>Search for them below.
               </div>
             </div>
 <br><br><br><br>
@@ -240,10 +252,11 @@ $(document).on("click","#proflink",function(event)
               <div id="search">
               <form method="GET">
               <font size="5" face="Calibri">
-              <input type="text" id="search_bar" name="search" placeholder="Enter City or Zip to find menus near you! Local spots only, no chains.">
+              <input type="text" id="search_bar" name="search" placeholder="  Enter City or Zip to find menus near you!" style="text-align:center">
               </font>
               </form>
               </div>
+
 </div>
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog">

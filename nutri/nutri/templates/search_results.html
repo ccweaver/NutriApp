@@ -19,13 +19,13 @@
         body {
             background-image: url('http://i375.photobucket.com/albums/oo197/Charles-Stanton_151515/bg_zpsthwyymln.jpg');
             background-size:cover;
-            background-repeat:no-repeat;
+            background-repeat:;
                    
         }
         
         .returns{
-            margin-left:20%;
-            margin-right:20%;
+            margin-left:12%;
+            margin-right:12%;
             border-radius:%;
             border-style:;
             border-bottom-style;
@@ -59,26 +59,28 @@
             <span class="icon-bar"></span>
           </button>
           <a class="navbar-brand" href="/">{% block navtitle %} <span style="color:#2efb00;opacity=.99;">CALO</span><span style="color:#1500fb;opacity=.99;">SPOT</span>{% endblock %}</a>          
-              
+          
+          </div>
+           <div class="nav navbar-nav navbar-right"><span style="font-size:15px; color:white; margin-right:%">Click on Restaurant's Name to View Their Menu</span></div>
           </div>
           </div>
-          </div>
-
+ 
 <br><br><br><br><br>
 <div class="container">
-<div class="Seuss" style="font-size:30px; text-align:center;">
-
+<div class="Seuss" style="font-size:15px; text-align:center;">
 </div>
 <div class="returns">
 
 {% for r in rests %}
 
-<ul class='rest_box' style="padding-top:1%; font-size:20px; padding-left:20%; border-style:solid; padding-bottom:7%; padding-right:20%"> 
-<a href="/restaurant_profile/{{r.rid}}" style="font-size:40px; color:black; font-weight:bold;">{{r.r}}</a> <br>{{r.t}} {{r.s}}, {{r.u}} {{r.v}}, {{r.w}}<br>Type of cuisine: <b>{{r.x}}</b>  Seamless: <b>{{r.y}}
+<ul class='rest_box' style="padding-top:1%; font-size:20px; padding-left:10%; border-style:solid; padding-bottom:10%; padding-right:0%"> 
+<a href="/restaurant_profile/{{r.rid}}" style="font-size:40px; color:black; font-weight:bold;">{{r.r}}</a> <br>{{r.t}} {{r.s}}, {{r.u}} {{r.v}}, {{r.w}}<br>Type of cuisine: <u><b>{{r.x}}</b></u>  Seamless: <b><u>{{r.y}}</b></u>   
 
-</b></br><span style="color:white">.</span>
+
+<span style="color:white">.</span>
 </ul>
-{% endfor %}
+
+{%endfor%}
 
 </div>
 </div>

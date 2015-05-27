@@ -156,6 +156,7 @@ function hideModal()
 
 $(window).load(function(){
     $('#myModal').modal('show');
+    
 });
 
 function showModal() {
@@ -164,6 +165,7 @@ function showModal() {
     document.getElementById('close_button').innerHTML = '<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>';
 
 }
+
 
 </script>
 
@@ -178,6 +180,10 @@ function showModal() {
             color: red;
             display: block;
             font-size: 12px;
+        }
+        #info_button {
+            margin-right: 5%;
+            margin-left: 90%;
         }
         #searchbox {
             -webkit-border-radius: 5px;
@@ -236,8 +242,20 @@ function showModal() {
             font-weight:bold;
         }
        
+       .USDA {
+           font-weight:bold;
+           padding-top:5%;
+       }
      
+        .thenotes{
+            font-weight:bold;
+            padding-top:30%;
+        }
 
+        .missingones{
+            font-weight:;
+            margin-left:61%;
+        }
         </style>
 </head>
 <body>
@@ -263,14 +281,17 @@ function showModal() {
 
 
 <div class="container">
+<div class="missingones">
+Please email charlie@calospot.com if our database is missing any of your ingredients, and we'll add them for you!   
+</div>
 
 <font size="5" style="bold;"><div id='name_wrapper'></div></font>
-    
+
     <font size="4" color="A22;" style="bold;">
     <div id="error_wrapper"></div>
 
     </font>
-    <br><br>
+    <br>
     
     <label style="color: #555;">
             <font size="2">Search for ingredients:&nbsp;
@@ -289,10 +310,11 @@ function showModal() {
         <div class="instructions">
         <ul style="list-style-type:none; padding-left:0">
          <li><u>Directions</u></li>
-         <li>1. Enter ingredient in Search, press Refresh List</li>
-         <li>2. Select ingredient from box above (by clicking on it)</li>
-         <li>3. Enter amount then press Add Ingredient</li>
-         <li>4. Repeat 1-3, then press Complete Dish</li>
+         <li>1. Enter ingredient in Search, press Refresh List.</li>
+         <li>2. Select ingredient from box above by clicking on ingredient name.<br>(If on phone/tablet, click on box above and ingredient list will appear, then select ingredient).</li>
+         <li>3. Once ingredient is highlighted (or if on phone/tablet, once ingredient appears alone in box above),<br>enter amount below then press Add Ingredient.</li>
+         <li>4. Repeat steps 1-3 for each ingredient, then press Complete Dish.</li>
+         <li>(We make all volume conversions. Scroll down to bottom of page for notes on ingredient database.)</li>
         </ul>
         </div>
 
@@ -305,7 +327,6 @@ function showModal() {
         <select id="unit" name="unit">
         <option value="g">g</option>
         <option value="oz">oz</option>
-        <option value="Fl. Oz">Fl. Oz</option>
         <option value="tsp">tsp</option>
         <option value="tblspn">tblspn</option>
         </select>
@@ -321,15 +342,15 @@ function showModal() {
         <input type="button" class="btn btn-primary" value="Add Ingredient" id="add_ingredient" onclick="addIn(document.getElementById('iSelect').value, document.getElementById('amount').value, document.getElementById('unit').value)">
         <input type="button" class="btn btn-danger" value="Complete Dish" onClick="submit()" style="margin-left:30px">
     
-         <a class="btn btn-primary" onclick="showModal()" style="margin-left:300px">Edit Name & Price</a>
-
-    
+    <div class="thenotes">
+    <u>Notes for Restaurants</u><br>1. Ingredient data is from U.S. Department of Agriculture, with a smaller number (about 7%) of ingredients coming from other indepedent sources.<br>2. You can check the nutrition values of an individual ingredient by creating a sample dish with just that ingredient (use an amount such as 100g). Simply delete dish afterwards. <br>3. For ingredients that are more difficult to weigh (examples: rice or yogurt), place ingredient inside cup and measure the total weight (with the cup), then subtract weight of empty cup to get ingredient measurement in grams or ounces.<br>4. All of the ingredients used to build your dishes are only seen by you and are confidential.   
+    </div>                                
+        
 </div>
 </div>  
 </div>
 
-<!-- Modal -->
-<div data-backdrop="static" class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div data-backdrop="static" data-keyboard="false" class="modal" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
@@ -359,6 +380,8 @@ function showModal() {
         <font size="4">Description:&nbsp;</font></label>
         <input id="dish_description" type="text" name="dish_description">  
       
+      *If the dish is a side, please write (Side) next to the name of the dish. <br>
+      *If you want to label dishes as Breakfast, Lunch or Dinner, please use ( ) for that as well.
 
 
 
@@ -372,10 +395,7 @@ function showModal() {
     </div>
   </div>
 </div>
-    
 
 
-
-<script src="{{STATIC_URL}}/js/bootstrap.min.js"></script>
 </body>
 </html>

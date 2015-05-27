@@ -12,6 +12,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth import logout
 from django.contrib import auth
 from datetime import datetime
+from operator import itemgetter
 
     
 def sign_in(request):
@@ -36,7 +37,15 @@ def sign_in(request):
                 restaurants = Restaurant.objects.all().order_by('zipcode').order_by('street')
                 rs = []
                 for r in restaurants:
-                    rs.append({'r':r.name, 'zipDist':abs(int(r.zipcode)-int(term)), 'rid':r.id, 's':r.street, 't':r.number, 'u':r.city, 'v':r.state, 'w':r.zipcode, 'x':r.cuisine, 'y':r.seamless})
+                    if r.cuisine2:
+                        if r.cuisine3:
+                            cuisine = r.cuisine1 + ', ' + r.cuisine2 + ', ' + r.cuisine3
+                        else:
+                            cuisine = r.cuisine1 + ', ' + r.cuisine2
+                    else:
+                        cuisine = r.cuisine1
+
+                    rs.append({'r':r.name, 'zipDist':abs(int(r.zipcode)-int(term)), 'rid':r.id, 's':r.street, 't':r.number, 'u':r.city, 'v':r.state, 'w':r.zipcode, 'x':cuisine, 'y':r.seamless})
                 r_zipSorted = sorted(rs, key=lambda r: r['zipDist'])
                 return render(request, 'search_results.html', {'rests':r_zipSorted})
 
@@ -44,7 +53,14 @@ def sign_in(request):
                 r_citySorted = Restaurant.objects.filter(city__icontains=term).order_by('street')
                 rs = []
                 for r in r_citySorted:
-                    rs.append({'r':r.name, 'rid':r.id, 's':r.street, 't':r.number, 'u':r.city, 'v':r.state, 'w':r.zipcode, 'x':r.cuisine, 'y':r.seamless})
+                    if r.cuisine2:
+                        if r.cuisine3:
+                            cuisine = r.cuisine1 + ', ' + r.cuisine2 + ', ' + r.cuisine3
+                        else:
+                            cuisine = r.cuisine1 + ', ' + r.cuisine2
+                    else:
+                        cuisine = r.cuisine1
+                    rs.append({'r':r.name, 'rid':r.id, 's':r.street, 't':r.number, 'u':r.city, 'v':r.state, 'w':r.zipcode, 'x':cuisine, 'y':r.seamless})
                 return render(request, 'search_results.html', {'rests':rs})
 
     if request.method == 'POST':
@@ -164,17 +180,27 @@ def dish(request, rid):
                 ingred_list = Ingredient.objects.filter(ingredient__icontains=terms[0]).filter(ingredient__icontains=terms[1]).filter(ingredient__icontains=terms[2]).order_by('ingredient')
             if len(terms) == 4:
                 ingred_list = Ingredient.objects.filter(ingredient__icontains=terms[0]).filter(ingredient__icontains=terms[1]).filter(ingredient__icontains=terms[2]).filter(ingredient__icontains=terms[3]).order_by('ingredient')
+            print ingred_list
+            if ingred_list:
+                ingreds = []
+                print 'hi'
+                for i in ingred_list:
+                    tup = (i, str(i).lower().index(terms[0].lower()))
+                    ingreds.append(tup)
+                ingreds = sorted(ingreds, key=itemgetter(1))
+                ingreds_sorted = []
+                for x in ingreds:
+                    ingreds_sorted.append(x[0])
 
-
-            if not ingred_list:
-                ingred_list = ['Sorry, no ingredient found']
+            elif not ingred_list:
+                ingreds_sorted = ['Sorry, no ingredient found']
             if not request.POST['term']:
-                ingred_list = []
+                ingreds_sorted = []
             
             #count = 10
             #for x in range(0,count):
             #   print ingred_list[x].id
-            return render(request, 'select_temp.html', {'ingred_list':ingred_list, 'error':error, 'added_ingreds':add_i})
+            return render(request, 'select_temp.html', {'ingred_list':ingreds_sorted, 'error':error, 'added_ingreds':add_i})
         
         if 'amount' in request.POST:
             ingred_to_add = request.POST['ingred_to_add']
@@ -196,22 +222,26 @@ def dish(request, rid):
             if not error:
                 i_t_a = Ingredient.objects.filter(ingredient=ingred_to_add)
                 
+                density = float(i_t_a.values_list('g_per_ml')[0][0])
+                print 'a;lskdjf;lasdkj'
+                #unit conversions
                 if unit == 'g':
                     amnt_grams = float(amount)
                 elif unit == 'oz':
                     amnt_grams = float(amount) * 28.3495
                 elif unit == 'tsp':
-                    amnt_grams = float(amount) * 4.92892
+                    amnt_grams = float(amount) * 4.92892 * density
                 elif unit == 'tblspn':
-                    amnt_grams = float(amount) * 14.78676
+                    amnt_grams = float(amount) * 14.78676 * density
                 elif unit == 'Fl. Oz':
-                    amnt_grams = float(amount) * 30
-                
+                    amnt_grams = float(amount) * 30 * density
+
                 amnt_grams = "{0:.2f}".format(round(amnt_grams,2))
                 
                 i_t_a_id = i_t_a.values_list('id')[0][0]
                 
                 added_ingred_ids = dish.values_list('ingredients')
+
                 for ind in range(0, len(added_ingred_ids)):       
                     index = added_ingred_ids[ind][0]
                     if index != None:
@@ -227,6 +257,7 @@ def dish(request, rid):
                     addition = Addition(amount_grams=amnt_grams)
                     addition.ingred_id = i_t_a_id 
                     addition.save()     
+                    print dish[0]
                     dish[0].ingredients.add(addition)
 
 
@@ -254,7 +285,7 @@ def dish(request, rid):
             d_description = request.POST['dish_description']
             if not d_name:
                 error = 'Please enter a dish name'
-            elif Item.objects.filter(name=d_name).filter(rest_id=rid):
+            elif Item.objects.filter(name=d_name).filter(rest_id=rid).filter(valid=True):
                 error = 'Dish already exists on this menu'
             elif not d_price:
                 error = "Please enter a dish price"
@@ -300,13 +331,17 @@ def dish(request, rid):
 def add_restaurant(request):
     error = ""
     rest_name = ""
-    cuisine = "Chinese"
+    cuisine = ""
+    c1 = ""
+    c2 = ""
+    c3 = ""
     seamless = ""
     num_street = ""
     city = ""
     state = "No Selection"
     zipcode = ""
     website = ""
+    yelp = ""
     phone = ""
     MoOpen = ""
     MoClose = ""
@@ -334,6 +369,8 @@ def add_restaurant(request):
         if not rest_name and not error:
             error = 'Please enter the name of your restaurant'
 
+
+       
         cuisine = request.POST.getlist('cuisine[]')
         if not cuisine and not error:
             error = 'Please enter a cuisine type'
@@ -353,7 +390,7 @@ def add_restaurant(request):
         hs = re.compile("^https:.*")
         w = re.compile("^www\..*")
         if not website and not error:
-            error = "Please enter a valid website"
+            error="Please enter a valid website"
         elif (not h.match(website)) and (not hs.match(website)):
             if w.match(website):
                 website = "http://" + website
@@ -361,7 +398,18 @@ def add_restaurant(request):
                 website = "http://www." + website
             elif not error:
                 error = "Please enter a valid website"
+            
 
+        yelp = request.POST['yelp']
+        zRE = re.compile("^.+yelp\..+$")
+        jk = re.compile("^http:.*")
+        kk = re.compile("^https:.*")
+        lm = re.compile("^www\..*")
+        if (not jk.match(yelp)) and (not kk.match(yelp)):
+            if lm.match(yelp):
+                yelp = "http://" + yelp 
+            elif zRE.match(yelp):
+                yelp = "http://www." + yelp
 
         phone = request.POST['phone']
         zRE = re.compile("^(\+\d{1,2}\s)?\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4}$")
@@ -542,14 +590,14 @@ def add_restaurant(request):
 
 
         if not error:
-            r = Restaurant(name=rest_name, cuisine1=c1, cuisine2=c2, cuisine3=c3, seamless=seamless, number=num, street=street, city=city, state=state, zipcode=zipcode, website=website, phone=phoneNum, moopen=MoOpen, tuopen=TuOpen, weopen=WeOpen, thopen=ThOpen, fropen=FrOpen, saopen=SaOpen, suopen=SuOpen, moclose=MoClose, tuclose=TuClose, weclose=WeClose, thclose=ThClose, frclose=FrClose, saclose=SaClose, suclose=SuClose, user=request.user)
+            r = Restaurant(name=rest_name, cuisine1=c1, cuisine2=c2, cuisine3=c3, seamless=seamless, number=num, street=street, city=city, state=state, zipcode=zipcode, website=website, yelp=yelp, phone=phoneNum, moopen=MoOpen, tuopen=TuOpen, weopen=WeOpen, thopen=ThOpen, fropen=FrOpen, saopen=SaOpen, suopen=SuOpen, moclose=MoClose, tuclose=TuClose, weclose=WeClose, thclose=ThClose, frclose=FrClose, saclose=SaClose, suclose=SuClose, user=request.user)
             r.save()
             rid = r.id
             print rid
             return HttpResponseRedirect('/restaurant_profile/' + str(rid))
+    
 
-
-    return render(request, 'add_rest.html', {'error':error, 'seamless':seamless, 'rest_name':rest_name, 'num_street':num_street, 'city':city, 'state':state, 'zipcode':zipcode, 'website':website, 'phone':phone, 'MoOpen':MoOpen, 'TuOpen':TuOpen, 'WeOpen':WeOpen, 'ThOpen':ThOpen, 'FrOpen':FrOpen, 'SaOpen':SaOpen, 'SuOpen':SuOpen, 'MoClose':MoClose, 'TuClose':TuClose, 'WeClose':WeClose, 'ThClose':ThClose, 'FrClose':FrClose, 'SaClose':SaClose, 'SuClose':SuClose})
+    return render(request, 'add_rest.html', {'error':error, 'cuisine':cuisine, 'seamless':seamless, 'rest_name':rest_name, 'num_street':num_street, 'city':city, 'state':state, 'zipcode':zipcode, 'website':website, 'yelp':yelp, 'phone':phone, 'MoOpen':MoOpen, 'TuOpen':TuOpen, 'WeOpen':WeOpen, 'ThOpen':ThOpen, 'FrOpen':FrOpen, 'SaOpen':SaOpen, 'SuOpen':SuOpen, 'MoClose':MoClose, 'TuClose':TuClose, 'WeClose':WeClose, 'ThClose':ThClose, 'FrClose':FrClose, 'SaClose':SaClose, 'SuClose':SuClose})
     
 def restaurant_profile(request, rid):
     MoOpen = ""
@@ -571,7 +619,10 @@ def restaurant_profile(request, rid):
     
     my_prof = False
     no_seamless = False
-
+    no_yelp = False
+    
+   
+    
     restaurant = Restaurant.objects.filter(id=rid)[0]
     if restaurant.user.id == request.user.id:
         my_prof = True
@@ -581,8 +632,14 @@ def restaurant_profile(request, rid):
 
     if restaurant.seamless == 'No':
         no_seamless = True
-
+    
+    if restaurant.yelp == '':
+        no_yelp = True
+    
+  
+        
     website = str(restaurant.website)
+    yelp = str(restaurant.yelp)
     address = str(restaurant.number) + ' ' + str(restaurant.street)
     city_st_zip = str(restaurant.city) + ', ' + str(restaurant.state) + ', ' + str(restaurant.zipcode)
     
@@ -773,8 +830,12 @@ def restaurant_profile(request, rid):
         
         calbyTen = cal/10
         calbyTen = round(calbyTen)
-
+        mgnabyTen = mgna/10
+        mgnabyTen = round(mgnabyTen)
+        
+        
         cal = calbyTen*10
+        mgna = mgnabyTen*10
         strings.append(item.name)
         strings.append("%d" % cal)
         strings.append("%d" % gpro)
@@ -798,7 +859,7 @@ def restaurant_profile(request, rid):
                 add.delete()
             delete_item.delete()
 
-            return render(request, 'rest_profile.html', {'no_seamless':no_seamless, 'hits':restaurant.hits, 'my_prof':my_prof, 'uname':request.user.username, 'rest':restaurant, 'strings':strings, 'address':address, 'website':website, 'csz':city_st_zip, 'phone':phone, \
+            return render(request, 'rest_profile.html', {'no_yelp':no_yelp, 'no_seamless':no_seamless, 'hits':restaurant.hits, 'my_prof':my_prof, 'uname':request.user.username, 'rest':restaurant, 'strings':strings, 'address':address, 'website':website, 'yelp':yelp, 'csz':city_st_zip, 'phone':phone, \
             'MoOpen':MoOpen, 'TuOpen':TuOpen, 'WeOpen':WeOpen, 'ThOpen':ThOpen, 'FrOpen':FrOpen, 'SaOpen':SaOpen, 'SuOpen':SuOpen, 'MoClose':MoClose, 'TuClose':TuClose, 'WeClose':WeClose, 'ThClose':ThClose, 'FrClose':FrClose, 'SaClose':SaClose, 'SuClose':SuClose})
 
         if 'ingred_dish' in request.POST:
@@ -815,6 +876,6 @@ def restaurant_profile(request, rid):
 
         return HttpResponseRedirect('/add_dish/' + rid)
     
-    return render(request, 'rest_profile.html', {'no_seamless':no_seamless, 'hits':restaurant.hits, 'my_prof':my_prof, 'uname':request.user.username, 'rest':restaurant, 'strings':strings, 'address':address, 'website':website, 'csz':city_st_zip, 'phone':phone, \
+    return render(request, 'rest_profile.html', {'no_yelp':no_yelp, 'no_seamless':no_seamless, 'hits':restaurant.hits, 'my_prof':my_prof, 'uname':request.user.username, 'rest':restaurant, 'strings':strings, 'address':address, 'website':website, 'yelp':yelp, 'csz':city_st_zip, 'phone':phone, \
         'MoOpen':MoOpen, 'TuOpen':TuOpen, 'WeOpen':WeOpen, 'ThOpen':ThOpen, 'FrOpen':FrOpen, 'SaOpen':SaOpen, 'SuOpen':SuOpen, 'MoClose':MoClose, 'TuClose':TuClose, 'WeClose':WeClose, 'ThClose':ThClose, 'FrClose':FrClose, 'SaClose':SaClose, 'SuClose':SuClose})
 
