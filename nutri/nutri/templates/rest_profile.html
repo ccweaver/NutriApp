@@ -9,22 +9,125 @@
 <script>
 
 
+//deleting a dish
+function removeItem(key) {
+$.ajax(
+    {
+        type: "post",
+        url: "",
+        data: {delete_key: key, csrfmiddlewaretoken:document.getElementsByName('csrfmiddlewaretoken')[0].value},
+        success: function (data)
+        {
+          location.reload();
+
+        }
+    });
+return false;
+};
+
+function openIngreds(key) {
+
+$.ajax(
+    {
+        type: "post",
+        url: "",
+        data: {ingred_dish:key, csrfmiddlewaretoken:document.getElementsByName('csrfmiddlewaretoken')[0].value},
+        success: function (data)
+        {
+          showModal();
+          document.getElementById('myModalLabel').innerHTML = data.dish;
+          if(data.ingreds) {
+            list = "";
+            for (i in data.ingreds) {
+              list += data.ingreds[i];
+              list += '<br>';
+            }
+          }
+          document.getElementById('ingred_list').innerHTML = list;
+          showModal();
+        }
+    });
+return false;
+};
+
+function redirect(website) {
+  location.href = website;
+}
+
+function hideModal()
+{
+    $('#myModal').modal('hide');
+}
+
+function showModal()
+{
+    $('#myModal').modal('show');
+}
+
 </script>
 <style>
     body {
-      background-image: url('http://i375.photobucket.com/albums/oo197/Charles-Stanton_151515/download_zpsqc62mtz0.jpg');
-      background-repeat: repeat;
-      background-attachment: fixed;
-      background-position: center; 
+      background-image: url('http://i375.photobucket.com/albums/oo197/Charles-Stanton_151515/rftgyhds_zpsajop0hvn.png');
+      background-size: cover;		
     }
-  .menu_table, .menu_table td{
-      border-color: black;
+	   table th, td{
+	      border: 1px solid black;
+	      border-top-color:black;
+	      }
+	    
+	 
+	    
+	    .menutitle {
+	    	text-align:center;
+	    	padding-bottom:30px;
+	    	font-size:30px;
+	    }
+	
+	#shizzle {
+		color:#990099;
+	}
+  #hits {
+    text-align:right;
+    margin-right:5%;
+    margin-top:2%;
+  }
+	
+	
+	
+   	#USDA {
+   		padding-top:3px;
+   	}
+   	
+   	 
+   	.lister {
+   		font-size:15px;
+   	}
+   	.addy
+   	{
+   		margin:0;
+   		padding:0;
+   	}
+   	.stuff{
+   		text-align:center;
+   		background-image: url('http://i375.photobucket.com/albums/oo197/Charles-Stanton_151515/rftgyhds_zpsajop0hvn.png');
+   		border-radius:5px;
+   	}
+    #ingred_list {
+      text-align:center;
+      margin-bottom:5px;
     }
-
-    table, th, td {
-      border: 1px solid black;
-
-  } 
+    
+    .lastone{
+    	text-align:center;
+    }
+    
+    .notice{
+    	padding-bottom:3%;
+    	text-align:;
+    }
+    
+    
+  
 </style>
 
 
@@ -49,29 +152,58 @@
 <br><br><br><br><br>
 <div class="container">
 <div class="jumbotron" style="background-image: url(../static/marble2.jpg); background-size: 100%;">
-<div class="container">
+
+<div class="stuff">
+<div id='hits'><b>Number of Views:</b> {{hits}}</div>
 
 <h1>{{rest}}</h1>
+<h2>{{address}}<br>{{csz}}</h2>
+<h4 style="font-size:15px">{{phone}}
+<br>
 
-<h4>{{address}}</h4>
-</div>
+</h4>
+
+<div class="lister">
+<ul style="list-style-type:none; padding-left:0">
+   <li> <b>M:</b> {{MoOpen}} to {{MoClose}}   <b>F:</b> {{FrOpen}} to {{FrClose}}</li>
+   <li> <b>T:</b> {{TuOpen}} to {{TuClose}}    <b> Sat:</b> {{SaOpen}} to {{SaClose}}</li>
+   <li> <b>W:</b> {{WeOpen}} to {{WeClose}}  <b>Sun:</b> {{SuOpen}} to {{SuClose}}</li>
+   <li> <b>Th:</b> {{ThOpen}} to {{ThClose}}</li>
+
+</ul>
 </div>
 
+</div>
+
+</div>
+
+<div class="menutitle">
+	<u>The <span id="shizzle">600 Calories and Under</span> Menu</u>
+</div>
 
 <table class="table" id="menu_table">
     
-    <th> </th>
-    <th><font color="black">Calories</font></th>
+    <th></th>
+    <th><u>DISH</u></th>
+    <th><font color="#990099">Calories</font></th>
     <th><font color="black">Protein (g)</font></th>
     <th><font color="black">Fat(g)</font></th>
     <th><font color="black">Carbs (g)</font></th>
     <th><font color="black">Sugar(g)</font></th>
     <th><font color="black">Sodium(mg)</font></th>
     <th><font color="black">Price</font></th>
+    <th><font color="black">Description</font></th>
 {% for s in strings %}
-{% if forloop.counter0|divisibleby:8 %}<tr>{% endif %}
+{% if forloop.counter0|divisibleby:9 %}<tr>
+<td>
+{% if my_prof %}
+<button class="btn btn-default btn-sm" id=type="button" onclick="removeItem('{{s}}')"><span class="glyphicon glyphicon-remove-circle"></span></button>
+<button class="btn btn-default btn-sm" id=type="button" onclick="openIngreds('{{s}}')"><span class="glyphicon glyphicon-eye-open"></span></button>
+{% endif %}
+</td>
+{% endif %}
 <td><font color="black">{{ s }}</font></td>
-{% if forloop.counter|divisibleby:8 %}</tr>{% endif %}
+{% if forloop.counter|divisibleby:9 %}</tr>{% endif %}
 {% endfor %}
 </font>
 </table>
@@ -82,8 +214,49 @@
     <input type="submit" class="btn btn-default" value="Add Dish" 
          name="Submit">
 </form>
+<div class="notice">
+<i>Add as many dishes as you like! As long as they are under 600 calories. If you create dish and it comes out to be over 600 calories, please remove, adjust ingredients in dish, repost.</i> 
+</div>
+{%endif%}
+<div class="lastone">
+
+{%if no_seamless%}
+<h4><span>You can also find these dishes and the full menu on their website: </span><a onclick='redirect("{{website}}")'>{{website}}</a></h4>
+
+{%else%}
+<h4><span style=>To order these dishes for takeout or delivery on Seamless: </span><a onclick='redirect("{{website}}")'>{{website}}</a></h4>
+{%endif%}
+
+{%if no_yelp%}
+
+{%else%}
+<h4><span>To check out this restaurant on Yelp:</span><a onclick='redirect("{{yelp}}")'>{{yelp}}</a> </h4>
 {%endif%}
 </div>
+</div>
+</div>
+
+
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title" id="myModalLabel"></h4>
+      </div>
+
+        <div id="ingred_list">
+        </div>
+      
+      <div class="modal-footer">
+            <div id="close_button">
+            <button class="btn btn-danger btn-sm" id="close_modal_button" type="button" onclick="hideModal()">Done</button> 
+            </div>
+    </div>
+        
+    </div>
+  </div>
+</div>
+
 
 
 <script src="{{STATIC_URL}}/js/bootstrap.min.js"></script>

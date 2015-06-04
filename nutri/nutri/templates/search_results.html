@@ -1,0 +1,91 @@
+<html>
+<head>
+
+<link rel="stylesheet" type="text/css" href="{{STATIC_URL}}css/bootstrap.min.css"/>
+<!--<link rel="stylesheet" type="text/css" href="{{STATIC_URL}}css/bootstrap-responsive.min.css"/> 
+--> 
+
+
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+<script type="text/javascript" src="{{STATIC_URL}}js/bootstrap.min.js"></script>
+<script>
+</script>
+
+
+<style type="text/css">
+
+
+           
+        body {
+            background-image: url('http://i375.photobucket.com/albums/oo197/Charles-Stanton_151515/bg_zpsthwyymln.jpg');
+            background-size:cover;
+            background-repeat:;
+                   
+        }
+        
+        .returns{
+            margin-left:12%;
+            margin-right:12%;
+            border-radius:%;
+            border-style:;
+            border-bottom-style;
+            border-top-style:
+            background-image:;
+        }
+        #topnavbar{
+            background-image:url();
+            background-size:solid;
+        }
+
+        .rest_box{
+          background-image:url("{{STATIC_URL}}/greengrass.jpg");
+          background-position:bottom;
+        }
+        
+        
+</style>
+
+
+    <title>CALOSPOT</title>
+</head>
+<body>
+<div class="navbar navbar-inverse navbar-fixed-top" id="topnavbar">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="/">{% block navtitle %} <span style="color:#2efb00;opacity=.99;">CALO</span><span style="color:#1500fb;opacity=.99;">SPOT</span>{% endblock %}</a>          
+          
+          </div>
+           <div class="nav navbar-nav navbar-right"><span style="font-size:15px; color:white; margin-right:%">Click on restaurant's name to view their menu.<br>All restaurants listed have take-out.</span></div>
+          </div>
+          </div>
+ 
+<br><br><br><br><br>
+<div class="container">
+<div class="Seuss" style="font-size:15px; text-align:center;">
+</div>
+<div class="returns">
+
+{% for r in rests %}
+
+<ul class='rest_box' style="padding-top:1%; font-size:20px; padding-left:10%; border-style:solid; padding-bottom:10%; padding-right:0%"> 
+<a href="/restaurant_profile/{{r.rid}}" style="font-size:40px; color:black; font-weight:bold;">{{r.r}}</a> <br>{{r.t}} {{r.s}}, {{r.u}} {{r.v}}, {{r.w}}<br>Type of cuisine: <u><b>{{r.x}}</b></u>  Seamless: <b><u>{{r.y}}</b></u> {% if r.bool_dm %} <br>Delivery Minimum: ${{r.z}} {% endif %}   
+
+
+<span style="color:white">.</span>
+</ul>
+
+{%endfor%}
+
+</div>
+</div>
+
+
+<script src="{{STATIC_URL}}/js/bootstrap.min.js"></script>
+</body>
+</html>

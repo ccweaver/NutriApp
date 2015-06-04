@@ -1,12 +1,21 @@
 <html>
 <head>
 
-<link rel="stylesheet" type="text/css" href="{{STATIC_URL}}css/bootstrap.min.css"/>
+
 <!--<link rel="stylesheet" type="text/css" href="{{STATIC_URL}}css/bootstrap-responsive.min.css"/> 
 --> 
-<script type="text/javascript" src="{{STATIC_URL}}js/bootstrap.min.js"></script>
 
-<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script type="text/javascript" src="{{STATIC_URL}}js/bootstrap.min.js"></script>
+<script src="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.1/js/bootstrap.min.js"></script>
+<link rel="stylesheet" type="text/css" href="{{STATIC_URL}}css/bootstrap.min.css"/>
+
+
+<script type="text/javascript" src="{{STATIC_URL}}silviomoreto-bootstrap-select-83d5a1b/dist/js/bootstrap-select.min.js"></script>
+<link rel="stylesheet" type="text/css" href="{{STATIC_URL}}silviomoreto-bootstrap-select-83d5a1b/dist/css/bootstrap-select.min.css"></script>
+
+
 
 <script>
 //  handles submitting the newuser form
@@ -38,20 +47,88 @@ $.ajax(
 return false;
 };
 
-
-function hideModal()
-{
-    $('#myModal').modal('hide');
+function setTimes() {
+    document.getElementById('TuOpen').value = document.getElementById('MoOpen').value;
+    document.getElementById('TuClose').value = document.getElementById('MoClose').value;
+    document.getElementById('WeOpen').value = document.getElementById('MoOpen').value;
+    document.getElementById('WeClose').value = document.getElementById('MoClose').value;
+    document.getElementById('ThOpen').value = document.getElementById('MoOpen').value;
+    document.getElementById('ThClose').value = document.getElementById('MoClose').value;
+    document.getElementById('FrOpen').value = document.getElementById('MoOpen').value;
+    document.getElementById('FrClose').value = document.getElementById('MoClose').value;
+    document.getElementById('SaOpen').value = document.getElementById('MoOpen').value;
+    document.getElementById('SaClose').value = document.getElementById('MoClose').value;    
+    document.getElementById('SuOpen').value = document.getElementById('MoOpen').value;
+    document.getElementById('SuClose').value = document.getElementById('MoClose').value;
+    return false;
 }
 
+
 $(window).load(function(){
-    $('#myModal').modal('show');
+    var $select = $(".opentime");
+    $select.append($("<option value='12:00 am'>12:00 am</option>"))
+    $select.append($("<option value='12:30 am'>12:30 am</option>"))
+    for(i=1; i<=11; i++){
+        if(i!=7) {
+        $select.append($("<option></option>").val(i + ":00 am").html(i + ":00 am"))
+        $select.append($("<option></option>").val(i + ":30 am").html(i + ":30 am"))
+        }
+        else {
+            $select.append($("<option selected></option>").val(i + ":00 am").html(i + ":00 am"))
+            $select.append($("<option></option>").val(i + ":30 am").html(i + ":30 am"))
+        }
+    }
+    $select.append($("<option value='12:00 pm'>12:00 pm</option>"))
+    $select.append($("<option value='12:30 pm'>12:30 pm</option>"))
+    for(i=1; i<=11; i++){
+        $select.append($("<option></option>").val(i + "00 pm").html(i + ":00 pm"))
+        $select.append($("<option></option>").val(i + "30 pm").html(i + ":30 pm"))
+
+    }
+    var $select2 = $(".closetime");
+    $select2.append($("<option value='12:00 am'>12:00 am</option>"))
+    $select2.append($("<option value='12:30 am'>12:30 am</option>"))
+    for(i=1; i<=11; i++){
+        $select2.append($("<option></option>").val(i + ":00 am").html(i + ":00 am"))
+        $select2.append($("<option></option>").val(i + ":30 am").html(i + ":30 am"))
+    }
+    $select2.append($("<option value='12:00 pm'>12:00 pm</option>"))
+    $select2.append($("<option value='12:30 pm'>12:30 pm</option>"))
+    for(i=1; i<=11; i++){
+        if(i!=10) {
+            $select2.append($("<option></option>").val(i + ":00 pm").html(i + ":00 pm"))
+            $select2.append($("<option></option>").val(i + ":30 pm").html(i + ":30 pm"))
+        }
+        else {
+            $select2.append($("<option></option>").val(i + ":00 pm").html(i + ":00 pm"))
+            $select2.append($("<option selected></option>").val(i + ":30 pm").html(i + ":30 pm"))
+        }
+
+    }
+    
+
 });
+     
+    $(document).ready(function(e) {
+        $('.selectpicker').selectpicker();
+ 
+    });
+
+    function seamChange() {
+        var $site = $("#site");
+        var $seamless = $("#seamless");
+        if ($seamless.val() == 'No') {
+            $site.html('Link to Your Website:&nbsp;');
+        }
+        else {
+            $site.html('Link to Your Seamless Page:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;');
+        }
+    }
 
 </script>
 
 
-<style type="text/css">
+<style type="text/css">           
         body {
             background-image: url('../static/restaurant2.JPG');
         }
@@ -70,12 +147,15 @@ $(window).load(function(){
             border-style: solid;
             width: 50%;
         }
+
         #num_street {
             -webkit-border-radius: 5px;
             -moz-border-radius: 5px;
             border-radius: 5px;
             border-style: solid;
             width: 50%;
+         
+            
         }
         #city {
             -webkit-border-radius: 5px;
@@ -83,22 +163,41 @@ $(window).load(function(){
             border-radius: 5px;
             border-style: solid;
             width: 30%;
+            
+            
         }
         #state {
             width: 75px;
-            height: 25px;
+            height: 20px;
             overflow: hidden;
             background-color: white;
             border: 1px solid #000;
             font-style: bold;
         }
+
         #zipcode {
             -webkit-border-radius: 5px;
             -moz-border-radius: 5px;
             border-radius: 5px;
             border-style: solid;
             width: 20%;
+            
         }
+        #website, #yelp { 
+            width:50%;}
+
+        #MoOpen, #MoClose, #TuOpen, #TuClose, #WeOpen, #WeClose, #ThOpen, #ThClose, #FrOpen, #FrClose, #SaOpen, #SaClose, #SuOpen, #SuClose {
+            width: 89%;
+            height: 20px;
+            overflow: hidden;
+            background-color: white;
+            border: 1px solid #000;
+            font-style: bold;
+        }
+        
+        #delivery
+            {width:5%;
+            }
 </style>
 
 
@@ -125,32 +224,250 @@ $(window).load(function(){
 <div class="jumbotron" style="background-image: url(../static/marble2.jpg); background-size: 100%;">
 <div class="container">
 
-    <form id="RestForm" method="post">
+    <form id="RestForm" method="post"  enctype="multipart/form-data">
         {% csrf_token %}
         <font size="5" color="A22;" style="bold;">{{error}}</font>
         <br><br>
 
         <label style="color: #555;">
-            <font size="4">Restaurant Name:&nbsp;</font></label>
-        <input id="rest_name" type="text" name="rest_name" value='{{rest_name}}'>
-        <br><br>
+            <font size="4">Restaurant Name:</font></label>
+        <input id="rest_name" type="text" name="rest_name" value='{{rest_name}}' maxlength="200">
+        
 
         <div class="container">
-        <label style="color: #555;">
-            <font size="2">Number & Street:&nbsp;</font></label>
-        <input id="num_street" type="text" name="num_street" value='{{num_street}}'>
+        <br>
+        <label style="color: #555; padding-right:0%;">
+        <font size="2">Cuisine Type (up to 3):
+        </font></label>
+        <select data-size="10" class="selectpicker" multiple data-max-options="3" id="cuisine" name="cuisine[]" value='{{cuisine}}'>
+        <option value="American">American</option>
+        <option value="Bagels">Bagels</option>
+        <option value="BBQ">BBQ</option>
+        <option value="Brazilian">Brazilian</option>
+        <option value="Breakfast">Breakfast</option>
+        <option value="Brunch">Brunch</option>
+        <option value="Burgers">Burgers</option>
+        <option value="Caribbean">Caribbean</option>
+        <option value="Chinese">Chinese</option>
+        <option value="Crepes">Crepes</option>
+        <option value="Cuban">Cuban</option>
+        <option value="Deli">Deli</option>
+        <option value="Dessert">Dessert</option>
+        <option value="Dim Sum">Dim Sum</option>
+        <option value="Diner">Diner</option>
+        <option value="French">French</option>
+        <option value="Gluten Free">Gluten Free</option>
+        <option value="Greek">Greek</option>
+        <option value="Grocery">Grocery</option>
+        <option value="Halal">Halal</option>
+        <option value="Healthy">Healthy</option>
+        <option value="Indian">Indian</option>
+        <option value="Irish">Irish</option>
+        <option value="Italian">Italian</option>
+        <option value="Japanese">Japanese</option>
+        <option value="Juices">Juices</option>
+        <option value="Korean">Korean</option>
+        <option value="Kosher">Kosher</option>
+        <option value="Latin American">Latin American</option>
+        <option value="Malaysian">Malaysian</option>
+        <option value="Mediterranean">Mediterranean</option>
+        <option value="Mexican">Mexican</option>
+        <option value="Middle Eastern">Middle Eastern</option>
+        <option value="Noodles">Noodles</option>
+        <option value="Organic">Organic</option>
+        <option value="Pakistani">Pakistani</option>
+        <option value="Pizza">Pizza</option>
+        <option value="Salads">Salads</option>
+        <option value="Sandwiches">Sandwiches</option>
+        <option value="Seafood">Seafood</option>
+        <option value="Smoothies and Shakes">Smoothies and Shakes</option>
+        <option value="Soups">Soups</option>
+        <option value="Southern and Soul Food">Southern and Soul Food</option>
+        <option value="Spanish/Tapas">Spanish/Tapas</option>
+        <option value="Steakhouse">Steakhouse</option>
+        <option value="Sushi">Sushi</option>
+        <option value="Thai">Thai</option>
+        <option value="Turkish">Turkish</option>
+        <option value="Vegan">Vegan</option>
+        <option value="Vegetarian">Vegetarian</option>
+        <option value="Vietnamese">Vietnamese</option>
+        <option value="Wings">Wings</option>
+        </select>
+       
+   
+  
+
+        <br>
+        <label style="color: #555; padding-right:0%;">
+        <font size="2">Seamless:
+                </font></label>
+        <select id="seamless" name="seamless" class="selectpicker" onchange="seamChange()">
+        <option>No</option>
+        <option>Takeout Only</option>
+        <option>Takeout and Delivery</option>
+        
+        </select>
+        
+        <br>
+        <label style= "color:#555; padding-right:%;">
+        <font size="2">Delivery Minimum: <br>(leave "0" in box if you don't deliver) $</font></label>
+        <input id="deliv_min" type="text" name="deliv_min" value='{{deliv_min}}' maxlength="300">
+        <br>
+
+        <br>
+        <br>
+
+        <label style= "color:#555; padding-right:1%;">
+        <font size="2"><div id="site">Link to Your Website:</div></font></label>
+        <input id="website" type="text" name="website" value='{{website}}' maxlength="300">
+        <br>
+
+        <label style= "color:#555";>
+        <font size="2"><div id="site">Link to Your Yelp Page (Optional):</div></font></label>
+        <input id="yelp" type="text" name="yelp" value='{{yelp}}' maxlength="300">
+        <br>    
+        
+        
+        <label style= "color:#555; padding-right:%;">
+            <font size="2">Phone Number:</font></label>
+        <input id="phone" type="text" name="phone" value='{{phone}}'>
+        <br>    
+        <hr>
+
+      </div>  
+        <table>
+        <th>
+        <label style= "color:#555";>
+        <font size="2">Monday:&nbsp;</font></label>
+        </th>
+        <th>
+        <label style= "color:#555";>
+        <font size="2">Tuesday:&nbsp;</font></label>
+        </th>
+        <th>
+        <label style= "color:#555";>
+        <font size="2">Wednesday:&nbsp;</font></label>
+        </th>
+        <th>
+        <label style= "color:#555";>
+        <font size="2">Thursday:&nbsp;</font></label>
+        </th>
+        <th>
+        <label style= "color:#555";>
+        <font size="2">Friday:&nbsp;</font></label>
+        </th>
+        <th>
+        <label style= "color:#555";>
+        <font size="2">Saturday:&nbsp;</font></label>
+        </th>
+        <th>
+        <label style= "color:#555";>
+        <font size="2">Sunday:&nbsp;</font></label>
+        </th>
+
+
+
+        <tr>
+        <td>
+        <font size="2">Open:&nbsp;</font></label>
+        <select class="opentime" id="MoOpen" type="text" name="MoOpen" value='{{MoOpen}}'>
+        </select>
+        </td>
+        <td>
+        <font size="2">Open:&nbsp;</font></label>
+        <select id="TuOpen" class="opentime" type="text" name="TuOpen" value='{{TuOpen}}'>
+        </select>
+        </td>
+        <td>
+        <font size="2">Open:&nbsp;</font></label>
+        <select id="WeOpen" class="opentime" type="text" name="WeOpen" value='{{WeOpen}}'>
+        </select>
+        </td>
+        <td>
+        <font size="2">Open:&nbsp;</font></label>
+        <select id="ThOpen" class="opentime" type="text" name="ThOpen" value='{{ThOpen}}'>
+        </select>
+        </td>
+        <td>
+        <font size="2">Open:&nbsp;</font></label>
+        <select id="FrOpen" class="opentime" type="text" name="FrOpen" value='{{FrOpen}}'>
+        </select>
+        </td>
+        <td>
+        <font size="2">Open:&nbsp;</font></label>
+        <select id="SaOpen" class="opentime" type="text" name="SaOpen" value='{{SaOpen}}'>
+        </select>
+        </td>
+        <td>
+        <font size="2">Open:&nbsp;</font></label>
+        <select id="SuOpen" class="opentime" type="text" name="SuOpen" value='{{SuOpen}}'>
+        </select>
+        </td>
+        </tr>
+
+        <tr>
+        <td>
+        <font size="2">Close:&nbsp;</font></label>
+        <select class="closetime" id="MoClose" type="text" name="MoClose" value='{{MoClose}}'>
+        </select>
+        </td>
+        <td>
+        <font size="2">Close:&nbsp;</font></label>
+        <select class="closetime" id="TuClose" type="text" name="TuClose" value='{{TuClose}}'>
+        </select>
+        </td>
+        <td>
+        <font size="2">Close:&nbsp;</font></label>
+        <select class="closetime" id="WeClose" type="text" name="WeClose" value='{{WeClose}}'>
+        </select>
+        </td>
+        <td>
+        <font size="2">Close:&nbsp;</font></label>
+        <select class="closetime" id="ThClose" type="text" name="ThClose" value='{{ThClose}}'>
+        </select>
+        </td>
+        <td>
+        <font size="2">Close:&nbsp;</font></label>
+        <select class="closetime" id="FrClose" type="text" name="FrClose" value='{{FrClose}}'>
+        </select>
+        </td>
+        <td>
+        <font size="2">Close:&nbsp;</font></label>
+        <select class="closetime" id="SaClose" type="text" name="SaClose" value='{{SaClose}}'>
+        </select>
+        </td>
+        <td>
+        <font size="2">Close:&nbsp;</font></label>
+        <select class="closetime" id="SuClose" type="text" name="SuClose" value='{{SuClose}}'>
+        </select>
+        </td>
+
+        </tr>
+        </table>
+        <br>
+
+
+        <br>
+        <input class="btn btn-default" value="Set All times as Monday" style="width: 200px;" onclick="setTimes()"> 
+        
+        <hr color='black'>
+        <br><br>
+
+        <label style="color: #555; padding-right:2%;">
+            <font size="2">Number & Street:</font></label>
+        <input id="num_street" type="text" name="num_street" value='{{num_street}}' maxlength="100">
 
             <br>
 
+        <label style="color: #555; padding-right:2%; margin-left:15%">
+            <font size="2">
+           City:&nbsp;</font></label>
+        <input id="city" type="text" name="city" value='{{city}}' maxlength="100">
+       
         <label style="color: #555;">
             <font size="2">
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;City:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font></label>
-        <input id="city" type="text" name="city" value='{{city}}'>
-        &nbsp;&nbsp;&nbsp;&nbsp;
-        <label style="color: #555;">
-            <font size="2">
-            State:&nbsp;</font></label>    
-        <select id="state" name="state" value="{{state}}">
+            State:&nbsp;</font></label>  
+        <select id="state" name="state" value='{{state}}'>
         <option value="--">--</option>
         <option value="AL">AL</option>
         <option value="AK">AK</option>
@@ -206,9 +523,9 @@ $(window).load(function(){
         </select>
 
         <br>
-        <label style="color: #555;">
+        <label style="color: #555; padding-right:2%; margin-left:20%;">
             <font size="2">
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Zip Code:&nbsp;</font></label>    
+            Zip Code:</font></label>    
         <input id="zipcode" type="text" name="zipcode" value="{{zipcode}}">
         
         
@@ -216,7 +533,7 @@ $(window).load(function(){
 
         <br><br>
 
-        <input class="btn btn-default" value="Cancel" style="width: 20%;"> 
+        <input id="cancel" class="btn btn-default" value="Cancel" style="width: 20%;"> 
         <input type="submit" class="btn btn-danger" value="Save" style="width: 20%;">
         </div>
     </form>

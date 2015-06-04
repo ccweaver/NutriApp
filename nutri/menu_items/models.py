@@ -8,6 +8,7 @@ class Item(models.Model):
 	price = models.DecimalField(max_digits=10, decimal_places=2)
 	ingredients = models.ManyToManyField(Addition, blank=True)
 	valid = models.BooleanField(default=False)
+	description = models.TextField()
 
 	def __unicode__(self):
 		return u'%s' % (self.name)
