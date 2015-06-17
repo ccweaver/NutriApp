@@ -633,8 +633,7 @@ def restaurant_profile(request, rid):
     SaClose = ""
     SuOpen = ""
     SuClose = ""   
-    print rid
-    print request.user.username
+
     
     my_prof = False
     no_seamless = False
@@ -671,7 +670,7 @@ def restaurant_profile(request, rid):
     if str(mi) == '0':
         mi = '00'
     if hr == 0:
-        MoOpen = 12 + str(':') + str(mi) + ' am'
+        MoOpen = '12' + str(':') + str(mi) + ' am'
     elif hr > 12:
         MoOpen = str(hr - 12) + str(':') + str(mi) + ' pm'
     else:
@@ -682,7 +681,7 @@ def restaurant_profile(request, rid):
     if str(mi) == '0':
         mi = '00'
     if hr == 0:
-        TuOpen = 12 + str(':') + str(mi) + ' am'
+        TuOpen = '12' + str(':') + str(mi) + ' am'
     elif hr > 12:
         TuOpen = str(hr - 12) + str(':') + str(mi) + ' pm'
     else:
@@ -693,7 +692,7 @@ def restaurant_profile(request, rid):
     if str(mi) == '0':
         mi = '00'
     if hr == 0:
-        WeOpen = 12 + str(':') + str(mi) + ' am'
+        WeOpen = '12' + str(':') + str(mi) + ' am'
     elif hr > 12:
         WeOpen = str(hr - 12) + str(':') + str(mi) + ' pm'
     else:
@@ -704,7 +703,7 @@ def restaurant_profile(request, rid):
     if str(mi) == '0':
         mi = '00'
     if hr == 0:
-        ThOpen = 12 + str(':') + str(mi) + ' am'
+        ThOpen = '12' + str(':') + str(mi) + ' am'
     elif hr > 12:
         ThOpen = str(hr - 12) + str(':') + str(mi) + ' pm'
     else:
@@ -715,7 +714,7 @@ def restaurant_profile(request, rid):
     if str(mi) == '0':
         mi = '00'
     if hr == 0:
-        FrOpen = 12 + str(':') + str(mi) + ' am'
+        FrOpen = '12' + str(':') + str(mi) + ' am'
     elif hr > 12:
         FrOpen = str(hr - 12) + str(':') + str(mi) + ' pm'
     else:
@@ -726,7 +725,7 @@ def restaurant_profile(request, rid):
     if str(mi) == '0':
         mi = '00'
     if hr == 0:
-        SaOpen = 12 + str(':') + str(mi) + ' am'
+        SaOpen = '12' + str(':') + str(mi) + ' am'
     elif hr > 12:
         SaOpen = str(hr - 12) + str(':') + str(mi) + ' pm'
     else:
@@ -737,7 +736,7 @@ def restaurant_profile(request, rid):
     if str(mi) == '0':
         mi = '00'
     if hr == 0:
-        SuOpen = 12 + str(':') + str(mi) + ' am'
+        SuOpen = '12' + str(':') + str(mi) + ' am'
     elif hr > 12:
         SuOpen = str(hr - 12) + str(':') + str(mi) + ' pm'
     else:
@@ -749,7 +748,7 @@ def restaurant_profile(request, rid):
     if str(mi) == '0':
         mi = '00'
     if hr == 0:
-        MoClose = 12 + str(':') + str(mi) + ' am'
+        MoClose = '12' + str(':') + str(mi) + ' am'
     elif hr > 12:
         MoClose = str(hr - 12) + str(':') + str(mi) + ' pm'
     else:
@@ -760,7 +759,7 @@ def restaurant_profile(request, rid):
     if str(mi) == '0':
         mi = '00'
     if hr == 0:
-        TuClose = 12 + str(':') + str(mi) + ' am'
+        TuClose = '12' + str(':') + str(mi) + ' am'
     elif hr > 12:
         TuClose = str(hr - 12) + str(':') + str(mi) + ' pm'
     else:
@@ -771,7 +770,7 @@ def restaurant_profile(request, rid):
     if str(mi) == '0':
         mi = '00'
     if hr == 0:
-        WeClose = 12 + str(':') + str(mi) + ' am'
+        WeClose = '12' + str(':') + str(mi) + ' am'
     elif hr > 12:
         WeClose = str(hr - 12) + str(':') + str(mi) + ' pm'
     else:
@@ -782,7 +781,7 @@ def restaurant_profile(request, rid):
     if str(mi) == '0':
         mi = '00'
     if hr == 0:
-        ThClose = 12 + str(':') + str(mi) + ' am'
+        ThClose = '12' + str(':') + str(mi) + ' am'
     elif hr > 12:
         ThClose = str(hr - 12) + str(':') + str(mi) + ' pm'
     else:
@@ -793,7 +792,7 @@ def restaurant_profile(request, rid):
     if str(mi) == '0':
         mi = '00'
     if hr == 0:
-        FrClose = 12 + str(':') + str(mi) + ' am'
+        FrClose = '12' + str(':') + str(mi) + ' am'
     elif hr > 12:
         FrClose = str(hr - 12) + str(':') + str(mi) + ' pm'
     else:
@@ -804,7 +803,7 @@ def restaurant_profile(request, rid):
     if str(mi) == '0':
         mi = '00'
     if hr == 0:
-        SaClose = 12 + str(':') + str(mi) + ' am'
+        SaClose = '12' + str(':') + str(mi) + ' am'
     elif hr > 12:
         SaClose = str(hr - 12) + str(':') + str(mi) + ' pm'
     else:
@@ -815,7 +814,7 @@ def restaurant_profile(request, rid):
     if str(mi) == '0':
         mi = '00'
     if hr == 0:
-        SuClose = 12 + str(':') + str(mi) + ' am'
+        SuClose = '12' + str(':') + str(mi) + ' am'
     elif hr > 12:
         SuClose = str(hr - 12) + str(':') + str(mi) + ' pm'
     else:
