@@ -350,7 +350,7 @@ def add_restaurant(request):
     c2 = ""
     c3 = ""
     seamless = ""
-    deliv_min = "0.00"
+    deliv_min = "0"
     num_street = ""
     city = ""
     state = "No Selection"
