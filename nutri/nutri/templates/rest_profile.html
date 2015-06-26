@@ -182,9 +182,7 @@ function showModal()
 </div>
 
 <table class="table" id="menu_table">
-    <colgroup>
-    	<col span="1" style="color:#990099">
-    </colgroup>
+ 
     <th></th>
     <th><u>DISH</u></th>
     <th><font color="#990099">Calories</font></th>
@@ -204,7 +202,10 @@ function showModal()
 {% endif %}
 </td>
 {% endif %}
-<td><font color="black">{{ s }}</font></td>
+<td><font color="black">{{ s }}</font>
+	<colgroup>
+    	<col span="1" style="color:#990099">
+    	</colgroup></td>
 {% if forloop.counter|divisibleby:9 %}</tr>{% endif %}
 {% endfor %}
 </font>
