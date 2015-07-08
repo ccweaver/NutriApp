@@ -35,7 +35,7 @@ def sign_in(request):
             
             zRE = re.compile("^[0-9][0-9][0-9][0-9][0-9]$")
             if zRE.match(term):
-                restaurants = Restaurant.objects.all().order_by('zipcode').order_by('street')
+                restaurants = Restaurant.objects.all().order_by('zipcode').order_by('street').order_by('number')
                 rs = []
                 for r in restaurants:
                     bool_dm = False
@@ -54,7 +54,7 @@ def sign_in(request):
                 return render(request, 'search_results.html', {'rests':r_zipSorted})
 
             else:
-                r_citySorted = Restaurant.objects.filter(city__icontains=term).order_by('street')
+                r_citySorted = Restaurant.objects.filter(city__icontains=term).order_by('street').order_by('number')
                 rs = []
                 for r in r_citySorted:
                     bool_dm = False
