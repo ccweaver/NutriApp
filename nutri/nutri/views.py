@@ -466,146 +466,21 @@ def add_restaurant(request):
             error = 'Please enter a valid 5 digit zip code'
 
         #opening times
-        rawTime = request.POST['MoOpen']
-        split = rawTime.split(':')
-        hr = split[0]
-        if hr == '12':
-            hr = '0'
-        mi = int(split[1].split(' ')[0])
-        if split[1].split(' ')[1] == 'pm':
-            hr = int(hr) + 12
-        MoOpen = datetime(2014, 3, 9, int(hr), mi)
-
-        rawTime = request.POST['TuOpen']
-        split = rawTime.split(':')
-        hr = split[0]
-        if hr == '12':
-            hr = '0'
-        mi = int(split[1].split(' ')[0])
-        if split[1].split(' ')[1] == 'pm':
-            hr = int(hr) + 12
-        TuOpen = datetime(2014, 3, 9, int(hr), mi)
-
-        rawTime = request.POST['WeOpen']
-        split = rawTime.split(':')
-        hr = split[0]
-        if hr == '12':
-            hr = '0'
-        mi = int(split[1].split(' ')[0])
-        if split[1].split(' ')[1] == 'pm':
-            hr = int(hr) + 12
-        WeOpen = datetime(2014, 3, 9, int(hr), mi)
-
-        rawTime = request.POST['ThOpen']
-        split = rawTime.split(':')
-        hr = split[0]
-        if hr == '12':
-            hr = '0'
-        mi = int(split[1].split(' ')[0])
-        if split[1].split(' ')[1] == 'pm':
-            hr = int(hr) + 12
-        ThOpen = datetime(2014, 3, 9, int(hr), mi)
-
-        rawTime = request.POST['FrOpen']
-        split = rawTime.split(':')
-        hr = split[0]
-        if hr == '12':
-            hr = '0'
-        mi = int(split[1].split(' ')[0])
-        if split[1].split(' ')[1] == 'pm':
-            hr = int(hr) + 12
-        FrOpen = datetime(2014, 3, 9, int(hr), mi)
-
-        rawTime = request.POST['SaOpen']
-        split = rawTime.split(':')
-        hr = split[0]
-        if hr == '12':
-            hr = '0'
-        mi = int(split[1].split(' ')[0])
-        if split[1].split(' ')[1] == 'pm':
-            hr = int(hr) + 12
-        SaOpen = datetime(2014, 3, 9, int(hr), mi)
-
-        rawTime = request.POST['SuOpen']
-        split = rawTime.split(':')
-        hr = split[0]
-        if hr == '12':
-            hr = '0'
-        mi = int(split[1].split(' ')[0])
-        if split[1].split(' ')[1] == 'pm':
-            hr = int(hr) + 12
-        SuOpen = datetime(2014, 3, 9, int(hr), mi)
-
-        #closing times
-        rawTime = request.POST['MoClose']
-        split = rawTime.split(':')
-        hr = split[0]
-        if hr == '12':
-            hr = '0'
-        mi = int(split[1].split(' ')[0])
-        if split[1].split(' ')[1] == 'pm':
-            hr = int(hr) + 12
-        MoClose = datetime(2014, 3, 9, int(hr), mi)
-
-        rawTime = request.POST['TuClose']
-        split = rawTime.split(':')
-        hr = split[0]
-        if hr == '12':
-            hr = '0'
-        mi = int(split[1].split(' ')[0])
-        if split[1].split(' ')[1] == 'pm':
-            hr = int(hr) + 12
-        TuClose = datetime(2014, 3, 9, int(hr), mi)
-
-        rawTime = request.POST['WeClose']
-        split = rawTime.split(':')
-        hr = split[0]
-        if hr == '12':
-            hr = '0'
-        mi = int(split[1].split(' ')[0])
-        if split[1].split(' ')[1] == 'pm':
-            hr = int(hr) + 12
-        WeClose = datetime(2014, 3, 9, int(hr), mi)
-
-        rawTime = request.POST['ThClose']
-        split = rawTime.split(':')
-        hr = split[0]
-        if hr == '12':
-            hr = '0'
-        mi = int(split[1].split(' ')[0])
-        if split[1].split(' ')[1] == 'pm':
-            hr = int(hr) + 12
-        ThClose = datetime(2014, 3, 9, int(hr), mi)
-
-        rawTime = request.POST['FrClose']
-        split = rawTime.split(':')
-        hr = split[0]
-        if hr == '12':
-            hr = '0'
-        mi = int(split[1].split(' ')[0])
-        if split[1].split(' ')[1] == 'pm':
-            hr = int(hr) + 12
-        FrClose = datetime(2014, 3, 9, int(hr), mi)
-
-        rawTime = request.POST['SaClose']
-        split = rawTime.split(':')
-        hr = split[0]
-        if hr == '12':
-            hr = '0'
-        mi = int(split[1].split(' ')[0])
-        if split[1].split(' ')[1] == 'pm':
-            hr = int(hr) + 12
-        SaClose = datetime(2014, 3, 9, int(hr), mi)
-
-        rawTime = request.POST['SuClose']
-        split = rawTime.split(':')
-        hr = split[0]
-        if hr == '12':
-            hr = '0'
-        mi = int(split[1].split(' ')[0])
-        if split[1].split(' ')[1] == 'pm':
-            hr = int(hr) + 12
-        SuClose = datetime(2014, 3, 9, int(hr), mi)
+        MoOpen = request.POST['MoOpen']
+        TuOpen = request.POST['TuOpen']
+        WeOpen = request.POST['WeOpen']
+        ThOpen = request.POST['ThOpen']
+        FrOpen = request.POST['FrOpen']
+        SaOpen = request.POST['SaOpen']
+        SuOpen = request.POST['SuOpen']
+        
+        MoClose = request.POST['MoClose']
+        TuClose = request.POST['TuClose']
+        WeClose = request.POST['WeClose']
+        ThClose = request.POST['ThClose']
+        FrClose = request.POST['FrClose']
+        SaClose = request.POST['SaClose']
+        SuClose = request.POST['SuClose']
 
 
         if not error:
@@ -665,160 +540,22 @@ def restaurant_profile(request, rid):
     if len(phone) == 10:
         phone = '(' + phone[0:3] + ') ' + phone[3:6] + '-' + phone[6:10]
     
-    hr = restaurant.moopen.hour
-    mi = restaurant.moopen.minute
-    if str(mi) == '0':
-        mi = '00'
-    if hr == 0:
-        MoOpen = '12' + str(':') + str(mi) + ' am'
-    elif hr > 12:
-        MoOpen = str(hr - 12) + str(':') + str(mi) + ' pm'
-    else:
-        MoOpen = str(hr) + str(':') + str(mi) + ' am'
-    
-    hr = restaurant.tuopen.hour
-    mi = restaurant.tuopen.minute
-    if str(mi) == '0':
-        mi = '00'
-    if hr == 0:
-        TuOpen = '12' + str(':') + str(mi) + ' am'
-    elif hr > 12:
-        TuOpen = str(hr - 12) + str(':') + str(mi) + ' pm'
-    else:
-        TuOpen = str(hr) + str(':') + str(mi) + ' am'
+    MoOpen = restaurant.moopen
+    TuOpen = restaurant.tuopen
+    WeOpen = restaurant.weopen
+    ThOpen = restaurant.thopen
+    FrOpen = restaurant.fropen
+    SaOpen = restaurant.saopen
+    SuOpen = restaurant.suopen
 
-    hr = restaurant.weopen.hour
-    mi = restaurant.weopen.minute
-    if str(mi) == '0':
-        mi = '00'
-    if hr == 0:
-        WeOpen = '12' + str(':') + str(mi) + ' am'
-    elif hr > 12:
-        WeOpen = str(hr - 12) + str(':') + str(mi) + ' pm'
-    else:
-        WeOpen = str(hr) + str(':') + str(mi) + ' am'
+    MoClose = restaurant.moclose
+    TuClose = restaurant.tuclose
+    WeClose = restaurant.weclose
+    ThClose = restaurant.thclose
+    FrClose = restaurant.frclose
+    SaClose = restaurant.saclose
+    SuClose = restaurant.suclose
 
-    hr = restaurant.thopen.hour
-    mi = restaurant.thopen.minute
-    if str(mi) == '0':
-        mi = '00'
-    if hr == 0:
-        ThOpen = '12' + str(':') + str(mi) + ' am'
-    elif hr > 12:
-        ThOpen = str(hr - 12) + str(':') + str(mi) + ' pm'
-    else:
-        ThOpen = str(hr) + str(':') + str(mi) + ' am'
-    
-    hr = restaurant.fropen.hour
-    mi = restaurant.fropen.minute
-    if str(mi) == '0':
-        mi = '00'
-    if hr == 0:
-        FrOpen = '12' + str(':') + str(mi) + ' am'
-    elif hr > 12:
-        FrOpen = str(hr - 12) + str(':') + str(mi) + ' pm'
-    else:
-        FrOpen = str(hr) + str(':') + str(mi) + ' am'
-    
-    hr = restaurant.saopen.hour
-    mi = restaurant.saopen.minute
-    if str(mi) == '0':
-        mi = '00'
-    if hr == 0:
-        SaOpen = '12' + str(':') + str(mi) + ' am'
-    elif hr > 12:
-        SaOpen = str(hr - 12) + str(':') + str(mi) + ' pm'
-    else:
-        SaOpen = str(hr) + str(':') + str(mi) + ' am'
-    
-    hr = restaurant.suopen.hour
-    mi = restaurant.suopen.minute
-    if str(mi) == '0':
-        mi = '00'
-    if hr == 0:
-        SuOpen = '12' + str(':') + str(mi) + ' am'
-    elif hr > 12:
-        SuOpen = str(hr - 12) + str(':') + str(mi) + ' pm'
-    else:
-        SuOpen = str(hr) + str(':') + str(mi) + ' am'
-
-    #closing times
-    hr = restaurant.moclose.hour
-    mi = restaurant.moclose.minute
-    if str(mi) == '0':
-        mi = '00'
-    if hr == 0:
-        MoClose = '12' + str(':') + str(mi) + ' am'
-    elif hr > 12:
-        MoClose = str(hr - 12) + str(':') + str(mi) + ' pm'
-    else:
-        MoClose = str(hr) + str(':') + str(mi) + ' am'
-    
-    hr = restaurant.tuclose.hour
-    mi = restaurant.tuclose.minute
-    if str(mi) == '0':
-        mi = '00'
-    if hr == 0:
-        TuClose = '12' + str(':') + str(mi) + ' am'
-    elif hr > 12:
-        TuClose = str(hr - 12) + str(':') + str(mi) + ' pm'
-    else:
-        TuClose = str(hr) + str(':') + str(mi) + ' am'
-
-    hr = restaurant.weclose.hour
-    mi = restaurant.weclose.minute
-    if str(mi) == '0':
-        mi = '00'
-    if hr == 0:
-        WeClose = '12' + str(':') + str(mi) + ' am'
-    elif hr > 12:
-        WeClose = str(hr - 12) + str(':') + str(mi) + ' pm'
-    else:
-        WeClose = str(hr) + str(':') + str(mi) + ' am'
-
-    hr = restaurant.thclose.hour
-    mi = restaurant.thclose.minute
-    if str(mi) == '0':
-        mi = '00'
-    if hr == 0:
-        ThClose = '12' + str(':') + str(mi) + ' am'
-    elif hr > 12:
-        ThClose = str(hr - 12) + str(':') + str(mi) + ' pm'
-    else:
-        ThClose = str(hr) + str(':') + str(mi) + ' am'
-    
-    hr = restaurant.frclose.hour
-    mi = restaurant.frclose.minute
-    if str(mi) == '0':
-        mi = '00'
-    if hr == 0:
-        FrClose = '12' + str(':') + str(mi) + ' am'
-    elif hr > 12:
-        FrClose = str(hr - 12) + str(':') + str(mi) + ' pm'
-    else:
-        FrClose = str(hr) + str(':') + str(mi) + ' am'
-    
-    hr = restaurant.saclose.hour
-    mi = restaurant.saclose.minute
-    if str(mi) == '0':
-        mi = '00'
-    if hr == 0:
-        SaClose = '12' + str(':') + str(mi) + ' am'
-    elif hr > 12:
-        SaClose = str(hr - 12) + str(':') + str(mi) + ' pm'
-    else:
-        SaClose = str(hr) + str(':') + str(mi) + ' am'
-    
-    hr = restaurant.suclose.hour
-    mi = restaurant.suclose.minute
-    if str(mi) == '0':
-        mi = '00'
-    if hr == 0:
-        SuClose = '12' + str(':') + str(mi) + ' am'
-    elif hr > 12:
-        SuClose = str(hr - 12) + str(':') + str(mi) + ' pm'
-    else:
-        SuClose = str(hr) + str(':') + str(mi) + ' am'
 
     menu = Item.objects.filter(rest_id=rid).filter(valid=True)
     print menu
