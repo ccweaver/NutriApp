@@ -66,6 +66,7 @@ function setTimes() {
 
 $(window).load(function(){
     var $select = $(".opentime");
+    $select.append($("<option value='Closed'>Closed</option>"))
     $select.append($("<option value='12:00 am'>12:00 am</option>"))
     $select.append($("<option value='12:30 am'>12:30 am</option>"))
     for(i=1; i<=11; i++){
@@ -86,6 +87,7 @@ $(window).load(function(){
 
     }
     var $select2 = $(".closetime");
+    $select2.append($("<option value='Closed'>Closed</option>"))
     $select2.append($("<option value='12:00 am'>12:00 am</option>"))
     $select2.append($("<option value='12:30 am'>12:30 am</option>"))
     for(i=1; i<=11; i++){
