@@ -165,10 +165,13 @@ function showModal()
 
 <div class="lister">
 <ul style="list-style-type:none; padding-left:0">
-   <li> <b>M:</b> {{MoOpen}} to {{MoClose}}   <b>F:</b> {{FrOpen}} to {{FrClose}}</li>
-   <li> <b>T:</b> {{TuOpen}} to {{TuClose}}    <b> Sat:</b> {{SaOpen}} to {{SaClose}}</li>
-   <li> <b>W:</b> {{WeOpen}} to {{WeClose}}  <b>Sun:</b> {{SuOpen}} to {{SuClose}}</li>
-   <li> <b>Th:</b> {{ThOpen}} to {{ThClose}}</li>
+   <li> <b>M:</b> {% if MoOpen == "Closed" %} Closed {% else %} {{MoOpen}} to {{MoClose}} {% endif %}  
+    <b>F:</b> {% if FrOpen == "Closed" %} Closed {% else %} {{FrOpen}} to {{FrClose}} {% endif %}</li>
+   <li> <b>T:</b> {% if TuOpen == "Closed" %} Closed {% else %} {{TuOpen}} to {{TuClose}} {% endif %}    
+    <b> Sat:</b> {% if SaOpen == "Closed" %} Closed {% else %} {{SaOpen}} to {{SaClose}} {% endif %}</li>
+   <li><b>W:</b> {% if WeOpen == "Closed" %} Closed {% else %} {{WeOpen}} to {{WeClose}} {% endif %} 
+    <b>Sun:</b> {% if SuOpen == "Closed" %} Closed {% else %} {{SuOpen}} to {{SuClose}} {% endif %}</li>
+   <li> <b>Th:</b> {% if ThOpen == "Closed" %} Closed {% else %} {{ThOpen}} to {{ThClose}} {% endif %}</li>
 
 </ul>
 </div>
