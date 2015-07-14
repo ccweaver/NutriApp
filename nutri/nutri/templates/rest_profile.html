@@ -178,11 +178,11 @@ function showModal()
 </div>
 
 <div class="menutitle">
-	<u>The <span id="shizzle">600 Calories and Under</span> Menu</u>
+	<u>The <span id="shizzle">650 Calories and Under</span> Menu</u>
 </div>
 
 <table class="table" id="menu_table">
-    
+ 
     <th></th>
     <th><u>DISH</u></th>
     <th><font color="#990099">Calories</font></th>
@@ -206,6 +206,9 @@ function showModal()
 {% if forloop.counter|divisibleby:9 %}</tr>{% endif %}
 {% endfor %}
 </font>
+   <colgroup>
+    	<col span="1" font color="#990099">
+   </colgroup>
 </table>
 
 {% if my_prof %}
@@ -215,7 +218,7 @@ function showModal()
          name="Submit">
 </form>
 <div class="notice">
-<i>Add as many dishes as you like! As long as they are under 600 calories. If you create dish and it comes out to be over 600 calories, please remove, adjust ingredients in dish, repost.</i> 
+<i>Add as many dishes as you like! As long as they are under 650 calories. If you create dish and it comes out to be over 650 calories, please remove, adjust ingredients in dish, repost.</i> 
 </div>
 {%endif%}
 <div class="lastone">
