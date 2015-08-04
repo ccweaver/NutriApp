@@ -34,6 +34,7 @@ $(document).on("click","#nav_login_submit",function(event)
                   document.getElementById('login_pass').value = "";
 
                   $("#search").effect("shake");
+                  $("#SearchMessage").effect("shake");
                 }
               return false;
               },
@@ -112,7 +113,7 @@ $(document).on("click","#proflink",function(event)
 
 <style type="text/css">
         body {
-            background-image: url('http://i375.photobucket.com/albums/oo197/Charles-Stanton_151515/awesome-bright-cool-food-Favim.com-621419_zpskfxq2xkk.jpg');
+            background-image: url('../static/orange_limes.jpg');
             background-size: cover;
         }
         
@@ -123,13 +124,9 @@ $(document).on("click","#proflink",function(event)
             margin-top: 25px;  
         }
         
-        #login_button { width: 95%;
-          
+        #login_list {
+          margin-top: 10px;
         }
-
-        #shake, #shake2, #shake3 {
-          display: inline-block;
-        }   
 
         input[type="text"],input[type="password"] {
             -webkit-border-radius: ;
@@ -157,17 +154,6 @@ $(document).on("click","#proflink",function(event)
           margin-top: 0px;
         }
 
-        #proflink, #logout{
-          margin-right: 10px;
-          margin-top: 10px;
-        }
-        
-        .SearchMessage {
-          margin-left: 5%;
-          font-size:23px;
-          padding-top:15px;
-          padding-bottom: 15px;
-        }
         .fizzle {
           color:;
           font-size:25px;
@@ -206,27 +192,23 @@ $(document).on("click","#proflink",function(event)
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="/"><span style="color:#2efb00;opacity=.99;">CALO</span><span style="color:#1500fb;opacity=.99;">SPOT</span></a>
+          <a class="navbar-brand" href="/"><span style="color:#CE3C3C;">Calo</span><span style="color:#003CFF;">Spot</span></a>
         </div>
         
         <div class="navbar-collapse collapse">
-            <ul class="nav navbar-nav navbar-right">
-           
+          <div id="login_list" align='right'>
             {% if is_user %}
-            <button id="proflink" type="button" class="btn btn-primary">{{user}}</button>
-            <button id="logout" type="button" class="btn btn-danger">Logout</button>
+            <button id="proflink" type="button" class="btn btn-primary btn-sm">{{user}}</button>
+            <button id="logout" type="button" class="btn btn-danger btn-sm">Logout</button>
             {% else %}
-
-            <div id="shake">
-            <li id="nav_login"  style="margin-top:4%;"><input name="login_email" type="text" id="login_email" placeholder="  Email"></li></div>
-            <div id="shake2">
-            <li id="nav_login_pass"  style="margin-top:4%;"><input name="login_pass" type="password" id="login_pass" placeholder="  Password"></li></div>
-            <div id="shake3">
-            <li id="nav_login_submit"  style="margin-top:0%;"> <button type="submit" class="btn btn-danger btn-sm" id="login_button" style="background-color:#0066ff; border:none;">Restaurant Management: Sign In</button>&nbsp;</li></div>
-            {% endif %}
-                 
-            </ul>
-            
+            <font color="white" size='3'> Restaurant Management:&nbsp; </font>
+            <input name="login_email" type="text" id="login_email" placeholder="  Email">
+            <input name="login_pass" type="password" id="login_pass" placeholder="  Password">
+            <button id="nav_login_submit" class="btn btn-danger btn-sm" id="login_button">Sign In</button>&nbsp;
+            <button class="btn btn-danger btn-sm"; style="background-color:#0066ff; border:none;" onclick="showModal();">Create New Account</button>&nbsp;
+            {% endif %} 
+          </ul>
+          </div>
         </div>
     </div>
 </div>
@@ -237,18 +219,15 @@ $(document).on("click","#proflink",function(event)
   Contact: charlie@calospot.com
 </div>
 
- <div class = "buttonz">
-                {% if not is_user %}
-                <button class="btn btn-danger"; style="width:200px; height:50px; white-space:normal; background-color:#0066ff; border:none; margin-bottom:2%" onclick="showModal();">Restaurant Management: Create New Account</button>
-                {% endif %}
-</div>
 
-<br><br><br><br>
-            <div class="jumbotron" style="background-image:url(http://i375.photobucket.com/albums/oo197/Charles-Stanton_151515/142626895585521_zpscfatpbf6.jpg); background-size: 100%;">
-              <div class ="SearchMessage">
-              Local restaurants post menus to this website. <br>All dishes on these menus are <span class="fizzle"><u>under 600 calories.</u></span><br>Search for them below.
-              </div>
-            </div>
+<br><br>
+  <div align='left' id="SearchMessage">
+    <font size="5" face="Calibri">
+    Wanna know what low calorie dishes your local restaurants offer?
+    <br>
+    Search for your favorite eatery below!
+    </font>
+  </div>
 <br><br><br><br>
 
               <div id="search">
