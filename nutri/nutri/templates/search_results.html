@@ -11,6 +11,32 @@
 <script>
 </script>
 
+<script>
+
+//  handles next page clicks
+$(document).on("click","#next_page",function(event)
+           {
+           $.ajax(
+           {
+              type: "post",
+              url: "",
+              data: {csrfmiddlewaretoken:document.getElementsByName('csrfmiddlewaretoken')[0].value},
+              success: function (data)
+              {
+                if (data.success == 'true') {
+                }
+                else {
+                }
+              return false;
+              },
+              error: function(data)
+              {
+
+              }
+            });
+           return false;
+});
+</script>
 
 <style type="text/css">
 
@@ -68,21 +94,24 @@
 <div class="container">
 <div class="Seuss" style="font-size:15px; text-align:center;">
 </div>
+{{num_rests}}
 <div class="returns">
 
 {% for r in rests %}
-{% if forloop.counter0 < 50 %}
 <ul class='rest_box' style="padding-top:1%; font-size:20px; padding-left:10%; border-style:solid; padding-bottom:10%; padding-right:0%"> 
 <a href="/restaurant_profile/{{r.rid}}" style="font-size:40px; color:black; font-weight:bold;">{{r.r}}</a> <br>{{r.t}} {{r.s}}, {{r.u}} {{r.v}}, {{r.w}}<br>Type of cuisine: <u><b>{{r.x}}</b></u>  Seamless: <b><u>{{r.y}}</b></u> {% if r.bool_dm %} <br>Delivery Minimum: <b><u>${{r.z}}</u></b> {% endif %}   
-{% endif %}
+
 
 </ul>
 
 {%endfor%}
 
-<div align='right'>
-{% if num_rests > 50 %} 
-<u>Next page</u>
+<div align='center'>
+{% if num_rests < 20 %} 
+Showing results 1 - {{num_rests}} of {{num_rests}}
+{% else %}
+Showing results {% widthratio page 1 20|add:-19 %} - {% widthratio page 1 20 %} &nbsp;&nbsp;&nbsp;
+<a href='/search/{{term}}/{{page|add:1}}'>Next page</a>
 {%endif%}
 </div>
 

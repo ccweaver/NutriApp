@@ -29,46 +29,7 @@ def sign_in(request):
     
     if request.method == 'GET':
         if 'search' in request.GET:
-            term = request.GET['search']
-            print term
-            
-            
-            zRE = re.compile("^[0-9][0-9][0-9][0-9][0-9]$")
-            if zRE.match(term):
-                restaurants = Restaurant.objects.all().order_by('zipcode').order_by('street', 'number')
-                rs = []
-                for r in restaurants:
-                    bool_dm = False
-                    if r.cuisine2:
-                        if r.cuisine3:
-                            cuisine = r.cuisine1 + ', ' + r.cuisine2 + ', ' + r.cuisine3
-                        else:
-                            cuisine = r.cuisine1 + ', ' + r.cuisine2
-                    else:
-                        cuisine = r.cuisine1
-                    if r.delivery_min != 0:
-                        bool_dm = True
-                    print bool_dm
-                    rs.append({'r':r.name, 'zipDist':abs(int(r.zipcode)-int(term)), 'rid':r.id, 's':r.street, 't':r.number, 'u':r.city, 'v':r.state, 'w':r.zipcode, 'x':cuisine, 'y':r.seamless, 'z':r.delivery_min, 'bool_dm':bool_dm})
-                r_zipSorted = sorted(rs, key=lambda r: r['zipDist'])
-                return render(request, 'search_results.html', {'rests':r_zipSorted, 'num_rests':len(r_zipSorted)})
-
-            else:
-                r_citySorted = Restaurant.objects.filter(city__icontains=term).order_by('street', 'number')
-                rs = []
-                for r in r_citySorted:
-                    bool_dm = False
-                    if r.cuisine2:
-                        if r.cuisine3:
-                            cuisine = r.cuisine1 + ', ' + r.cuisine2 + ', ' + r.cuisine3
-                        else:
-                            cuisine = r.cuisine1 + ', ' + r.cuisine2
-                    else:
-                        cuisine = r.cuisine1
-                    if r.delivery_min != 0:
-                        bool_dm = True
-                    rs.append({'r':r.name, 'rid':r.id, 's':r.street, 't':r.number, 'u':r.city, 'v':r.state, 'w':r.zipcode, 'x':cuisine, 'y':r.seamless, 'z':r.delivery_min, 'bool_dm':bool_dm})
-                return render(request, 'search_results.html', {'rests':rs, 'num_rests':len(rs)})
+            return HttpResponseRedirect('/search/' + str(request.GET['search']))
 
     if request.method == 'POST':
         if 'login_email' in request.POST:
@@ -94,7 +55,6 @@ def sign_in(request):
             rest_id = Restaurant.objects.filter(user=request.user.id)
 
             if len(rest_id) > 0:
-                print 'mallows'
                 address = '/restaurant_profile/' + str(rest_id[0].id)
             else:
                 address = "/add_restaurant"
@@ -149,6 +109,62 @@ def sign_in(request):
                     error = 'Please enter a password'
 
     return render(request, 'sign_in.html', {'form':uform, 'invalid':invalid, 'error':error, 'is_user':is_user, 'user':request.user.username})
+
+def search_results(request, term, page=1):
+    print "Searching for: " + term
+    print "Page: " + str(page) 
+
+    #################
+    # Zip Code Search
+    #################
+    zRE = re.compile("^[0-9][0-9][0-9][0-9][0-9]$")
+    if zRE.match(term):
+        restaurants = Restaurant.objects.all().order_by('zipcode').order_by('street', 'number')
+        rs = []
+        for r in restaurants:
+            bool_dm = False
+            if r.cuisine2:
+                if r.cuisine3:
+                    cuisine = r.cuisine1 + ', ' + r.cuisine2 + ', ' + r.cuisine3
+                else:
+                    cuisine = r.cuisine1 + ', ' + r.cuisine2
+            else:
+                cuisine = r.cuisine1
+            if r.delivery_min != 0:
+                bool_dm = True
+            rs.append({'r':r.name, 'zipDist':abs(int(r.zipcode)-int(term)), 'rid':r.id, 's':r.street, 't':r.number, 'u':r.city, 'v':r.state, 'w':r.zipcode, 'x':cuisine, 'y':r.seamless, 'z':r.delivery_min, 'bool_dm':bool_dm})
+        rs = sorted(rs, key=lambda r: r['zipDist'])
+
+
+    #################
+    # City Search
+    #################
+    else:
+        r_citySorted = Restaurant.objects.filter(city__icontains=term).order_by('street', 'number')
+        rs = []
+        for r in r_citySorted:
+            bool_dm = False
+            if r.cuisine2:
+                if r.cuisine3:
+                    cuisine = r.cuisine1 + ', ' + r.cuisine2 + ', ' + r.cuisine3
+                else:
+                    cuisine = r.cuisine1 + ', ' + r.cuisine2
+            else:
+                cuisine = r.cuisine1
+            if r.delivery_min != 0:
+                bool_dm = True
+            rs.append({'r':r.name, 'rid':r.id, 's':r.street, 't':r.number, 'u':r.city, 'v':r.state, 'w':r.zipcode, 'x':cuisine, 'y':r.seamless, 'z':r.delivery_min, 'bool_dm':bool_dm})
+
+    if int(page) == 1:
+        rs_20 = rs[:20]
+    else:
+        low_index = 20*(int(page)-1)
+        high_index = 20* (int(page))
+        rs_20 = rs[low_index:high_index]
+    return render(request, 'search_results.html', {'rests':rs_20, 'num_rests':len(rs), 'page':page, 'term':term})
+
+
+
 
 def dish(request, rid):
     ingred_list = []
