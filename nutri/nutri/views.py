@@ -51,7 +51,7 @@ def sign_in(request):
                     print bool_dm
                     rs.append({'r':r.name, 'zipDist':abs(int(r.zipcode)-int(term)), 'rid':r.id, 's':r.street, 't':r.number, 'u':r.city, 'v':r.state, 'w':r.zipcode, 'x':cuisine, 'y':r.seamless, 'z':r.delivery_min, 'bool_dm':bool_dm})
                 r_zipSorted = sorted(rs, key=lambda r: r['zipDist'])
-                return render(request, 'search_results.html', {'rests':r_zipSorted})
+                return render(request, 'search_results.html', {'rests':r_zipSorted, 'num_rests':len(r_zipSorted)})
 
             else:
                 r_citySorted = Restaurant.objects.filter(city__icontains=term).order_by('street', 'number')
@@ -68,7 +68,7 @@ def sign_in(request):
                     if r.delivery_min != 0:
                         bool_dm = True
                     rs.append({'r':r.name, 'rid':r.id, 's':r.street, 't':r.number, 'u':r.city, 'v':r.state, 'w':r.zipcode, 'x':cuisine, 'y':r.seamless, 'z':r.delivery_min, 'bool_dm':bool_dm})
-                return render(request, 'search_results.html', {'rests':rs})
+                return render(request, 'search_results.html', {'rests':rs, 'num_rests':len(rs)})
 
     if request.method == 'POST':
         if 'login_email' in request.POST:
@@ -149,7 +149,6 @@ def sign_in(request):
                     error = 'Please enter a password'
 
     return render(request, 'sign_in.html', {'form':uform, 'invalid':invalid, 'error':error, 'is_user':is_user, 'user':request.user.username})
-
 
 def dish(request, rid):
     ingred_list = []

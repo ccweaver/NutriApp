@@ -17,8 +17,7 @@
 
            
         body {
-            background-image: url('http://i375.photobucket.com/albums/oo197/Charles-Stanton_151515/bg_zpsthwyymln.jpg');
-            background-size:cover;
+            background-image: url('{{STATIC_URL}}/marble2.jpg');
             background-repeat:;
                    
         }
@@ -72,15 +71,22 @@
 <div class="returns">
 
 {% for r in rests %}
-
+{% if forloop.counter0 < 50 %}
 <ul class='rest_box' style="padding-top:1%; font-size:20px; padding-left:10%; border-style:solid; padding-bottom:10%; padding-right:0%"> 
 <a href="/restaurant_profile/{{r.rid}}" style="font-size:40px; color:black; font-weight:bold;">{{r.r}}</a> <br>{{r.t}} {{r.s}}, {{r.u}} {{r.v}}, {{r.w}}<br>Type of cuisine: <u><b>{{r.x}}</b></u>  Seamless: <b><u>{{r.y}}</b></u> {% if r.bool_dm %} <br>Delivery Minimum: <b><u>${{r.z}}</u></b> {% endif %}   
+{% endif %}
 
-
-<span style="color:white">.</span>
 </ul>
 
 {%endfor%}
+
+<div align='right'>
+{% if num_rests > 50 %} 
+<u>Next page</u>
+{%endif%}
+</div>
+
+<br><br><br><br><br><br><br><br><br><br>
 
 </div>
 </div>
