@@ -207,8 +207,10 @@ function showModal()
 {% endif %}
 <td><font color="black">{{ s }}</font></td>
 {% if forloop.counter|divisibleby:9 %}</tr>{% endif %}
+{% if forloop.counter0|divisibleby:3 %}<font color="#990099"></font>{% endif %}
 {% endfor %}
 </font>
+
    <colgroup>
     	<col span="1" font color="#990099">
    </colgroup>
