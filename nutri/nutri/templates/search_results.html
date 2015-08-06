@@ -11,14 +11,39 @@
 <script>
 </script>
 
+<script>
+
+//  handles next page clicks
+$(document).on("click","#next_page",function(event)
+           {
+           $.ajax(
+           {
+              type: "post",
+              url: "",
+              data: {csrfmiddlewaretoken:document.getElementsByName('csrfmiddlewaretoken')[0].value},
+              success: function (data)
+              {
+                if (data.success == 'true') {
+                }
+                else {
+                }
+              return false;
+              },
+              error: function(data)
+              {
+
+              }
+            });
+           return false;
+});
+</script>
 
 <style type="text/css">
 
 
            
         body {
-            background-image: url('http://i375.photobucket.com/albums/oo197/Charles-Stanton_151515/bg_zpsthwyymln.jpg');
-            background-size:cover;
+            background-image: url('{{STATIC_URL}}/marble2.jpg');
             background-repeat:;
                    
         }
@@ -58,7 +83,7 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="/">{% block navtitle %} <span style="color:#2efb00;opacity=.99;">CALO</span><span style="color:#1500fb;opacity=.99;">SPOT</span>{% endblock %}</a>          
+          <a class="navbar-brand" href="/">{% block navtitle %} <span style="color:#2efb00;opacity=.99;">Calo</span><span style="color:#1500fb;opacity=.99;">Spot</span>{% endblock %}</a>          
           
           </div>
            <div class="nav navbar-nav navbar-right"><span style="font-size:15px; color:white; margin-right:%">Click on restaurant's name to view their menu.<br>All restaurants listed have take-out.</span></div>
@@ -72,15 +97,32 @@
 <div class="returns">
 
 {% for r in rests %}
-
 <ul class='rest_box' style="padding-top:1%; font-size:20px; padding-left:10%; border-style:solid; padding-bottom:10%; padding-right:0%"> 
 <a href="/restaurant_profile/{{r.rid}}" style="font-size:40px; color:black; font-weight:bold;">{{r.r}}</a> <br>{{r.t}} {{r.s}}, {{r.u}} {{r.v}}, {{r.w}}<br>Type of cuisine: <u><b>{{r.x}}</b></u>  Seamless: <b><u>{{r.y}}</b></u> {% if r.bool_dm %} <br>Delivery Minimum: <b><u>${{r.z}}</u></b> {% endif %}   
 
 
-<span style="color:white">.</span>
 </ul>
 
 {%endfor%}
+
+
+<div align='center'>
+{% if page != 1 %}
+<a href='/search/{{term}}/{{page|add:-1}}'>Previous page</a>&nbsp;&nbsp;&nbsp;
+{%endif%}
+{% if num_rests < page_mult20 %}
+Showing results {{page_mult20|add:-19}} - {{num_rests}} of {{num_rests}}
+{% else %} 
+Showing results {{page_mult20|add:-19}} - {{page_mult20}} 
+{%endif%}
+{% if num_rests >= page_mult20 %}
+&nbsp;&nbsp;&nbsp;<a href='/search/{{term}}/{{page|add:1}}'>Next page</a>
+{%endif%}
+
+
+</div>
+
+<br><br><br><br><br><br><br><br><br><br>
 
 </div>
 </div>
