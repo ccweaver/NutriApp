@@ -573,7 +573,6 @@ def restaurant_profile(request, rid):
 
 
     menu = Item.objects.filter(rest_id=rid).filter(valid=True)
-    print menu
     strings = []
 
 
@@ -590,7 +589,6 @@ def restaurant_profile(request, rid):
         for add in item.ingredients.all():
             ingred = Ingredient.objects.filter(id=add.ingred_id)[0]
             amount = add.amount_grams
-            print ingred
             cal = cal + ingred.calories*amount
             gpro = gpro + ingred.protein*amount
             gfat = gfat + ingred.fat*amount
@@ -615,17 +613,12 @@ def restaurant_profile(request, rid):
         strings.append("%d" % mgna)
         strings.append(price)
         strings.append(description)
-      
-    print strings
 
 
     if request.method == 'POST':
         if 'delete_key' in request.POST:
-            print request.POST['delete_key']
             delete_item = Item.objects.filter(rest_id=rid).filter(valid=True).filter(name=request.POST['delete_key'])[0]
-            print delete_item
             for add in delete_item.ingredients.all():
-                print add.id
                 add.delete()
             delete_item.delete()
 
@@ -633,13 +626,10 @@ def restaurant_profile(request, rid):
             'MoOpen':MoOpen, 'TuOpen':TuOpen, 'WeOpen':WeOpen, 'ThOpen':ThOpen, 'FrOpen':FrOpen, 'SaOpen':SaOpen, 'SuOpen':SuOpen, 'MoClose':MoClose, 'TuClose':TuClose, 'WeClose':WeClose, 'ThClose':ThClose, 'FrClose':FrClose, 'SaClose':SaClose, 'SuClose':SuClose})
 
         if 'ingred_dish' in request.POST:
-            print '*****************'
-            print request.POST['ingred_dish']
             item = Item.objects.filter(rest_id=rid).filter(valid=True).filter(name=request.POST['ingred_dish'])[0]
             ingreds = []
             for i in item.ingredients.all():
                 ingreds.append(str(i.ingred) + ' ' + str(i.amount_grams) + 'g')
-            print ingreds
 
             data = {'ingreds':ingreds, 'dish':request.POST['ingred_dish']}
             return HttpResponse(json.dumps(data), content_type="application/json")
