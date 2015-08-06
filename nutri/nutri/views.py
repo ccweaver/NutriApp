@@ -613,7 +613,7 @@ def restaurant_profile(request, rid):
         strings.append("%d" % gfat)
         strings.append("%d" % gcarb)
         strings.append("%d" % gsug)
-        strings.append("%d" % mgna).mgno
+        strings.append("%d" % mgna mgno)
         strings.append(price)
         strings.append(description)
       
