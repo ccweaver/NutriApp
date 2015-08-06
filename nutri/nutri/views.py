@@ -605,7 +605,7 @@ def restaurant_profile(request, rid):
         
         
         cal = calbyTen*10
-        mgna = mgnabyTen*10
+        mgna = mgnabyTen*10 (mgnabyTen/2300)
         strings.append(item.name)
         strings.append("%d" % cal)
         strings.append("%d" % gpro)
