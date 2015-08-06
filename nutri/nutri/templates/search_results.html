@@ -94,7 +94,6 @@ $(document).on("click","#next_page",function(event)
 <div class="container">
 <div class="Seuss" style="font-size:15px; text-align:center;">
 </div>
-{{num_rests}}
 <div class="returns">
 
 {% for r in rests %}
@@ -106,13 +105,21 @@ $(document).on("click","#next_page",function(event)
 
 {%endfor%}
 
+
 <div align='center'>
-{% if num_rests < 20 %} 
-Showing results 1 - {{num_rests}} of {{num_rests}}
-{% else %}
-Showing results {% widthratio page 1 20|add:-19 %} - {% widthratio page 1 20 %} &nbsp;&nbsp;&nbsp;
-<a href='/search/{{term}}/{{page|add:1}}'>Next page</a>
+{% if page != 1 %}
+<a href='/search/{{term}}/{{page|add:-1}}'>Previous page</a>&nbsp;&nbsp;&nbsp;
 {%endif%}
+{% if num_rests < page_mult20 %}
+Showing results {{page_mult20|add:-19}} - {{num_rests}} of {{num_rests}}
+{% else %} 
+Showing results {{page_mult20|add:-19}} - {{page_mult20}} 
+{%endif%}
+{% if num_rests >= page_mult20 %}
+&nbsp;&nbsp;&nbsp;<a href='/search/{{term}}/{{page|add:1}}'>Next page</a>
+{%endif%}
+
+
 </div>
 
 <br><br><br><br><br><br><br><br><br><br>
