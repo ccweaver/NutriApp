@@ -106,7 +106,7 @@ $(document).on("click","#next_page",function(event)
 
 {% for r in rests %}
 <ul class='rest_box' style="padding-top:1%; font-size:20px; padding-left:10%; border-style:solid; padding-bottom:10%; padding-right:0%"> 
-<a href="/restaurant_profile/{{r.rid}}" style="font-size:40px; color:black; font-weight:bold;">{{r.r}}</a> <br>{{r.t}} {{r.s}}, {{r.u}} {{r.v}}, {{r.w}}<br>Type of cuisine: <b>{{r.x}}</b>  Seamless: <b>{{r.y}}</b> {% if r.bool_dm %} <br>Delivery Minimum: <b><u>${{r.z}}</u></b> {% endif %}   
+<a href="/restaurant_profile/{{r.rid}}" style="font-size:40px; color:black; font-weight:bold;">{{r.r}}</a> <br>{{r.t}} {{r.s}}, {{r.u}} {{r.v}}, {{r.w}}<br>Type of cuisine: <b>{{r.x}}</b>  Seamless: <b>{{r.y}}</b> {% if r.bool_dm %} <br>Delivery Minimum: <b>${{r.z}}</b> {% endif %}   
 
 
 </ul>
