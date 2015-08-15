@@ -118,12 +118,12 @@ $(document).on("click","#next_page",function(event)
 {% if page != 1 %}
 <a href='/search/{{term}}/{{page|add:-1}}'>Previous page</a>&nbsp;&nbsp;&nbsp;
 {%endif%}
-{% if num_rests < page_mult10 %}
-Showing results {{page_mult10|add:-9}} - {{num_rests}} of {{num_rests}}
+{% if num_rests < page_mult20 %}
+Showing results {{page_mult20|add:-19}} - {{num_rests}} of {{num_rests}}
 {% else %} 
-Showing results {{page_mult10|add:-9}} - {{page_mult20}} 
+Showing results {{page_mult20|add:-19}} - {{page_mult20}} 
 {%endif%}
-{% if num_rests >= page_mult10 %}
+{% if num_rests >= page_mult20 %}
 &nbsp;&nbsp;&nbsp;<a href='/search/{{term}}/{{page|add:1}}'>Next page</a>
 {%endif%}
 
