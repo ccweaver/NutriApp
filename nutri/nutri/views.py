@@ -157,7 +157,7 @@ def search_results(request, term, page=1):
             rs.append({'r':r.name, 'rid':r.id, 's':r.street, 't':r.number, 'u':r.city, 'v':r.state, 'w':r.zipcode, 'x':cuisine, 'y':r.seamless, 'z':r.delivery_min, 'bool_dm':bool_dm})
     
     else:
-        r_nameSorted = Restaurant.objects.filter(name_icontains=term).order_by('street', 'number')
+        r_nameSorted = Restaurant.objects.filter(name__icontains=term).order_by('street', 'number')
         rs = []
         for r in r_nameSorted:
             bool_dm = False
