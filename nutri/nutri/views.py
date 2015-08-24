@@ -118,7 +118,6 @@ def search_results(request, term, page=1):
     # Zip Code Search
     #################
     zRE = re.compile("^[0-9][0-9][0-9][0-9][0-9]$")
-    abc = 'Stamford'
     if zRE.match(term):
         restaurants = Restaurant.objects.all().order_by('zipcode').order_by('street', 'number')
         rs = []
