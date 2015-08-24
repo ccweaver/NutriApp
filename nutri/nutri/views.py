@@ -159,7 +159,7 @@ def search_results(request, term, page=1):
     
     else:
         r_nameSorted = Restaurants.objects.filter(name_icontains=term).order_by('street', 'number')
-        rs = {}
+        rs = []
         for r in r_nameSorted:
             bool_dm = False
             if r.cuisine2:
