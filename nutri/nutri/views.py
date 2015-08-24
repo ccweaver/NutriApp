@@ -139,7 +139,7 @@ def search_results(request, term, page=1):
     #################
     # City Search
     #################
-    elif
+    else if
         r_citySorted = Restaurant.objects.filter(city__icontains=term).order_by('street', 'number')
         rs = []
         for r in r_citySorted:
