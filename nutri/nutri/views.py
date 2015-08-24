@@ -139,7 +139,7 @@ def search_results(request, term, page=1):
     #################
     # City Search
     #################
-    else:
+    elif:
         r_citySorted = Restaurant.objects.filter(city__icontains=term).order_by('street', 'number')
         rs = []
         for r in r_citySorted:
@@ -154,7 +154,25 @@ def search_results(request, term, page=1):
             if r.delivery_min != 0:
                 bool_dm = True
             rs.append({'r':r.name, 'rid':r.id, 's':r.street, 't':r.number, 'u':r.city, 'v':r.state, 'w':r.zipcode, 'x':cuisine, 'y':r.seamless, 'z':r.delivery_min, 'bool_dm':bool_dm})
-
+    
+    else
+        r.nameSorted = Restaurants.objects.filter(name_icontains=term).order_by('street', 'number')
+        rs = {}
+        for r in r_nameSorted:
+            bool_dm = False
+            if r.cuisine2:
+                if r.cuisine3:
+                    cuisine = r.cuisine1 + ', ' + r.cuisine2 + ', ' + r.cuisine3
+                else:
+                    cuisine = r.cuisine1 + ', ' + r.cuisine2
+            else:
+                cuisine = r.cuisine1
+            if r.delivery_min != 0:
+                bool_dm = True
+            rs.append({'r':r.name, 'rid':r.id, 's':r.street, 't':r.number, 'u':r.city, 'v':r.state, 'w':r.zipcode, 'x':cuisine, 'y':r.seamless, 'z':r.delivery_min, 'bool_dm':bool_dm})
+    
+    
+    
     if int(page) == 1:
         rs_10 = rs[:10]
     else:
