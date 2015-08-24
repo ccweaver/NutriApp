@@ -119,7 +119,6 @@ def search_results(request, term, page=1):
     #################
     zRE = re.compile("^[0-9][0-9][0-9][0-9][0-9]$")
     abc = re.compile('')
-    efg = re.compile('')
     if zRE.match(term):
         restaurants = Restaurant.objects.all().order_by('zipcode').order_by('street', 'number')
         rs = []
@@ -157,7 +156,7 @@ def search_results(request, term, page=1):
                 bool_dm = True
             rs.append({'r':r.name, 'rid':r.id, 's':r.street, 't':r.number, 'u':r.city, 'v':r.state, 'w':r.zipcode, 'x':cuisine, 'y':r.seamless, 'z':r.delivery_min, 'bool_dm':bool_dm})
     
-    elif efg.match(term):
+    else
         r_nameSorted = Restaurant.objects.filter(name_icontains=term).order_by('street', 'number')
         rs = []
         for r in r_nameSorted:
