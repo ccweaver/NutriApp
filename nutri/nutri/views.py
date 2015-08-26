@@ -138,9 +138,11 @@ def search_results(request, term, page=1):
 
     #################
     # City Search
-    #################
+    ################
     else:
         r_citySorted = Restaurant.objects.filter(city__icontains=term).order_by('street', 'number')
+        rs = []
+        r_nameSorted = Restaurant.objects.filter(name__icontains=term).order_by('street', 'number')
         rs = []
         for r in r_citySorted:
             bool_dm = False
@@ -153,15 +155,29 @@ def search_results(request, term, page=1):
                 cuisine = r.cuisine1
             if r.delivery_min != 0:
                 bool_dm = True
+        for r in r_nameSorted:
+            bool_dm = False
+            if r.cuisine2:
+                if r.cuisine3:
+                    cuisine = r.cuisine1 + ', ' + r.cuisine2 + ', ' + r.cuisine3
+                else:
+                    cuisine = r.cuisine1 + ', ' + r.cuisine2
+            else:
+                cuisine = r.cuisine1
+            if r.delivery_min != 0:
+                bool_dm = True
             rs.append({'r':r.name, 'rid':r.id, 's':r.street, 't':r.number, 'u':r.city, 'v':r.state, 'w':r.zipcode, 'x':cuisine, 'y':r.seamless, 'z':r.delivery_min, 'bool_dm':bool_dm})
-
+    
+       
+    
+    
     if int(page) == 1:
-        rs_20 = rs[:20]
+        rs_10 = rs[:10]
     else:
-        low_index = 20*(int(page)-1)
-        high_index = 20* (int(page))
-        rs_20 = rs[low_index:high_index]
-    return render(request, 'search_results.html', {'rests':rs_20, 'num_rests':len(rs), 'page':int(page), 'page_mult20':int(page)*20, 'term':term})
+        low_index = 10*(int(page)-1)
+        high_index = 10* (int(page))
+        rs_10 = rs[low_index:high_index]
+    return render(request, 'search_results.html', {'rests':rs_10, 'num_rests':len(rs), 'page':int(page), 'page_mult10':int(page)*10, 'term':term})
 
 
 
@@ -573,7 +589,6 @@ def restaurant_profile(request, rid):
 
 
     menu = Item.objects.filter(rest_id=rid).filter(valid=True)
-    print menu
     strings = []
 
 
@@ -590,7 +605,6 @@ def restaurant_profile(request, rid):
         for add in item.ingredients.all():
             ingred = Ingredient.objects.filter(id=add.ingred_id)[0]
             amount = add.amount_grams
-            print ingred
             cal = cal + ingred.calories*amount
             gpro = gpro + ingred.protein*amount
             gfat = gfat + ingred.fat*amount
@@ -605,27 +619,22 @@ def restaurant_profile(request, rid):
         
         
         cal = calbyTen*10
-        mgna = mgnabyTen*10
+        mgna = mgnabyTen*10 
         strings.append(item.name)
         strings.append("%d" % cal)
         strings.append("%d" % gpro)
         strings.append("%d" % gfat)
         strings.append("%d" % gcarb)
         strings.append("%d" % gsug)
-        strings.append("%d" % mgna)
+        strings.append("%d (%d%s)" % (mgna, (100*mgna)/2500, '%'))
         strings.append(price)
         strings.append(description)
-      
-    print strings
 
 
     if request.method == 'POST':
         if 'delete_key' in request.POST:
-            print request.POST['delete_key']
             delete_item = Item.objects.filter(rest_id=rid).filter(valid=True).filter(name=request.POST['delete_key'])[0]
-            print delete_item
             for add in delete_item.ingredients.all():
-                print add.id
                 add.delete()
             delete_item.delete()
 
@@ -633,13 +642,10 @@ def restaurant_profile(request, rid):
             'MoOpen':MoOpen, 'TuOpen':TuOpen, 'WeOpen':WeOpen, 'ThOpen':ThOpen, 'FrOpen':FrOpen, 'SaOpen':SaOpen, 'SuOpen':SuOpen, 'MoClose':MoClose, 'TuClose':TuClose, 'WeClose':WeClose, 'ThClose':ThClose, 'FrClose':FrClose, 'SaClose':SaClose, 'SuClose':SuClose})
 
         if 'ingred_dish' in request.POST:
-            print '*****************'
-            print request.POST['ingred_dish']
             item = Item.objects.filter(rest_id=rid).filter(valid=True).filter(name=request.POST['ingred_dish'])[0]
             ingreds = []
             for i in item.ingredients.all():
                 ingreds.append(str(i.ingred) + ' ' + str(i.amount_grams) + 'g')
-            print ingreds
 
             data = {'ingreds':ingreds, 'dish':request.POST['ingred_dish']}
             return HttpResponse(json.dumps(data), content_type="application/json")
