@@ -193,7 +193,7 @@ function showModal()
     <th><font color="black">Fat(g)</font></th>
     <th><font color="black">Carbs (g)</font></th>
     <th><font color="black">Sugar(g)</font></th>
-    <th><font color="black">Sodium(mg)</font></th>
+    <th><font color="black">Sodium(mg),(% DV)</font></th>
     <th><font color="black">Price</font></th>
     <th><font color="black">Description</font></th>
 {% for s in strings %}
@@ -209,6 +209,7 @@ function showModal()
 {% if forloop.counter|divisibleby:9 %}</tr>{% endif %}
 {% endfor %}
 </font>
+
    <colgroup>
     	<col span="1" font color="#990099">
    </colgroup>
