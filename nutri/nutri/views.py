@@ -8,6 +8,7 @@ from Restaurant.models import Restaurant
 from menu_items.models import Item
 from added_ingreds.models import Addition
 import re, json
+from django.db.models import Q
 from django.contrib.auth.models import User
 from django.contrib.auth import logout
 from django.contrib import auth
@@ -140,22 +141,9 @@ def search_results(request, term, page=1):
     # City Search
     ################
     else:
-        r_citySorted = Restaurant.objects.filter(city__icontains=term).order_by('street', 'number')
+        rests = Restaurant.objects.filter(Q(city__icontains=term) | Q(name__icontains=term)).order_by('street', 'number')
         rs = []
-        r_nameSorted = Restaurant.objects.filter(name__icontains=term).order_by('street', 'number')
-        rs = []
-        for r in r_citySorted:
-            bool_dm = False
-            if r.cuisine2:
-                if r.cuisine3:
-                    cuisine = r.cuisine1 + ', ' + r.cuisine2 + ', ' + r.cuisine3
-                else:
-                    cuisine = r.cuisine1 + ', ' + r.cuisine2
-            else:
-                cuisine = r.cuisine1
-            if r.delivery_min != 0:
-                bool_dm = True
-        for r in r_nameSorted:
+        for r in rests:
             bool_dm = False
             if r.cuisine2:
                 if r.cuisine3:
@@ -167,8 +155,6 @@ def search_results(request, term, page=1):
             if r.delivery_min != 0:
                 bool_dm = True
             rs.append({'r':r.name, 'rid':r.id, 's':r.street, 't':r.number, 'u':r.city, 'v':r.state, 'w':r.zipcode, 'x':cuisine, 'y':r.seamless, 'z':r.delivery_min, 'bool_dm':bool_dm})
-    
-       
     
     
     if int(page) == 1:
