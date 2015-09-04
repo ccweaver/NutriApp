@@ -436,7 +436,7 @@ def add_restaurant(request):
                 error = "Please enter a valid website"
             
 
-        yelp = request.POST['yelp']
+        
         zRE = re.compile("^.+yelp\..+$")
         jk = re.compile("^http:.*")
         kk = re.compile("^https:.*")
