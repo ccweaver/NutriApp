@@ -543,7 +543,7 @@ def restaurant_profile(request, rid):
     if restaurant.seamless == 'No':
         no_seamless = True
     
-    if restaurant.yelp == '':
+    if restaurant.yelp == "":
         no_yelp = True
     
   
