@@ -141,7 +141,7 @@ def search_results(request, term, page=1):
     # City Search
     ################
     else:
-        rests = Restaurant.objects.filter(Q(city__icontains=term) | Q(street_icontains=term) | Q(name__icontains=term)).order_by('street', 'number')
+        rests = Restaurant.objects.filter(Q(city__icontains=term) | Q(street__icontains=term) | Q(name__icontains=term)).order_by('street', 'number')
         rs = []
         for r in rests:
             bool_dm = False
