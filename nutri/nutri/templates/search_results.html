@@ -100,13 +100,13 @@ $(document).on("click","#next_page",function(event)
           Showing results for <span style="font-size:40px;"><i>{{term}}</i></span>
           </div>
 <div class="Seuss" style="font-size:18px; text-align:center; padding-bottom:2%;">
-           [ All restaurants listed have takeout. Click on their names to view their menus. ]
+           [ Restaurants in order by street. Some have links to Seamless. All have takeout. Click their names to view menus. ]
 </div>
 <div class="returns">
 
 {% for r in rests %}
-<ul class='rest_box' style="padding-top:1%; font-size:20px; padding-left:10%; border-style:solid; padding-bottom:10%; padding-right:0%"> 
-<a href="/restaurant_profile/{{r.rid}}" style="font-size:40px; color:black; font-weight:bold;">{{r.r}}</a> <br>{{r.t}} {{r.s}}, {{r.u}} {{r.v}}, {{r.w}}<br>Type of cuisine: <b>{{r.x}}</b>  Seamless: <b>{{r.y}}</b> {% if r.bool_dm %} <br>Delivery Minimum: <b>${{r.z}}</b> {% endif %}   
+<ul class='rest_box' style="padding-top:1%; font-size:18px; padding-left:10%; border-style:solid; padding-bottom:9%; padding-right:0%"> 
+<a href="/restaurant_profile/{{r.rid}}" style="font-size:30px; color:black; font-weight:bold;">{{r.r}}</a> <br>{{r.t}} {{r.s}}, {{r.u}} {{r.v}}, {{r.w}}<br>Type of cuisine: <b>{{r.x}}</b>  Seamless: <b>{{r.y}}</b> {% if r.bool_dm %}<br> Delivery Minimum: <b>${{r.z}}</b> {% endif %}   
 
 
 </ul>
@@ -116,7 +116,7 @@ $(document).on("click","#next_page",function(event)
 
 <div align='center'>
 {% if page != 1 %}
-<a href='/search/{{term}}/{{page|add:-1}}'>Previous page</a>&nbsp;&nbsp;&nbsp;
+<a href='/search/{{term}}/{{page|add:-1}}' style="font-size:20px">Previous page</a>&nbsp;&nbsp;&nbsp;
 {%endif%}
 {% if num_rests < page_mult10 %}
 Showing results {{page_mult10|add:-9}} - {{num_rests}} of {{num_rests}}
@@ -125,7 +125,7 @@ Showing results {{page_mult10|add:-9}} - {{page_mult10}} of {{num_rests}}
 
 {%endif%}
 {% if num_rests >= page_mult10 %}
-&nbsp;&nbsp;&nbsp;<a href='/search/{{term}}/{{page|add:1}}'>Next page</a>
+&nbsp;&nbsp;&nbsp;<a href='/search/{{term}}/{{page|add:1}}' style="font-size:20px">Next page</a>
 {%endif%}
 
 
