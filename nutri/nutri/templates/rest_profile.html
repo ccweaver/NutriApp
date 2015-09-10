@@ -25,6 +25,24 @@ $.ajax(
 return false;
 };
 
+//deleting an ingred
+function removeIngred(ingred, key) {
+$.ajax(
+    {
+        type: "post",
+        url: "",
+        data: {delete_ingred:ingred, dish:key, csrfmiddlewaretoken:document.getElementsByName('csrfmiddlewaretoken')[0].value},
+        success: function (data)
+        {
+          location.reload();
+
+        }
+    });
+return false;
+};
+
+
+
 function openIngreds(key) {
 
 $.ajax(
@@ -37,13 +55,8 @@ $.ajax(
           showModal();
           document.getElementById('myModalLabel').innerHTML = data.dish;
           if(data.ingreds) {
-            list = "";
-            for (i in data.ingreds) {
-              list += data.ingreds[i];
-              list += '<br>';
-            }
+            document.getElementById('ingred_list').innerHTML = data.ingreds;
           }
-          document.getElementById('ingred_list').innerHTML = list;
           showModal();
         }
     });
@@ -123,7 +136,6 @@ function showModal()
     
     .notice{
     	padding-bottom:3%;
-    	text-align:;
     }
     
     
