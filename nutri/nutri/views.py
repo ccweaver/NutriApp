@@ -527,7 +527,7 @@ def restaurant_profile(request, rid):
     SuClose = ""   
 
     
-    my_prof = False
+    my_prof = True
     no_seamless = False
     no_yelp = False
     
@@ -627,12 +627,21 @@ def restaurant_profile(request, rid):
             return render(request, 'rest_profile.html', {'no_yelp':no_yelp, 'no_seamless':no_seamless, 'hits':restaurant.hits, 'my_prof':my_prof, 'uname':request.user.username, 'rest':restaurant, 'strings':strings, 'address':address, 'website':website, 'yelp':yelp, 'csz':city_st_zip, 'phone':phone, \
             'MoOpen':MoOpen, 'TuOpen':TuOpen, 'WeOpen':WeOpen, 'ThOpen':ThOpen, 'FrOpen':FrOpen, 'SaOpen':SaOpen, 'SuOpen':SuOpen, 'MoClose':MoClose, 'TuClose':TuClose, 'WeClose':WeClose, 'ThClose':ThClose, 'FrClose':FrClose, 'SaClose':SaClose, 'SuClose':SuClose})
 
+        if 'delete_ingred' in request.POST:
+            dish = Item.objects.filter(rest_id=rid).filter(valid=True).filter(name=request.POST['dish'])[0]
+            for add in dish.ingredients.all():
+                if str(add.ingred) == str(request.POST['delete_ingred']):
+                    add.ingred.delete()
+            
+            return render(request, 'rest_profile.html', {'no_yelp':no_yelp, 'no_seamless':no_seamless, 'hits':restaurant.hits, 'my_prof':my_prof, 'uname':request.user.username, 'rest':restaurant, 'strings':strings, 'address':address, 'website':website, 'yelp':yelp, 'csz':city_st_zip, 'phone':phone, \
+            'MoOpen':MoOpen, 'TuOpen':TuOpen, 'WeOpen':WeOpen, 'ThOpen':ThOpen, 'FrOpen':FrOpen, 'SaOpen':SaOpen, 'SuOpen':SuOpen, 'MoClose':MoClose, 'TuClose':TuClose, 'WeClose':WeClose, 'ThClose':ThClose, 'FrClose':FrClose, 'SaClose':SaClose, 'SuClose':SuClose})
+
+
         if 'ingred_dish' in request.POST:
             item = Item.objects.filter(rest_id=rid).filter(valid=True).filter(name=request.POST['ingred_dish'])[0]
-            ingreds = []
+            ingreds = ""
             for i in item.ingredients.all():
-                ingreds.append(str(i.ingred) + ' ' + str(i.amount_grams) + 'g')
-
+                ingreds += '<span class="glyphicon glyphicon-remove-circle" onClick="removeIngred(\'' + str(i.ingred) + '\', \'' + request.POST['ingred_dish'] + '\')"></span>' + str(i.ingred) + ' ' + str(i.amount_grams) + 'g' + '<br>'
             data = {'ingreds':ingreds, 'dish':request.POST['ingred_dish']}
             return HttpResponse(json.dumps(data), content_type="application/json")
 
