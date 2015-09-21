@@ -527,7 +527,7 @@ def restaurant_profile(request, rid):
     SuClose = ""   
 
     
-    my_prof = False
+    my_prof = True
     no_seamless = False
     no_yelp = False
     
