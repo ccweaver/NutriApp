@@ -635,7 +635,7 @@ def restaurant_profile(request, rid):
 
 
         if 'ingred_dish' in request.POST:
-            item = Item.objects.filter(rest_id=rid).filter(valid=True).filter(name=request.POST['ingred_dish'])[0]
+            item = Item.objects.filter(rest_id=rid).filter(valid=True).filter(name=request.POST['ingred_dish'])[0].order_by('cal')
             ingreds = ""
             for i in item.ingredients.all():
                 ingreds += '<span class="glyphicon glyphicon-remove-circle" onClick="removeIngred(\'' + str(i.ingred) + '\', \'' + request.POST['ingred_dish'] + '\')"></span>' + str(i.ingred) + ' ' + str(i.amount_grams) + 'g' + '<br>'
