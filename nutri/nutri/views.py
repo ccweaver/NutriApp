@@ -639,7 +639,7 @@ def restaurant_profile(request, rid):
             ingreds = ""
             for i in item.ingredients.all():
                 ingreds += '<span class="glyphicon glyphicon-remove-circle" onClick="removeIngred(\'' + str(i.ingred) + '\', \'' + request.POST['ingred_dish'] + '\')"></span>' + str(i.ingred) + ' ' + str(i.amount_grams) + 'g' + '<br>'
-            data = {'ingreds':ingreds, 'dish':request.POST['ingred_dish'].order_by('cal')}
+            data = {'ingreds':ingreds, 'dish':request.POST['ingred_dish']}
             return HttpResponse(json.dumps(data), content_type="application/json")
 
         return HttpResponseRedirect('/add_dish/' + rid)
