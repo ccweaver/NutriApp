@@ -571,7 +571,7 @@ def restaurant_profile(request, rid):
     SuClose = restaurant.suclose
 
 
-    menu = Item.objects.filter(rest_id=rid).filter(valid=True)
+    menu = Item.objects.filter(rest_id=rid).filter(valid=True).order_by('calories')
     strings = []
 
 
