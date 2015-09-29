@@ -571,7 +571,7 @@ def restaurant_profile(request, rid):
     SuClose = restaurant.suclose
 
 
-    menu = Item.objects.filter(rest_id=rid).filter(valid=True).order_by('calories')
+    menu = Item.objects.filter(rest_id=rid).filter(valid=True)
     strings = []
 
 
@@ -586,7 +586,7 @@ def restaurant_profile(request, rid):
         description = str(item.description)
 
         for add in item.ingredients.all():
-            ingred = Ingredient.objects.filter(id=add.ingred_id)[0]
+            ingred = Ingredient.objects.filter(id=add.ingred_id).order_by('calories')[0]
             amount = add.amount_grams
             cal = cal + ingred.calories*amount
             gpro = gpro + ingred.protein*amount
