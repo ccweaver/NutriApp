@@ -653,10 +653,11 @@ def restaurant_profile(request, rid):
             for add in dish.ingredients.all():
                 ingred = Ingredient.objects.filter(id=add.ingred_id)[0]
                 amount = add.amount_grams
-                cal = cal + ingred.calories*amount
-
+            
                 if str(add.ingred) == str(request.POST['delete_ingred']):
                     add.delete()
+                else:
+                    cal = cal + ingred.calories*amount
                 
             dish.calories = cal
             dish.save()
