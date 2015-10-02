@@ -572,10 +572,27 @@ def restaurant_profile(request, rid):
 
 
     menu = Item.objects.filter(rest_id=rid).filter(valid=True)
-    strings = []
+    
 
-
+    print 'Header generated'
+    
+    menu_calOrdered = []
     for item in menu:
+        cal = 0
+        for add in item.ingredients.all():
+            ingred = Ingredient.objects.filter(id=add.ingred_id)[0]
+            amount = add.amount_grams
+            cal = cal + ingred.calories*amount
+        menu_calOrdered.append({'item':item, 'cals':cal})
+    menu_calOrdered = sorted(menu_calOrdered, key=lambda i: i['cals'])
+    
+    print 'items Cal Sorted'
+
+
+    table = []
+    for item_dict in menu_calOrdered:
+        strings = []
+        item = item_dict['item']
         price = '$' + str(item.price)
         cal = 0
         gpro = 0
@@ -603,7 +620,6 @@ def restaurant_profile(request, rid):
         
         cal = calbyTen*10
         mgna = mgnabyTen*10 
-        strings.append(item.name)
         strings.append("%d" % cal)
         strings.append("%d" % gpro)
         strings.append("%d" % gfat)
@@ -612,7 +628,10 @@ def restaurant_profile(request, rid):
         strings.append("%d (%d%s)" % (mgna, (100*mgna)/2500, '%'))
         strings.append(price)
         strings.append(description)
+        table.append({'name':item.name, 'strings':strings})
 
+    print 'Strings generated'
+    print 'this is my prof', my_prof
 
     if request.method == 'POST':
         if 'delete_key' in request.POST:
@@ -621,7 +640,7 @@ def restaurant_profile(request, rid):
                 add.delete()
             delete_item.delete()
 
-            return render(request, 'rest_profile.html', {'no_yelp':no_yelp, 'no_seamless':no_seamless, 'hits':restaurant.hits, 'my_prof':my_prof, 'uname':request.user.username, 'rest':restaurant, 'strings':strings, 'address':address, 'website':website, 'yelp':yelp, 'csz':city_st_zip, 'phone':phone, \
+            return render(request, 'rest_profile.html', {'no_yelp':no_yelp, 'no_seamless':no_seamless, 'hits':restaurant.hits, 'my_prof':my_prof, 'uname':request.user.username, 'rest':restaurant, 'table':table, 'address':address, 'website':website, 'yelp':yelp, 'csz':city_st_zip, 'phone':phone, \
             'MoOpen':MoOpen, 'TuOpen':TuOpen, 'WeOpen':WeOpen, 'ThOpen':ThOpen, 'FrOpen':FrOpen, 'SaOpen':SaOpen, 'SuOpen':SuOpen, 'MoClose':MoClose, 'TuClose':TuClose, 'WeClose':WeClose, 'ThClose':ThClose, 'FrClose':FrClose, 'SaClose':SaClose, 'SuClose':SuClose})
 
         if 'delete_ingred' in request.POST:
@@ -630,7 +649,7 @@ def restaurant_profile(request, rid):
                 if str(add.ingred) == str(request.POST['delete_ingred']):
                     add.delete()
             
-            return render(request, 'rest_profile.html', {'no_yelp':no_yelp, 'no_seamless':no_seamless, 'hits':restaurant.hits, 'my_prof':my_prof, 'uname':request.user.username, 'rest':restaurant, 'strings':strings, 'address':address, 'website':website, 'yelp':yelp, 'csz':city_st_zip, 'phone':phone, \
+            return render(request, 'rest_profile.html', {'no_yelp':no_yelp, 'no_seamless':no_seamless, 'hits':restaurant.hits, 'my_prof':my_prof, 'uname':request.user.username, 'rest':restaurant, 'table':table, 'address':address, 'website':website, 'yelp':yelp, 'csz':city_st_zip, 'phone':phone, \
             'MoOpen':MoOpen, 'TuOpen':TuOpen, 'WeOpen':WeOpen, 'ThOpen':ThOpen, 'FrOpen':FrOpen, 'SaOpen':SaOpen, 'SuOpen':SuOpen, 'MoClose':MoClose, 'TuClose':TuClose, 'WeClose':WeClose, 'ThClose':ThClose, 'FrClose':FrClose, 'SaClose':SaClose, 'SuClose':SuClose})
 
 
@@ -644,6 +663,6 @@ def restaurant_profile(request, rid):
 
         return HttpResponseRedirect('/add_dish/' + rid)
     
-    return render(request, 'rest_profile.html', {'no_yelp':no_yelp, 'no_seamless':no_seamless, 'hits':restaurant.hits, 'my_prof':my_prof, 'uname':request.user.username, 'rest':restaurant, 'strings':strings, 'address':address, 'website':website, 'yelp':yelp, 'csz':city_st_zip, 'phone':phone, \
+    return render(request, 'rest_profile.html', {'no_yelp':no_yelp, 'no_seamless':no_seamless, 'hits':restaurant.hits, 'my_prof':my_prof, 'uname':request.user.username, 'rest':restaurant, 'table':table, 'address':address, 'website':website, 'yelp':yelp, 'csz':city_st_zip, 'phone':phone, \
         'MoOpen':MoOpen, 'TuOpen':TuOpen, 'WeOpen':WeOpen, 'ThOpen':ThOpen, 'FrOpen':FrOpen, 'SaOpen':SaOpen, 'SuOpen':SuOpen, 'MoClose':MoClose, 'TuClose':TuClose, 'WeClose':WeClose, 'ThClose':ThClose, 'FrClose':FrClose, 'SaClose':SaClose, 'SuClose':SuClose})
 
