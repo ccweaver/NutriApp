@@ -9,6 +9,7 @@ class Item(models.Model):
 	ingredients = models.ManyToManyField(Addition, blank=True)
 	valid = models.BooleanField(default=False)
 	description = models.TextField()
+	calories = models.DecimalField(max_digits=10, decimal_places=2, default=0)
 
 	def __unicode__(self):
 		return u'%s' % (self.name)

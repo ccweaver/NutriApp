@@ -186,6 +186,12 @@ def dish(request, rid):
         if 'done' in request.POST:
             dish = Item.objects.filter(rest_id=rid).filter(name=request.POST['ingred_dish'])[0]
             dish.valid = True;
+            cal = 0
+            for add in dish.ingredients.all():
+                ingred = Ingredient.objects.filter(id=add.ingred_id)[0]
+                amount = add.amount_grams
+                cal = cal + ingred.calories*amount
+            dish.calories = cal
             dish.save()
             data = {'rid':rid}
             return HttpResponse(json.dumps(data), content_type="application/json")
@@ -571,28 +577,26 @@ def restaurant_profile(request, rid):
     SuClose = restaurant.suclose
 
 
-    menu = Item.objects.filter(rest_id=rid).filter(valid=True)
+    menu = Item.objects.filter(rest_id=rid).filter(valid=True).order_by('-calories')
     
 
     print 'Header generated'
-    
-    menu_calOrdered = []
+
     for item in menu:
         cal = 0
-        for add in item.ingredients.all():
-            ingred = Ingredient.objects.filter(id=add.ingred_id)[0]
-            amount = add.amount_grams
-            cal = cal + ingred.calories*amount
-        menu_calOrdered.append({'item':item, 'cals':cal})
-    menu_calOrdered = sorted(menu_calOrdered, key=lambda i: i['cals'], reverse=True)
-    
+        if item.calories == 0:        
+            for add in item.ingredients.all():
+                ingred = Ingredient.objects.filter(id=add.ingred_id)[0]
+                amount = add.amount_grams
+                cal = cal + ingred.calories*amount
+            item.calories = cal
+            item.save()
     print 'items Cal Sorted'
 
 
     table = []
-    for item_dict in menu_calOrdered:
+    for item in menu:
         strings = []
-        item = item_dict['item']
         price = '$' + str(item.price)
         cal = 0
         gpro = 0
@@ -645,9 +649,18 @@ def restaurant_profile(request, rid):
 
         if 'delete_ingred' in request.POST:
             dish = Item.objects.filter(rest_id=rid).filter(valid=True).filter(name=request.POST['dish'])[0]
+            cal = 0
             for add in dish.ingredients.all():
+                ingred = Ingredient.objects.filter(id=add.ingred_id)[0]
+                amount = add.amount_grams
+                cal = cal + ingred.calories*amount
+
                 if str(add.ingred) == str(request.POST['delete_ingred']):
                     add.delete()
+                
+            dish.calories = cal
+            dish.save()
+            
             
             return render(request, 'rest_profile.html', {'no_yelp':no_yelp, 'no_seamless':no_seamless, 'hits':restaurant.hits, 'my_prof':my_prof, 'uname':request.user.username, 'rest':restaurant, 'table':table, 'address':address, 'website':website, 'yelp':yelp, 'csz':city_st_zip, 'phone':phone, \
             'MoOpen':MoOpen, 'TuOpen':TuOpen, 'WeOpen':WeOpen, 'ThOpen':ThOpen, 'FrOpen':FrOpen, 'SaOpen':SaOpen, 'SuOpen':SuOpen, 'MoClose':MoClose, 'TuClose':TuClose, 'WeClose':WeClose, 'ThClose':ThClose, 'FrClose':FrClose, 'SaClose':SaClose, 'SuClose':SuClose})
