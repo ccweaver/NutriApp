@@ -165,9 +165,6 @@ def search_results(request, term, page=1):
         rs_10 = rs[low_index:high_index]
     return render(request, 'search_results.html', {'rests':rs_10, 'num_rests':len(rs), 'page':int(page), 'page_mult10':int(page)*10, 'term':term})
 
-
-
-
 def dish(request, rid):
     ingred_list = []
     alpha_ingreds = Ingredient.objects.order_by('name')
@@ -527,7 +524,7 @@ def restaurant_profile(request, rid):
     SuClose = ""   
 
     
-    my_prof = True
+    my_prof = False
     no_seamless = False
     no_yelp = False
     
@@ -631,7 +628,7 @@ def restaurant_profile(request, rid):
             dish = Item.objects.filter(rest_id=rid).filter(valid=True).filter(name=request.POST['dish'])[0]
             for add in dish.ingredients.all():
                 if str(add.ingred) == str(request.POST['delete_ingred']):
-                    add.ingred.delete()
+                    add.delete()
             
             return render(request, 'rest_profile.html', {'no_yelp':no_yelp, 'no_seamless':no_seamless, 'hits':restaurant.hits, 'my_prof':my_prof, 'uname':request.user.username, 'rest':restaurant, 'strings':strings, 'address':address, 'website':website, 'yelp':yelp, 'csz':city_st_zip, 'phone':phone, \
             'MoOpen':MoOpen, 'TuOpen':TuOpen, 'WeOpen':WeOpen, 'ThOpen':ThOpen, 'FrOpen':FrOpen, 'SaOpen':SaOpen, 'SuOpen':SuOpen, 'MoClose':MoClose, 'TuClose':TuClose, 'WeClose':WeClose, 'ThClose':ThClose, 'FrClose':FrClose, 'SaClose':SaClose, 'SuClose':SuClose})
