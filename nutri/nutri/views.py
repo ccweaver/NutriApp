@@ -584,7 +584,7 @@ def restaurant_profile(request, rid):
             amount = add.amount_grams
             cal = cal + ingred.calories*amount
         menu_calOrdered.append({'item':item, 'cals':cal})
-    menu_calOrdered = sorted(menu_calOrdered, key=lambda i: i['cals'])
+    menu_calOrdered = sorted(menu_calOrdered, key=lambda i: i['cals'], reverse=True)
     
     print 'items Cal Sorted'
 
