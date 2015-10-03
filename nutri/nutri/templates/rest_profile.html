@@ -218,7 +218,7 @@ function showModal()
 <button class="btn btn-default btn-sm" id=type="button" onclick="openIngreds('{{d.name}}')"><span class="glyphicon glyphicon-eye-open"></span></button>
 </td>
 {% endif %}
-<td><font color="black"><b>{{ d.name }}</b></font></td>
+<td><font color="black">{{ d.name }}</font></td>
 {% for s in d.strings %}
 {% if forloop.first%}
 <td><font color="#990099">{{ s }}</font></td>
