@@ -187,11 +187,26 @@ def dish(request, rid):
             dish = Item.objects.filter(rest_id=rid).filter(name=request.POST['ingred_dish'])[0]
             dish.valid = True;
             cal = 0
+            gpro = 0
+            gfat = 0
+            gcarb = 0
+            gsug = 0
+            mgna = 0
             for add in dish.ingredients.all():
                 ingred = Ingredient.objects.filter(id=add.ingred_id)[0]
                 amount = add.amount_grams
                 cal = cal + ingred.calories*amount
+                gpro = gpro + ingred.protein*amount
+                gfat = gfat + ingred.fat*amount
+                gcarb = gcarb + ingred.carbs*amount
+                gsug = gsug + ingred.sugar*amount
+                mgna = mgna + ingred.sodium*amount
             dish.calories = cal
+            dish.protein = gpro
+            dish.fat = gfat
+            dish.carbs = gcarb
+            dish.sugar = gsug
+            dish.sodium = mgna
             dish.save()
             data = {'rid':rid}
             return HttpResponse(json.dumps(data), content_type="application/json")
@@ -606,16 +621,31 @@ def restaurant_profile(request, rid):
         mgna = 0
         description = str(item.description)
 
-        for add in item.ingredients.all():
-            ingred = Ingredient.objects.filter(id=add.ingred_id)[0]
-            amount = add.amount_grams
-            cal = cal + ingred.calories*amount
-            gpro = gpro + ingred.protein*amount
-            gfat = gfat + ingred.fat*amount
-            gcarb = gcarb + ingred.carbs*amount
-            gsug = gsug + ingred.sugar*amount
-            mgna = mgna + ingred.sodium*amount
-        
+        if item.protein == - 1:
+            for add in item.ingredients.all():
+                ingred = Ingredient.objects.filter(id=add.ingred_id)[0]
+                amount = add.amount_grams
+                cal = cal + ingred.calories*amount
+                gpro = gpro + ingred.protein*amount
+                gfat = gfat + ingred.fat*amount
+                gcarb = gcarb + ingred.carbs*amount
+                gsug = gsug + ingred.sugar*amount
+                mgna = mgna + ingred.sodium*amount
+            item.calories = cal
+            item.protein = gpro
+            item.fat = gfat
+            item.carbs = gcarb
+            item.sugar = gsug
+            item.sodium = mgna
+            item.save()
+        else: 
+            cal = item.calories
+            gpro = item.protein
+            gfat = item.fat
+            gcarb = item.carbs
+            gsug = item.sugar
+            mgna = item.sodium
+
         calbyTen = cal/10
         calbyTen = round(calbyTen)
         mgnabyTen = mgna/10
@@ -658,9 +688,19 @@ def restaurant_profile(request, rid):
                     add.delete()
                 else:
                     cal = cal + ingred.calories*amount
-                
+                    gpro = gpro + ingred.protein*amount
+                    gfat = gfat + ingred.fat*amount
+                    gcarb = gcarb + ingred.carbs*amount
+                    gsug = gsug + ingred.sugar*amount
+                    mgna = mgna + ingred.sodium*amount
             dish.calories = cal
+            dish.protein = gpro
+            dish.fat = gfat
+            dish.carbs = gcarb
+            dish.sugar = gsug
+            dish.sodium = mgna
             dish.save()
+
             
             
             return render(request, 'rest_profile.html', {'no_yelp':no_yelp, 'no_seamless':no_seamless, 'hits':restaurant.hits, 'my_prof':my_prof, 'uname':request.user.username, 'rest':restaurant, 'table':table, 'address':address, 'website':website, 'yelp':yelp, 'csz':city_st_zip, 'phone':phone, \

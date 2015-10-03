@@ -10,6 +10,11 @@ class Item(models.Model):
 	valid = models.BooleanField(default=False)
 	description = models.TextField()
 	calories = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+	protein = models.DecimalField(max_digits=10, decimal_places=2, default=-1)
+	fat = models.DecimalField(max_digits=10, decimal_places=2, default=-1)
+	carbs = models.DecimalField(max_digits=10, decimal_places=2, default=-1)
+	sugar = models.DecimalField(max_digits=10, decimal_places=2, default=-1)
+	sodium = models.DecimalField(max_digits=10, decimal_places=2, default=-1)
 
 	def __unicode__(self):
 		return u'%s' % (self.name)
