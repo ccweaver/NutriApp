@@ -202,7 +202,7 @@ function showModal()
     <th></th>
     {% endif %}
     <th><u>DISH</u></th>
-    <th><font color="#00cc00">Calories</font></th>
+    <th><font color="black">Calories</font></th>
     <th><font color="black">Protein (g)</font></th>
     <th><font color="black">Fat(g)</font></th>
     <th><font color="black">Carbs (g)</font></th>
@@ -221,7 +221,7 @@ function showModal()
 <td><font color="black">{{ d.name }}</font></td>
 {% for s in d.strings %}
 {% if forloop.first%}
-<td><font color="black">{{ s }}</font></td>
+<td><font color="#00cc00">{{ s }}</font></td>
 {% else %}
 <td><font color="black">{{ s }}</font></td>
 {% endif %}
