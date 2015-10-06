@@ -185,6 +185,11 @@ $(document).on("click","#proflink",function(event)
           margin-left:16%;
           font-size: 23px
         }
+        
+        .berpo{
+          -moz-border-radius: 15px;
+          -webkit-border-radius: 15px;
+        }
 </style>
 
 
@@ -245,7 +250,9 @@ $(document).on("click","#proflink",function(event)
               <form method="GET">
               <font size="5" face="Calibri">
               <input type="text" id="search_bar" name="search" placeholder="Enter Restaurant Name, Street, or City (Stamford) to find menus near you!" style="text-align:center">
-              <button type="submit" style="margin-left:55%; margin-top:3%; border-radius:5%;">Search</button>
+              <div class="berpo">
+              <button type="submit" style="margin-left:55%; margin-top:3%;">Search</button>
+              </div>
               </font>
               </form>
               </div>
