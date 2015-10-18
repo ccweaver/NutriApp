@@ -548,7 +548,7 @@ def restaurant_profile(request, rid):
     my_prof = False
     no_seamless = False
     no_yelp = False
-    jazz = False
+    jazz_man = False
    
     
     restaurant = Restaurant.objects.filter(id=rid)[0]
@@ -564,8 +564,8 @@ def restaurant_profile(request, rid):
     if restaurant.yelp == "":
         no_yelp = True
     
-    if restaurant.name == "Jazzman's_Cafe":
-        jazz = True
+    if restaurant.name == "Jazzman's Cafe":
+        jazz_man = True
   
     
     website = str(restaurant.website)
