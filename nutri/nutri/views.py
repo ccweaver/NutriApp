@@ -564,7 +564,7 @@ def restaurant_profile(request, rid):
     if restaurant.yelp == "":
         no_yelp = True
     
-    if restaurant.name(icontains=Jazzman):
+    if "Jazzman" in restaurant.name:
         jazz_man = True
   
     
