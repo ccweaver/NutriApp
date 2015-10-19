@@ -97,7 +97,7 @@ function showModal()
 	    }
 	
 	#shizzle {
-		color:#990099;
+		color:#00cc00;
 	}
   #hits {
     text-align:right;
@@ -138,6 +138,9 @@ function showModal()
     	padding-bottom:3%;
     }
     
+    .dizclaimer{
+    	font-size:12px;
+    }
     
   
 </style>
@@ -169,6 +172,9 @@ function showModal()
 <div id='hits'><b>Number of Views:</b> {{hits}}</div>
 
 <h1>{{rest}}</h1>
+{% if jazz_man %}
+<h2>Check menu in Cafe to see which dishes are being served today</h2> 
+{% endif %}
 <h2><a href='http://maps.google.com/?q={{address}}{{csz}}'>{{address}}<br>{{csz}}</a></h2>
 <h4 style="font-size:15px">{{phone}}
 <br>
@@ -183,7 +189,9 @@ function showModal()
     <b> Sat:</b> {% if SaOpen == "Closed" %} Closed {% else %} {{SaOpen}} to {{SaClose}} {% endif %}</li>
    <li><b>W:</b> {% if WeOpen == "Closed" %} Closed {% else %} {{WeOpen}} to {{WeClose}} {% endif %} 
     <b>Sun:</b> {% if SuOpen == "Closed" %} Closed {% else %} {{SuOpen}} to {{SuClose}} {% endif %}</li>
-   <li> <b>Th:</b> {% if ThOpen == "Closed" %} Closed {% else %} {{ThOpen}} to {{ThClose}} {% endif %}</li>
+   <li> <b>Th:</b> {% if ThOpen == "Closed" %} Closed {% else %} {{ThOpen}} to {{ThClose}} {% endif %} 
+  </li>
+
 
 </ul>
 </div>
@@ -193,7 +201,7 @@ function showModal()
 </div>
 
 <div class="menutitle">
-	<u>The <span id="shizzle">600 Calories and Under</span> Menu</u>
+	<u>The <span id="shizzle">Under 600 Calories</span> Menu</u>
 </div>
 
 <table class="table" id="menu_table">
@@ -202,7 +210,7 @@ function showModal()
     <th></th>
     {% endif %}
     <th><u>DISH</u></th>
-    <th><font color="#990099">Calories</font></th>
+    <th><font color="black">Calories</font></th>
     <th><font color="black">Protein (g)</font></th>
     <th><font color="black">Fat(g)</font></th>
     <th><font color="black">Carbs (g)</font></th>
@@ -218,10 +226,10 @@ function showModal()
 <button class="btn btn-default btn-sm" id=type="button" onclick="openIngreds('{{d.name}}')"><span class="glyphicon glyphicon-eye-open"></span></button>
 </td>
 {% endif %}
-<td><font color="black"><b>{{ d.name }}</b></font></td>
+<td><font color="black">{{ d.name }}</font></td>
 {% for s in d.strings %}
 {% if forloop.first%}
-<td><font color="#990099">{{ s }}</font></td>
+<td><font color="#00cc00">{{ s }}</font></td>
 {% else %}
 <td><font color="black">{{ s }}</font></td>
 {% endif %}
@@ -247,7 +255,7 @@ function showModal()
 <div class="lastone">
 
 {%if no_seamless%}
-<h4><span>You can also find these dishes and the full menu on their website: </span><a onclick='redirect("{{website}}")'>{{website}}</a></h4>
+<h4><span>Visit their website: </span><a onclick='redirect("{{website}}")'>{{website}}</a></h4>
 
 {%else%}
 <h4><span style=>To order these dishes for takeout or delivery on Seamless: </span><a onclick='redirect("{{website}}")'>{{website}}</a></h4>
@@ -258,6 +266,9 @@ function showModal()
 {%else%}
 <h4><span>To check out this restaurant on Yelp: </span><a onclick='redirect("{{yelp}}")'>{{yelp}}</a> </h4>
 {%endif%}
+<div class="dizclaimer">
+Nutrition calculations for this menu are made by the Calospot team. Slight variance in ingredients/serving size may occur. Restaurant managers email info@calospot.com to take over this account.
+</div>
 </div>
 </div>
 </div>

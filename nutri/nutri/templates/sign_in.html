@@ -109,8 +109,28 @@ $(document).on("click","#proflink",function(event)
 
 
 </script>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-62884207-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
 
 
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-68992320-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
 <style type="text/css">
         body {
             background-image: url('../static/orange_limes.jpg');
@@ -176,7 +196,25 @@ $(document).on("click","#proflink",function(event)
           margin-left:80%;
           font-weight:bold;
         }
-     
+        
+        .money{
+          margin-left:1%;
+        }
+        
+        .giants {
+          margin-left:12%;
+          font-size: 23px
+        }
+        
+        .berpo{
+          -moz-border-radius: 15px;
+          -webkit-border-radius: 15px;
+        }
+        
+        .turf{
+          font-size:16px;
+          margin-top:1%;
+        }
 </style>
 
 
@@ -216,27 +254,38 @@ $(document).on("click","#proflink",function(event)
 <br><br><br><br>
 <div class = "container">
   <div class="contactme">
-  Contact: charlie@calospot.com
+  Contact: info@calospot.com 
+  
 </div>
 
 
 <br><br>
+<div class="money">
   <div align='left' id="SearchMessage">
-    <font size="5" face="Calibri">
-    Find dishes <u>under 600 calories</u> from your favorite local restaurants (and a few healthy chains).
+    <div class="Giants"
+    <font size="10" face="Calibri">
+    View the <span style="color:#00cc00"><u>Under 600 Calories Menu</u></span> from your favorite spot in Downtown Stamford.
     <br>
-   
+   </div>
     </font>
   </div>
+<div>
 <br><br><br><br>
 
               <div id="search">
               <form method="GET">
               <font size="5" face="Calibri">
-              <input type="text" id="search_bar" name="search" placeholder="Enter Restaurant Name, Street, City or Zip to find menus near you!" style="text-align:center">
+              <input type="text" id="search_bar" name="search" placeholder="Enter Restaurant Name or Street or City and go" style="text-align:center">
+              <div class="turf" style="margin-left:24%;">
+                [Tip: Search "Stamford" to view all restaurants. We have every place in Downtown Stamford listed.]
+              </div>
+              <div class="berpo">
+              <button type="submit" style="margin-left:55%; margin-top:3%;">Search</button>
+              </div>
               </font>
               </form>
               </div>
+              
 
 </div>
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
