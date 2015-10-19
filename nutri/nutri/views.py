@@ -566,6 +566,7 @@ def restaurant_profile(request, rid):
     
     if "Jazzman's Cafe" in restaurant.name:
         jazz_man = True
+    print 'This is jazz_man', jazz_man
   
     
     website = str(restaurant.website)
@@ -719,6 +720,6 @@ def restaurant_profile(request, rid):
 
         return HttpResponseRedirect('/add_dish/' + rid)
     
-    return render(request, 'rest_profile.html', {'no_yelp':no_yelp, 'no_seamless':no_seamless, 'hits':restaurant.hits, 'my_prof':my_prof, 'uname':request.user.username, 'rest':restaurant, 'table':table, 'address':address, 'website':website, 'yelp':yelp, 'csz':city_st_zip, 'phone':phone, \
+    return render(request, 'rest_profile.html', {'no_yelp':no_yelp, 'no_seamless':no_seamless, 'hits':restaurant.hits, 'my_prof':my_prof, 'jazz_man':jazz_man, 'uname':request.user.username, 'rest':restaurant, 'table':table, 'address':address, 'website':website, 'yelp':yelp, 'csz':city_st_zip, 'phone':phone, \
         'MoOpen':MoOpen, 'TuOpen':TuOpen, 'WeOpen':WeOpen, 'ThOpen':ThOpen, 'FrOpen':FrOpen, 'SaOpen':SaOpen, 'SuOpen':SuOpen, 'MoClose':MoClose, 'TuClose':TuClose, 'WeClose':WeClose, 'ThClose':ThClose, 'FrClose':FrClose, 'SaClose':SaClose, 'SuClose':SuClose})
 
