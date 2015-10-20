@@ -121,7 +121,7 @@ $(document).on("click","#next_page",function(event)
 {% if num_rests < page_mult20 %}
 Showing results {{page_mult20|add:-19}} - {{num_rests}} of {{num_rests}}
 {% else %} 
-Showing results {{page_mult20|add:-19}} - {{page_mult9}} of {{num_rests}}
+Showing results {{page_mult20|add:-19}} - {{page_mult20}} of {{num_rests}}
 
 {%endif%}
 {% if num_rests >= page_mult20 %}
