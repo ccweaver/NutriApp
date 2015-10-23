@@ -118,13 +118,13 @@ $(document).on("click","#next_page",function(event)
 {% if page != 1 %}
 <a href='/search/{{term}}/{{page|add:-1}}' style="font-size:18px; color:#1500fb;">Previous page</a>&nbsp;&nbsp;&nbsp;
 {%endif%}
-{% if num_rests < page_mult15 %}
-Showing results {{page_mult15|add:-14}} - {{num_rests}} of {{num_rests}}
+{% if num_rests < page_mult20 %}
+Showing results {{page_mult20|add:-19}} - {{num_rests}} of {{num_rests}}
 {% else %} 
-Showing results {{page_mult15|add:-14}} - {{page_mult15}} of {{num_rests}}
+Showing results {{page_mult20|add:-19}} - {{page_mult20}} of {{num_rests}}
 
 {%endif%}
-{% if num_rests >= page_mult15 %}
+{% if num_rests >= page_mult20 %}
 &nbsp;&nbsp;&nbsp;<a href='/search/{{term}}/{{page|add:1}}' style="font-size:18px; color:#1500fb;">Next page</a>
 {%endif%}
 
@@ -132,11 +132,14 @@ Showing results {{page_mult15|add:-14}} - {{page_mult15}} of {{num_rests}}
 </div>
 
  
-<br><br><br><br><br><br><br><br><br><br>
+
 
 </div>
 </div>
 
+<div class="Wake" style="font-size:28px; text-align:center; padding-top:1%">
+           [ New places added every day. ]
+</div>
 
 <script src="{{STATIC_URL}}/js/bootstrap.min.js"></script>
 </body>
