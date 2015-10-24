@@ -172,29 +172,6 @@ function showModal()
 <div id='hits'><b>Number of Views:</b> {{hits}}</div>
 
 <h1>{{rest}}</h1>
-{% if jazz_man %}
-<h2>(Check menu in Cafe to see which dishes are being served today)</h2> 
-{% endif %}
-<h2><a href='http://maps.google.com/?q={{address}}{{csz}}'>{{address}}<br>{{csz}}</a></h2>
-<h4 style="font-size:15px">{{phone}}
-<br>
-
-</h4>
-
-<div class="lister">
-<ul style="list-style-type:none; padding-left:0">
-   <li> <b>M:</b> {% if MoOpen == "Closed" %} Closed {% else %} {{MoOpen}} to {{MoClose}} {% endif %}  
-    <b>F:</b> {% if FrOpen == "Closed" %} Closed {% else %} {{FrOpen}} to {{FrClose}} {% endif %}</li>
-   <li> <b>T:</b> {% if TuOpen == "Closed" %} Closed {% else %} {{TuOpen}} to {{TuClose}} {% endif %}    
-    <b> Sat:</b> {% if SaOpen == "Closed" %} Closed {% else %} {{SaOpen}} to {{SaClose}} {% endif %}</li>
-   <li><b>W:</b> {% if WeOpen == "Closed" %} Closed {% else %} {{WeOpen}} to {{WeClose}} {% endif %} 
-    <b>Sun:</b> {% if SuOpen == "Closed" %} Closed {% else %} {{SuOpen}} to {{SuClose}} {% endif %}</li>
-   <li> <b>Th:</b> {% if ThOpen == "Closed" %} Closed {% else %} {{ThOpen}} to {{ThClose}} {% endif %} 
-  </li>
-
-
-</ul>
-</div>
 
 </div>
 
