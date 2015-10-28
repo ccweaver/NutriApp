@@ -569,7 +569,7 @@ def restaurant_profile(request, rid):
         jazz_man = True
     print 'This is jazz_man', jazz_man
   
-    if "Tresser Blvd" in restaurant.street:
+    if "California Pizza Kitchen" in restaurant.name:
         town_center = True
     print 'This is town_center', town_center
     
