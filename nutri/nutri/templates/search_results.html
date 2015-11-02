@@ -116,7 +116,7 @@ $(document).on("click","#next_page",function(event)
 
 <div align='center'>
 {% if page != 1 %}
-<a href='/search/{{term}}/{{page|add:-1}}' style="font-size:30px; color:#1500fb;">Previous page</a>&nbsp;&nbsp;&nbsp;
+<a href='/search/{{term}}/{{page|add:-1}}' style="font-size:26px; color:#1500fb;">Previous page</a>&nbsp;&nbsp;&nbsp;
 {%endif%}
 {% if num_rests < page_mult20 %}
 Showing results {{page_mult20|add:-19}} - {{num_rests}} of {{num_rests}}
@@ -125,7 +125,7 @@ Showing results {{page_mult20|add:-19}} - {{page_mult20}} of {{num_rests}}
 
 {%endif%}
 {% if num_rests >= page_mult20 %}
-&nbsp;&nbsp;&nbsp;<a href='/search/{{term}}/{{page|add:1}}' style="font-size:30px; color:#1500fb;">Next page</a>
+&nbsp;&nbsp;&nbsp;<a href='/search/{{term}}/{{page|add:1}}' style="font-size:26px; color:#1500fb;">Next page</a>
 {%endif%}
 
 
