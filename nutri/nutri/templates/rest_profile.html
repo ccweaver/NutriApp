@@ -142,6 +142,10 @@ function showModal()
     	font-size:12px;
     }
     
+    .clerk {
+    	text-align:center;
+    }
+    
   
 </style>
 
@@ -163,9 +167,13 @@ function showModal()
           </div>
           </div>
           </div>
-
-<br><br><br><br><br>
+          
+          
+<br><br><br><br><br><br><br><br><br>
 <div class="container">
+	<div class="clerk">
+<h1></h1>
+	  </div>
 <div class="jumbotron" style="background-image: url(../static/marble2.jpg); background-size: 100%;">
 
 <div class="stuff">
@@ -173,8 +181,13 @@ function showModal()
 
 <h1>{{rest}}</h1>
 {% if jazz_man %}
-<h2>Check menu in Cafe to see which dishes are being served today</h2> 
+<h2>(Check menu in Cafe to see which dishes are being served today)</h2> 
 {% endif %}
+
+{% if town_center %}
+<h2>(Stamford Town Center)</h2>
+{% endif %}
+
 <h2><a href='http://maps.google.com/?q={{address}}{{csz}}'>{{address}}<br>{{csz}}</a></h2>
 <h4 style="font-size:15px">{{phone}}
 <br>
@@ -195,6 +208,7 @@ function showModal()
 
 </ul>
 </div>
+
 
 </div>
 
