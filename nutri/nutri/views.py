@@ -112,7 +112,7 @@ def sign_in(request):
     return render(request, 'sign_in.html', {'form':uform, 'invalid':invalid, 'error':error, 'is_user':is_user, 'user':request.user.username})
 
 def search_results(request, term, page=1):
-    term = term.rstrip()
+    term = term.rstrip().replace(" ' ", " ")
     print "Searching for: " + term
     print "Page: " + str(page) 
 
