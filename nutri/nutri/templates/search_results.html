@@ -124,6 +124,9 @@ $(document).on("click","#next_page",function(event)
 
 {%endfor%}
 
+{% if rs.length=0%}
+Message
+(%endif%)
 
 <div align='center' style='margin-bottom:30%'>
 {% if page != 1 %}
