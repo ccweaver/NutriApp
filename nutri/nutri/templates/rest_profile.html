@@ -25,6 +25,24 @@ $.ajax(
 return false;
 };
 
+//deleting an ingred
+function removeIngred(ingred, key) {
+$.ajax(
+    {
+        type: "post",
+        url: "",
+        data: {delete_ingred:ingred, dish:key, csrfmiddlewaretoken:document.getElementsByName('csrfmiddlewaretoken')[0].value},
+        success: function (data)
+        {
+          location.reload();
+
+        }
+    });
+return false;
+};
+
+
+
 function openIngreds(key) {
 
 $.ajax(
@@ -37,13 +55,8 @@ $.ajax(
           showModal();
           document.getElementById('myModalLabel').innerHTML = data.dish;
           if(data.ingreds) {
-            list = "";
-            for (i in data.ingreds) {
-              list += data.ingreds[i];
-              list += '<br>';
-            }
+            document.getElementById('ingred_list').innerHTML = data.ingreds;
           }
-          document.getElementById('ingred_list').innerHTML = list;
           showModal();
         }
     });
@@ -65,6 +78,20 @@ function showModal()
 }
 
 </script>
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-62884207-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+
+
 <style>
     body {
       background-image: url('http://i375.photobucket.com/albums/oo197/Charles-Stanton_151515/rftgyhds_zpsajop0hvn.png');
@@ -84,7 +111,7 @@ function showModal()
 	    }
 	
 	#shizzle {
-		color:#990099;
+		color:#00cc00;
 	}
   #hits {
     text-align:right;
@@ -122,9 +149,16 @@ function showModal()
     }
     
     .notice{
-    	text-align:center;
+    	padding-bottom:3%;
     }
     
+    .dizclaimer{
+    	font-size:12px;
+    }
+    
+    .clerk {
+    	text-align:center;
+    }
     
   
 </style>
@@ -142,69 +176,98 @@ function showModal()
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="/">{% block navtitle %} <span style="color:#2efb00;opacity=.99;">CALO</span><span style="color:#1500fb;opacity=.99;">SPOT</span>{% endblock %}</a>          
+          <a class="navbar-brand" href="/">{% block navtitle %} <span style="color:#2efb00;opacity=.99;">Calo</span><span style="color:#1500fb;opacity=.99;">Spot</span>{% endblock %}</a>          
               
           </div>
           </div>
           </div>
-
-<br><br><br><br><br>
+          
+          
+<br><br><br><br><br><br><br><br><br>
 <div class="container">
+	<div class="clerk">
+<h1></h1>
+	  </div>
 <div class="jumbotron" style="background-image: url(../static/marble2.jpg); background-size: 100%;">
 
 <div class="stuff">
 <div id='hits'><b>Number of Views:</b> {{hits}}</div>
 
 <h1>{{rest}}</h1>
-<h2>{{address}}<br>{{csz}}</h2>
+{% if jazz_man %}
+<h2>(Check menu in Cafe to see which dishes are being served today)</h2> 
+{% endif %}
+
+{% if town_center %}
+<h2>(Stamford Town Center)</h2>
+{% endif %}
+
+<h2><a href='http://maps.google.com/?q={{address}}{{csz}}'>{{address}}<br>{{csz}}</a></h2>
 <h4 style="font-size:15px">{{phone}}
 <br>
-{{yelp}}
+
 </h4>
 
 <div class="lister">
 <ul style="list-style-type:none; padding-left:0">
-   <li> <b>M:</b> {{MoOpen}} to {{MoClose}}   <b>F:</b> {{FrOpen}} to {{FrClose}}</li>
-   <li> <b>T:</b> {{TuOpen}} to {{TuClose}}    <b> Sat:</b> {{SaOpen}} to {{SaClose}}</li>
-   <li> <b>W:</b> {{WeOpen}} to {{WeClose}}  <b>Sun:</b> {{SuOpen}} to {{SuClose}}</li>
-   <li> <b>Th:</b> {{ThOpen}} to {{ThClose}}</li>
+   <li> <b>M:</b> {% if MoOpen == "Closed" %} Closed {% else %} {{MoOpen}} to {{MoClose}} {% endif %}  
+    <b>F:</b> {% if FrOpen == "Closed" %} Closed {% else %} {{FrOpen}} to {{FrClose}} {% endif %}</li>
+   <li> <b>T:</b> {% if TuOpen == "Closed" %} Closed {% else %} {{TuOpen}} to {{TuClose}} {% endif %}    
+    <b> Sat:</b> {% if SaOpen == "Closed" %} Closed {% else %} {{SaOpen}} to {{SaClose}} {% endif %}</li>
+   <li><b>W:</b> {% if WeOpen == "Closed" %} Closed {% else %} {{WeOpen}} to {{WeClose}} {% endif %} 
+    <b>Sun:</b> {% if SuOpen == "Closed" %} Closed {% else %} {{SuOpen}} to {{SuClose}} {% endif %}</li>
+   <li> <b>Th:</b> {% if ThOpen == "Closed" %} Closed {% else %} {{ThOpen}} to {{ThClose}} {% endif %} 
+  </li>
+
 
 </ul>
 </div>
+
 
 </div>
 
 </div>
 
 <div class="menutitle">
-	<u>The <span id="shizzle">600 Calories and Under</span> Menu</u>
+	<u>The <span id="shizzle">Under 600 Calories</span> Menu</u>
 </div>
 
 <table class="table" id="menu_table">
-    
+ 
+    {% if my_prof %}
     <th></th>
+    {% endif %}
     <th><u>DISH</u></th>
-    <th><font color="#990099">Calories</font></th>
+    <th><font color="black">Calories</font></th>
     <th><font color="black">Protein (g)</font></th>
     <th><font color="black">Fat(g)</font></th>
     <th><font color="black">Carbs (g)</font></th>
     <th><font color="black">Sugar(g)</font></th>
-    <th><font color="black">Sodium(mg)</font></th>
+    <th><font color="black">Sodium(mg),(% DV)</font></th>
     <th><font color="black">Price</font></th>
     <th><font color="black">Description</font></th>
-{% for s in strings %}
-{% if forloop.counter0|divisibleby:9 %}<tr>
-<td>
+{% for d in table %}
+<tr>
 {% if my_prof %}
-<button class="btn btn-default btn-sm" id=type="button" onclick="removeItem('{{s}}')"><span class="glyphicon glyphicon-remove-circle"></span></button>
-<button class="btn btn-default btn-sm" id=type="button" onclick="openIngreds('{{s}}')"><span class="glyphicon glyphicon-eye-open"></span></button>
-{% endif %}
+<td>
+<button class="btn btn-default btn-sm" id=type="button" onclick="removeItem('{{d.name}}')"><span class="glyphicon glyphicon-remove-circle"></span></button>
+<button class="btn btn-default btn-sm" id=type="button" onclick="openIngreds('{{d.name}}')"><span class="glyphicon glyphicon-eye-open"></span></button>
 </td>
 {% endif %}
+<td><font color="black">{{ d.name }}</font></td>
+{% for s in d.strings %}
+{% if forloop.first%}
+<td><font color="#00cc00">{{ s }}</font></td>
+{% else %}
 <td><font color="black">{{ s }}</font></td>
-{% if forloop.counter|divisibleby:9 %}</tr>{% endif %}
+{% endif %}
 {% endfor %}
-</font>
+</tr>
+{% endfor %}
+
+   <colgroup>
+    	<col span="1" font color="#990099">
+   </colgroup>
 </table>
 
 {% if my_prof %}
@@ -214,17 +277,26 @@ function showModal()
          name="Submit">
 </form>
 <div class="notice">
-Restaurants: Add however many dishes you'd like! As long as they are under 600 calories. <br> If you create a dish and it comes out to be over 600 calories, please remove and adjust ingredients in dish, then repost. 
+<i>Add as many dishes as you like! As long as they are under 600 calories. If you create dish and it comes out to be over 600 calories, please remove, adjust ingredients in dish, repost.</i> 
 </div>
 {%endif%}
 <div class="lastone">
 
 {%if no_seamless%}
-<h4><span>You can also find these dishes and the full menu on their website: </span><a onclick='redirect("{{website}}")'>{{website}}</a></h4>
+<h4><span>Visit their website: </span><a onclick='redirect("{{website}}")'>{{website}}</a></h4>
 
 {%else%}
-<h4><span style=>To order these dishes for Takeout or Delivery: </span><a onclick='redirect("{{website}}")'>{{website}}</a></h4>
+<h4><span style=>Order these dishes for takeout or delivery on Seamless: </span><a onclick='redirect("{{website}}")'>{{website}}</a></h4>
 {%endif%}
+
+{%if no_yelp%}
+
+{%else%}
+<h4><span>To check out this restaurant on Yelp: </span><a onclick='redirect("{{yelp}}")'>{{yelp}}</a> </h4>
+{%endif%}
+<div class="dizclaimer">
+Nutrition calculations for this menu are made by the Calospot team. Slight variance in ingredients/serving size may occur. Restaurant managers email info@calospot.com to take over this account.
+</div>
 </div>
 </div>
 </div>

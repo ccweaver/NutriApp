@@ -11,21 +11,58 @@
 <script>
 </script>
 
+<script>
+
+//  handles next page clicks
+$(document).on("click","#next_page",function(event)
+           {
+           $.ajax(
+           {
+              type: "post",
+              url: "",
+              data: {csrfmiddlewaretoken:document.getElementsByName('csrfmiddlewaretoken')[0].value},
+              success: function (data)
+              {
+                if (data.success == 'true') {
+                }
+                else {
+                }
+              return false;
+              },
+              error: function(data)
+              {
+
+              }
+            });
+           return false;
+});
+</script>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-62884207-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
 
 <style type="text/css">
 
 
            
         body {
-            background-image: url('http://i375.photobucket.com/albums/oo197/Charles-Stanton_151515/bg_zpsthwyymln.jpg');
-            background-size:cover;
-            background-repeat:no-repeat;
+            background-image: url('http://i375.photobucket.com/albums/oo197/Charles-Stanton_151515/light-green-background-2_zpsaalvszae.jpg');
+            background-size:;
+            background-repeat:
                    
         }
         
         .returns{
-            margin-left:17%;
-            margin-right:17%;
+            margin-left:12%;
+            margin-right:12%;
             border-radius:%;
             border-style:;
             border-bottom-style;
@@ -42,6 +79,9 @@
           background-position:bottom;
         }
         
+        .termio{
+           font-size:30px;
+        }
         
 </style>
 
@@ -58,31 +98,59 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="/">{% block navtitle %} <span style="color:#2efb00;opacity=.99;">CALO</span><span style="color:#1500fb;opacity=.99;">SPOT</span>{% endblock %}</a>          
-              
+          <a class="navbar-brand" href="/">{% block navtitle %} <span style="color:#2efb00;opacity=.99;">Calo</span><span style="color:#1500fb;opacity=.99;">Spot</span>{% endblock %}</a>          
+          
+          </div>
+           <div class="nav navbar-nav navbar-right"><span style="font-size:15px; color:white; margin-right:%"></span></div>
           </div>
           </div>
-          </div>
-
+ 
 <br><br><br><br><br>
 <div class="container">
-<div class="Seuss" style="font-size:30px; text-align:center;">
-
+<div class="TheSearchTerm" style="text-align:center; padding-bottom:1%; font-size:28px;">
+          Showing results for <span style="font-size:40px;"><i>{{term}}</i></span>
+          </div>
+<div class="Seuss" style="font-size:28px; text-align:center; padding-bottom:2%;">
+          { More dishes added every day. }
 </div>
 <div class="returns">
 
 {% for r in rests %}
+<ul class='rest_box' style="padding-top:1%; font-size:18px; padding-left:10%; border-style:solid; padding-bottom:9%; padding-right:0%"> 
+<a href="/restaurant_profile/{{r.rid}}" style="font-size:30px; color:black; font-weight:bold;">{{r.r}}</a> <br>{{r.t}} {{r.s}}, {{r.u}} {{r.v}}, {{r.w}}<br>Type of cuisine: <b>{{r.x}}</b>  Seamless: <b>{{r.y}}</b> {% if r.bool_dm %}<br> Delivery Minimum: <b>${{r.z}}</b> {% endif %}   
 
-<ul class='rest_box' style="padding-top:1%; font-size:20px; padding-left:10%; border-style:solid; padding-bottom:7%; padding-right:0%"> 
-<a href="/restaurant_profile/{{r.rid}}" style="font-size:40px; color:black; font-weight:bold;">{{r.r}}</a> <br>{{r.t}} {{r.s}}, {{r.u}} {{r.v}}, {{r.w}}<br>Type of cuisine: <b>{{r.x}}</b>  Seamless: <b>{{r.y}}
 
-</b></br><span style="color:white">.</span>
 </ul>
-{% endfor %}
+
+{%endfor%}
+
+
+<div align='center' style='margin-bottom:30%'>
+{% if page != 1 %}
+<a href='/search/{{term}}/{{page|add:-1}}' style="font-size:26px; color:#1500fb;">Previous page</a>&nbsp;&nbsp;&nbsp;
+{%endif%}
+{% if num_rests < page_mult30 %}
+Showing results {{page_mult30|add:-29}} - {{num_rests}} of {{num_rests}}
+{% else %} 
+Showing results {{page_mult30|add:-29}} - {{page_mult30}} of {{num_rests}}
+
+{%endif%}
+{% if num_rests >= page_mult30 %}
+&nbsp;&nbsp;&nbsp;<a href='/search/{{term}}/{{page|add:1}}' style="font-size:26px; color:#1500fb;">Next page</a>
+{%endif%}
+
+
+</div>
+
+ 
+
 
 </div>
 </div>
 
+<div class="Wake" style="font-size:28px; text-align:center; padding-top:1%">
+           
+</div>
 
 <script src="{{STATIC_URL}}/js/bootstrap.min.js"></script>
 </body>

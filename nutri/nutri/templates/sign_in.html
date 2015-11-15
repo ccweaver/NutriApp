@@ -34,6 +34,7 @@ $(document).on("click","#nav_login_submit",function(event)
                   document.getElementById('login_pass').value = "";
 
                   $("#search").effect("shake");
+                  $("#SearchMessage").effect("shake");
                 }
               return false;
               },
@@ -108,11 +109,22 @@ $(document).on("click","#proflink",function(event)
 
 
 </script>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-62884207-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
 
 
 <style type="text/css">
         body {
-            background-image: url('http://i375.photobucket.com/albums/oo197/Charles-Stanton_151515/awesome-bright-cool-food-Favim.com-621419_zpskfxq2xkk.jpg');
+            background-image: url('../static/orange_limes.jpg');
             background-size: cover;
         }
         
@@ -123,13 +135,9 @@ $(document).on("click","#proflink",function(event)
             margin-top: 25px;  
         }
         
-        #login_button { width: 95%;
-          
+        #login_list {
+          margin-top: 10px;
         }
-
-        #shake, #shake2, #shake3 {
-          display: inline-block;
-        }   
 
         input[type="text"],input[type="password"] {
             -webkit-border-radius: ;
@@ -157,17 +165,6 @@ $(document).on("click","#proflink",function(event)
           margin-top: 0px;
         }
 
-        #proflink, #logout{
-          margin-right: 10px;
-          margin-top: 10px;
-        }
-        
-        .SearchMessage {
-          margin-left: 5%;
-          font-size:23px;
-          padding-top:15px;
-          padding-bottom: 15px;
-        }
         .fizzle {
           color:;
           font-size:25px;
@@ -185,7 +182,36 @@ $(document).on("click","#proflink",function(event)
           margin-right:25%;
           background-color:white;
         }
-     
+        
+        .contactme{
+          margin-left:80%;
+          font-weight:bold;
+        }
+        
+        .money{
+          margin-left:1%;
+        }
+        
+        .giants {
+          margin-left:17%;
+          font-size: 23px
+        }
+        
+        .berpo{
+          -moz-border-radius: 15px;
+          -webkit-border-radius: 15px;
+        }
+        
+        .turf{
+          font-size:16px;
+          margin-top:1%;
+        }
+        
+        .eli{
+          margin-left:30%;
+          margin-top:100%;
+          font-size:50px;
+        }
 </style>
 
 
@@ -201,54 +227,68 @@ $(document).on("click","#proflink",function(event)
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="/"><span style="color:#2efb00;opacity=.99;">CALO</span><span style="color:#1500fb;opacity=.99;">SPOT</span></a>
+          <a class="navbar-brand" href="/"><span style="color:#2efb00;">Calo</span><span style="color:#003CFF;">Spot</span></a>
         </div>
+        
         <div class="navbar-collapse collapse">
-            <ul class="nav navbar-nav navbar-right">
-            
+          <div id="login_list" align='right'>
             {% if is_user %}
-            <button id="proflink" type="button" class="btn btn-primary">{{user}}</button>
-            <button id="logout" type="button" class="btn btn-danger">Logout</button>
+            <button id="proflink" type="button" class="btn btn-primary btn-sm">{{user}}</button>
+            <button id="logout" type="button" class="btn btn-danger btn-sm">Logout</button>
             {% else %}
-
-            <div id="shake">
-            <li id="nav_login"  style="margin-top:4%;"><input name="login_email" type="text" id="login_email" placeholder="  Email"></li></div>
-            <div id="shake2">
-            <li id="nav_login_pass"  style="margin-top:4%;"><input name="login_pass" type="password" id="login_pass" placeholder="  Password"></li></div>
-            <div id="shake3">
-            <li id="nav_login_submit"  style="margin-top:0%;"> <button type="submit" class="btn btn-danger btn-sm" id="login_button" style="background-color:#0066ff; border:none;">Restaurant Management: Sign In</button>&nbsp;</li></div>
-            {% endif %}
-                 
-            </ul>
-            
+            <font color="white" size='3'> Restaurant Management:&nbsp; </font>
+            <input name="login_email" type="text" id="login_email" placeholder="  Email">
+            <input name="login_pass" type="password" id="login_pass" placeholder="  Password">
+            <button id="nav_login_submit" class="btn btn-danger btn-sm" id="login_button" style="background-color:">Sign In</button>&nbsp;
+            <button class="btn btn-danger btn-sm"; style="background-color:#0066ff; border:none;" onclick="showModal();">Create New Account</button>&nbsp;
+            {% endif %} 
+          </ul>
+          </div>
         </div>
     </div>
 </div>
 
 <br><br><br><br>
 <div class = "container">
-<div class = "buttonz">
-                {% if not is_user %}
-                <button class="btn btn-danger"; style="width:200px; height:50px; white-space:normal; background-color:#0066ff; border:none; margin-bottom:2%" onclick="showModal();">Restaurant Management: Create New Account</button>
-                {% endif %}
+  <div class="contactme">
+  Send us your feedback info@calospot.com 
+  
 </div>
 
-<br><br><br><br>
-            <div class="jumbotron" style="background-image:url(http://i375.photobucket.com/albums/oo197/Charles-Stanton_151515/142626895585521_zpscfatpbf6.jpg); background-size: 100%;">
-              <div class ="SearchMessage">
-              Local restaurants post menus to this website. <br>All items on these menus are <span class="fizzle"><u>under 600 calories.</u></span><br> Search for them below.
-              </div>
-            </div>
+
+<br><br>
+<div class="money">
+  <div align='left' id="SearchMessage">
+    <div class="Giants"
+    <font size="10" face="Calibri">
+    View the <span style="color:#00cc00"><u>Under 600 Calories Menu</u></span> from your favorite spot in Stamford.
+    <br>
+   </div>
+    </font>
+  </div>
+<div>
 <br><br><br><br>
 
               <div id="search">
               <form method="GET">
               <font size="5" face="Calibri">
-              <input type="text" id="search_bar" name="search" placeholder="  Enter City or Zip to find menus near you! Local spots only, no chains." style="text-align:center">
+              <input type="text" id="search_bar" name="search" placeholder="Enter Restaurant/Deli's Name or Street or City" style="text-align:center">
+              <div class="turf" style="margin-left:24%;">
+                [Tip: Search "Stamford" to view all eating spots. We have every place in Stamford listed.]
+              </div>
+              <div class="berpo">
+              <button type="submit" style="margin-left:55%; margin-top:3%;">Search</button>
+              </div>
               </font>
               </form>
-              </div>
+              <div class="eli">
+  You can Zoom In<br>on your phone
 </div>
+              </div>
+              
+
+</div>
+
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
@@ -294,3 +334,5 @@ $(document).on("click","#proflink",function(event)
 
 </body>
 </html>
+
+

@@ -247,7 +247,15 @@ function showModal() {
            padding-top:5%;
        }
      
+        .thenotes{
+            font-weight:bold;
+            padding-top:30%;
+        }
 
+        .missingones{
+            font-weight:;
+            margin-left:61%;
+        }
         </style>
 </head>
 <body>
@@ -260,7 +268,7 @@ function showModal() {
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="/">{% block navtitle %} <span style="color:#2efb00;opacity=.99;">CALO</span><span style="color:#1500fb;opacity=.99;">SPOT</span>{% endblock %}</a>
+          <a class="navbar-brand" href="/">{% block navtitle %} <span style="color:#2efb00;opacity=.99;">Calo</span><span style="color:#1500fb;opacity=.99;">Spot</span>{% endblock %}</a>
           </div>
           </div>
           </div>
@@ -273,10 +281,16 @@ function showModal() {
 
 
 <div class="container">
+<div class="missingones">
+Please email info@calospot.com if our database is missing any of your ingredients, and we'll add them for you!   
+</div>
 
 <font size="5" style="bold;"><div id='name_wrapper'></div></font>
+<<<<<<< HEAD
     
    
+=======
+>>>>>>> master
 
     <font size="4" color="A22;" style="bold;">
     <div id="error_wrapper"></div>
@@ -300,12 +314,7 @@ function showModal() {
         
         <div class="instructions">
         <ul style="list-style-type:none; padding-left:0">
-         <li><u>Directions</u></li>
-         <li>1. Enter ingredient in Search, press Refresh List.</li>
-         <li>2. Select ingredient from box above (by clicking on it).</li>
-         <li>3. Once ingredient is highlighted, enter amount below then press Add Ingredient.</li>
-         <li>4. Repeat steps 1-3 for each ingredient, then press Complete Dish.</li>
-         <li>(We make all volume conversions. Scroll down to bottom of page for notes on ingredient database.)</li>
+         Reminder: For all vinaigrette salad dressing besides Balsamic, use "Salad Dressing / Vinaigrette (all other besides Balsmaic)".
         </ul>
         </div>
 
@@ -333,7 +342,17 @@ function showModal() {
         <input type="button" class="btn btn-primary" value="Add Ingredient" id="add_ingredient" onclick="addIn(document.getElementById('iSelect').value, document.getElementById('amount').value, document.getElementById('unit').value)">
         <input type="button" class="btn btn-danger" value="Complete Dish" onClick="submit()" style="margin-left:30px">
     
-    
+    <div class="thenotes">
+    <u>Notes on ingredient database</u><br>-Ingredient data is from U.S. Department of Agriculture, with a smaller number (about 7%) of ingredients coming from other indepedent sources.<br>-All of the ingredients used to build your dishes are only seen by you and are confidential.<br>   
+    <u> How to use ingredient database</u><br>
+         1. Enter ingredient in Search, press Refresh List.<br>
+         2. Select ingredient from box above by clicking on ingredient name. (If on phone/tablet, click on box above and ingredient list will appear, then select ingredient).<br>
+         3. Once ingredient is highlighted (or if on phone/tablet, once ingredient appears alone in box above),enter amount below then press Add Ingredient.<br>
+         4. Repeat steps 1-3 for each ingredient, then press Complete Dish.
+    </div>                                
+      
+      
+ 
 </div>
 </div>  
 </div>
@@ -356,7 +375,7 @@ function showModal() {
         <font size="3" color="A22;" style="bold;"><div id="modal_error"></div></font>
         <label style="color: #555;">
         <font size="4">Name:&nbsp;</font></label>
-        <input id="dish_name" type="text" name="dish_name">
+        <input id="dish_name" type="text" name="dish_name" style="font-weight:bold">
 
         <br>
         <label style="color: #555;">
@@ -367,6 +386,9 @@ function showModal() {
         <label style="color: #555;">
         <font size="4">Description:&nbsp;</font></label>
         <input id="dish_description" type="text" name="dish_description">  
+      
+      
+     
       
 
 

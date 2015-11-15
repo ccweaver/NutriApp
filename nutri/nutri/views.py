@@ -8,6 +8,7 @@ from Restaurant.models import Restaurant
 from menu_items.models import Item
 from added_ingreds.models import Addition
 import re, json
+from django.db.models import Q
 from django.contrib.auth.models import User
 from django.contrib.auth import logout
 from django.contrib import auth
@@ -29,39 +30,7 @@ def sign_in(request):
     
     if request.method == 'GET':
         if 'search' in request.GET:
-            term = request.GET['search']
-            print term
-            
-            zRE = re.compile("^[0-9][0-9][0-9][0-9][0-9]$")
-            if zRE.match(term):
-                restaurants = Restaurant.objects.all().order_by('zipcode').order_by('street')
-                rs = []
-                for r in restaurants:
-                    if r.cuisine2:
-                        if r.cuisine3:
-                            cuisine = r.cuisine1 + ', ' + r.cuisine2 + ', ' + r.cuisine3
-                        else:
-                            cuisine = r.cuisine1 + ', ' + r.cuisine2
-                    else:
-                        cuisine = r.cuisine1
-
-                    rs.append({'r':r.name, 'zipDist':abs(int(r.zipcode)-int(term)), 'rid':r.id, 's':r.street, 't':r.number, 'u':r.city, 'v':r.state, 'w':r.zipcode, 'x':cuisine, 'y':r.seamless})
-                r_zipSorted = sorted(rs, key=lambda r: r['zipDist'])
-                return render(request, 'search_results.html', {'rests':r_zipSorted})
-
-            else:
-                r_citySorted = Restaurant.objects.filter(city__icontains=term).order_by('street')
-                rs = []
-                for r in r_citySorted:
-                    if r.cuisine2:
-                        if r.cuisine3:
-                            cuisine = r.cuisine1 + ', ' + r.cuisine2 + ', ' + r.cuisine3
-                        else:
-                            cuisine = r.cuisine1 + ', ' + r.cuisine2
-                    else:
-                        cuisine = r.cuisine1
-                    rs.append({'r':r.name, 'rid':r.id, 's':r.street, 't':r.number, 'u':r.city, 'v':r.state, 'w':r.zipcode, 'x':cuisine, 'y':r.seamless})
-                return render(request, 'search_results.html', {'rests':rs})
+            return HttpResponseRedirect('/search/' + str(request.GET['search']))
 
     if request.method == 'POST':
         if 'login_email' in request.POST:
@@ -87,7 +56,6 @@ def sign_in(request):
             rest_id = Restaurant.objects.filter(user=request.user.id)
 
             if len(rest_id) > 0:
-                print 'mallows'
                 address = '/restaurant_profile/' + str(rest_id[0].id)
             else:
                 address = "/add_restaurant"
@@ -143,6 +111,60 @@ def sign_in(request):
 
     return render(request, 'sign_in.html', {'form':uform, 'invalid':invalid, 'error':error, 'is_user':is_user, 'user':request.user.username})
 
+def search_results(request, term, page=1):
+    term = term.rstrip()
+    print "Searching for: " + term
+    print "Page: " + str(page) 
+
+    #################
+    # Zip Code Search
+    #################
+    zRE = re.compile("^[0-9][0-9][0-9][0-9][0-9]$")
+    if zRE.match(term):
+        restaurants = Restaurant.objects.all().order_by('zipcode').order_by('street', 'number')
+        rs = []
+        for r in restaurants:
+            bool_dm = False
+            if r.cuisine2:
+                if r.cuisine3:
+                    cuisine = r.cuisine1 + ', ' + r.cuisine2 + ', ' + r.cuisine3
+                else:
+                    cuisine = r.cuisine1 + ', ' + r.cuisine2
+            else:
+                cuisine = r.cuisine1
+            if r.delivery_min != 0:
+                bool_dm = True
+            rs.append({'r':r.name, 'zipDist':abs(int(r.zipcode)-int(term)), 'rid':r.id, 's':r.street, 't':r.number, 'u':r.city, 'v':r.state, 'w':r.zipcode, 'x':cuisine, 'y':r.seamless, 'z':r.delivery_min, 'bool_dm':bool_dm})
+        rs = sorted(rs, key=lambda r: r['zipDist'])
+
+
+    #################
+    # City Search
+    ################
+    else:
+        rests = Restaurant.objects.filter(Q(city__icontains=term) | Q(street__icontains=term) | Q(name__icontains=term)).order_by('name')
+        rs = []
+        for r in rests:
+            bool_dm = False
+            if r.cuisine2:
+                if r.cuisine3:
+                    cuisine = r.cuisine1 + ', ' + r.cuisine2 + ', ' + r.cuisine3
+                else:
+                    cuisine = r.cuisine1 + ', ' + r.cuisine2
+            else:
+                cuisine = r.cuisine1
+            if r.delivery_min != 0:
+                bool_dm = True
+            rs.append({'r':r.name, 'rid':r.id, 's':r.street, 't':r.number, 'u':r.city, 'v':r.state, 'w':r.zipcode, 'x':cuisine, 'y':r.seamless, 'z':r.delivery_min, 'bool_dm':bool_dm})
+    
+    
+    if int(page) == 1:
+        rs_30 = rs[:30]
+    else:
+        low_index = 30*(int(page)-1)
+        high_index = 30* (int(page))
+        rs_30 = rs[low_index:high_index]
+    return render(request, 'search_results.html', {'rests':rs_30, 'num_rests':len(rs), 'page':int(page), 'page_mult30':int(page)*30, 'term':term})
 
 def dish(request, rid):
     ingred_list = []
@@ -165,6 +187,27 @@ def dish(request, rid):
         if 'done' in request.POST:
             dish = Item.objects.filter(rest_id=rid).filter(name=request.POST['ingred_dish'])[0]
             dish.valid = True;
+            cal = 0
+            gpro = 0
+            gfat = 0
+            gcarb = 0
+            gsug = 0
+            mgna = 0
+            for add in dish.ingredients.all():
+                ingred = Ingredient.objects.filter(id=add.ingred_id)[0]
+                amount = add.amount_grams
+                cal = cal + ingred.calories*amount
+                gpro = gpro + ingred.protein*amount
+                gfat = gfat + ingred.fat*amount
+                gcarb = gcarb + ingred.carbs*amount
+                gsug = gsug + ingred.sugar*amount
+                mgna = mgna + ingred.sodium*amount
+            dish.calories = cal
+            dish.protein = gpro
+            dish.fat = gfat
+            dish.carbs = gcarb
+            dish.sugar = gsug
+            dish.sodium = mgna
             dish.save()
             data = {'rid':rid}
             return HttpResponse(json.dumps(data), content_type="application/json")
@@ -206,7 +249,7 @@ def dish(request, rid):
             ingred_to_add = request.POST['ingred_to_add']
             amount = request.POST['amount']
             unit = request.POST['unit']
-            dish = Item.objects.filter(rest_id=rid).filter(name=request.POST['ingred_dish']).filter(valid=True)
+            dish = Item.objects.filter(rest_id=rid).filter(name=request.POST['ingred_dish'])
 
             if not ingred_to_add:
                 error = "Please search for and select (by clicking on) an ingredient. Then enter an amount, and click Add Ingredient."
@@ -241,6 +284,7 @@ def dish(request, rid):
                 i_t_a_id = i_t_a.values_list('id')[0][0]
                 
                 added_ingred_ids = dish.values_list('ingredients')
+
                 for ind in range(0, len(added_ingred_ids)):       
                     index = added_ingred_ids[ind][0]
                     if index != None:
@@ -256,6 +300,7 @@ def dish(request, rid):
                     addition = Addition(amount_grams=amnt_grams)
                     addition.ingred_id = i_t_a_id 
                     addition.save()     
+                    print dish[0]
                     dish[0].ingredients.add(addition)
 
 
@@ -326,6 +371,13 @@ def dish(request, rid):
 
     return render(request, 'nutri_form.html', {'ingred_list':ingred_list, 'error':error})
 
+def is_number(s):
+    try:
+        float(s)
+        return True
+    except ValueError:
+        return False
+
 def add_restaurant(request):
     error = ""
     rest_name = ""
@@ -334,6 +386,7 @@ def add_restaurant(request):
     c2 = ""
     c3 = ""
     seamless = ""
+    deliv_min = "0"
     num_street = ""
     city = ""
     state = "No Selection"
@@ -367,6 +420,8 @@ def add_restaurant(request):
         if not rest_name and not error:
             error = 'Please enter the name of your restaurant'
 
+
+       
         cuisine = request.POST.getlist('cuisine[]')
         if not cuisine and not error:
             error = 'Please enter a cuisine type'
@@ -379,14 +434,18 @@ def add_restaurant(request):
                     c3 = cuisine[2]
 
         seamless = request.POST['seamless']
-        
+
+        deliv_min = request.POST['deliv_min']
+        if not is_number(deliv_min) and not error:
+            error = "Please enter a valid Delivery Minimum"
+
         website = request.POST['website']
         zRE = re.compile("^.+\..{2,3}$")
         h = re.compile("^http:.*")
         hs = re.compile("^https:.*")
         w = re.compile("^www\..*")
         if not website and not error:
-            error = "Please enter a valid website"
+            error="Please enter a valid website"
         elif (not h.match(website)) and (not hs.match(website)):
             if w.match(website):
                 website = "http://" + website
@@ -394,11 +453,18 @@ def add_restaurant(request):
                 website = "http://www." + website
             elif not error:
                 error = "Please enter a valid website"
+            
 
-        yelp = request.POST['yelp']
+        
         zRE = re.compile("^.+yelp\..+$")
-        if not zRE.match(yelp):
-            error = "Please enter a valid yelp page"
+        jk = re.compile("^http:.*")
+        kk = re.compile("^https:.*")
+        lm = re.compile("^www\..*")
+        if (not jk.match(yelp)) and (not kk.match(yelp)):
+            if lm.match(yelp):
+                yelp = "http://" + yelp 
+            elif zRE.match(yelp):
+                yelp = "http://www." + yelp
 
         phone = request.POST['phone']
         zRE = re.compile("^(\+\d{1,2}\s)?\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4}$")
@@ -436,157 +502,32 @@ def add_restaurant(request):
             error = 'Please enter a valid 5 digit zip code'
 
         #opening times
-        rawTime = request.POST['MoOpen']
-        split = rawTime.split(':')
-        hr = split[0]
-        if hr == '12':
-            hr = '0'
-        mi = int(split[1].split(' ')[0])
-        if split[1].split(' ')[1] == 'pm':
-            hr = int(hr) + 12
-        MoOpen = datetime(2014, 3, 9, int(hr), mi)
-
-        rawTime = request.POST['TuOpen']
-        split = rawTime.split(':')
-        hr = split[0]
-        if hr == '12':
-            hr = '0'
-        mi = int(split[1].split(' ')[0])
-        if split[1].split(' ')[1] == 'pm':
-            hr = int(hr) + 12
-        TuOpen = datetime(2014, 3, 9, int(hr), mi)
-
-        rawTime = request.POST['WeOpen']
-        split = rawTime.split(':')
-        hr = split[0]
-        if hr == '12':
-            hr = '0'
-        mi = int(split[1].split(' ')[0])
-        if split[1].split(' ')[1] == 'pm':
-            hr = int(hr) + 12
-        WeOpen = datetime(2014, 3, 9, int(hr), mi)
-
-        rawTime = request.POST['ThOpen']
-        split = rawTime.split(':')
-        hr = split[0]
-        if hr == '12':
-            hr = '0'
-        mi = int(split[1].split(' ')[0])
-        if split[1].split(' ')[1] == 'pm':
-            hr = int(hr) + 12
-        ThOpen = datetime(2014, 3, 9, int(hr), mi)
-
-        rawTime = request.POST['FrOpen']
-        split = rawTime.split(':')
-        hr = split[0]
-        if hr == '12':
-            hr = '0'
-        mi = int(split[1].split(' ')[0])
-        if split[1].split(' ')[1] == 'pm':
-            hr = int(hr) + 12
-        FrOpen = datetime(2014, 3, 9, int(hr), mi)
-
-        rawTime = request.POST['SaOpen']
-        split = rawTime.split(':')
-        hr = split[0]
-        if hr == '12':
-            hr = '0'
-        mi = int(split[1].split(' ')[0])
-        if split[1].split(' ')[1] == 'pm':
-            hr = int(hr) + 12
-        SaOpen = datetime(2014, 3, 9, int(hr), mi)
-
-        rawTime = request.POST['SuOpen']
-        split = rawTime.split(':')
-        hr = split[0]
-        if hr == '12':
-            hr = '0'
-        mi = int(split[1].split(' ')[0])
-        if split[1].split(' ')[1] == 'pm':
-            hr = int(hr) + 12
-        SuOpen = datetime(2014, 3, 9, int(hr), mi)
-
-        #closing times
-        rawTime = request.POST['MoClose']
-        split = rawTime.split(':')
-        hr = split[0]
-        if hr == '12':
-            hr = '0'
-        mi = int(split[1].split(' ')[0])
-        if split[1].split(' ')[1] == 'pm':
-            hr = int(hr) + 12
-        MoClose = datetime(2014, 3, 9, int(hr), mi)
-
-        rawTime = request.POST['TuClose']
-        split = rawTime.split(':')
-        hr = split[0]
-        if hr == '12':
-            hr = '0'
-        mi = int(split[1].split(' ')[0])
-        if split[1].split(' ')[1] == 'pm':
-            hr = int(hr) + 12
-        TuClose = datetime(2014, 3, 9, int(hr), mi)
-
-        rawTime = request.POST['WeClose']
-        split = rawTime.split(':')
-        hr = split[0]
-        if hr == '12':
-            hr = '0'
-        mi = int(split[1].split(' ')[0])
-        if split[1].split(' ')[1] == 'pm':
-            hr = int(hr) + 12
-        WeClose = datetime(2014, 3, 9, int(hr), mi)
-
-        rawTime = request.POST['ThClose']
-        split = rawTime.split(':')
-        hr = split[0]
-        if hr == '12':
-            hr = '0'
-        mi = int(split[1].split(' ')[0])
-        if split[1].split(' ')[1] == 'pm':
-            hr = int(hr) + 12
-        ThClose = datetime(2014, 3, 9, int(hr), mi)
-
-        rawTime = request.POST['FrClose']
-        split = rawTime.split(':')
-        hr = split[0]
-        if hr == '12':
-            hr = '0'
-        mi = int(split[1].split(' ')[0])
-        if split[1].split(' ')[1] == 'pm':
-            hr = int(hr) + 12
-        FrClose = datetime(2014, 3, 9, int(hr), mi)
-
-        rawTime = request.POST['SaClose']
-        split = rawTime.split(':')
-        hr = split[0]
-        if hr == '12':
-            hr = '0'
-        mi = int(split[1].split(' ')[0])
-        if split[1].split(' ')[1] == 'pm':
-            hr = int(hr) + 12
-        SaClose = datetime(2014, 3, 9, int(hr), mi)
-
-        rawTime = request.POST['SuClose']
-        split = rawTime.split(':')
-        hr = split[0]
-        if hr == '12':
-            hr = '0'
-        mi = int(split[1].split(' ')[0])
-        if split[1].split(' ')[1] == 'pm':
-            hr = int(hr) + 12
-        SuClose = datetime(2014, 3, 9, int(hr), mi)
+        MoOpen = request.POST['MoOpen']
+        TuOpen = request.POST['TuOpen']
+        WeOpen = request.POST['WeOpen']
+        ThOpen = request.POST['ThOpen']
+        FrOpen = request.POST['FrOpen']
+        SaOpen = request.POST['SaOpen']
+        SuOpen = request.POST['SuOpen']
+        
+        MoClose = request.POST['MoClose']
+        TuClose = request.POST['TuClose']
+        WeClose = request.POST['WeClose']
+        ThClose = request.POST['ThClose']
+        FrClose = request.POST['FrClose']
+        SaClose = request.POST['SaClose']
+        SuClose = request.POST['SuClose']
 
 
         if not error:
-            r = Restaurant(name=rest_name, cuisine1=c1, cuisine2=c2, cuisine3=c3, seamless=seamless, number=num, street=street, city=city, state=state, zipcode=zipcode, website=website, yelp=yelp, phone=phoneNum, moopen=MoOpen, tuopen=TuOpen, weopen=WeOpen, thopen=ThOpen, fropen=FrOpen, saopen=SaOpen, suopen=SuOpen, moclose=MoClose, tuclose=TuClose, weclose=WeClose, thclose=ThClose, frclose=FrClose, saclose=SaClose, suclose=SuClose, user=request.user)
+            r = Restaurant(name=rest_name, cuisine1=c1, cuisine2=c2, cuisine3=c3, seamless=seamless, delivery_min=deliv_min, number=num, street=street, city=city, state=state, zipcode=zipcode, website=website, yelp=yelp, phone=phoneNum, moopen=MoOpen, tuopen=TuOpen, weopen=WeOpen, thopen=ThOpen, fropen=FrOpen, saopen=SaOpen, suopen=SuOpen, moclose=MoClose, tuclose=TuClose, weclose=WeClose, thclose=ThClose, frclose=FrClose, saclose=SaClose, suclose=SuClose, user=request.user)
             r.save()
             rid = r.id
             print rid
             return HttpResponseRedirect('/restaurant_profile/' + str(rid))
+    
 
-
-    return render(request, 'add_rest.html', {'error':error, 'cuisine':cuisine, 'seamless':seamless, 'rest_name':rest_name, 'num_street':num_street, 'city':city, 'state':state, 'zipcode':zipcode, 'website':website, 'yelp':yelp, 'phone':phone, 'MoOpen':MoOpen, 'TuOpen':TuOpen, 'WeOpen':WeOpen, 'ThOpen':ThOpen, 'FrOpen':FrOpen, 'SaOpen':SaOpen, 'SuOpen':SuOpen, 'MoClose':MoClose, 'TuClose':TuClose, 'WeClose':WeClose, 'ThClose':ThClose, 'FrClose':FrClose, 'SaClose':SaClose, 'SuClose':SuClose})
+    return render(request, 'add_rest.html', {'error':error, 'cuisine':cuisine, 'seamless':seamless, 'deliv_min':deliv_min, 'rest_name':rest_name, 'num_street':num_street, 'city':city, 'state':state, 'zipcode':zipcode, 'website':website, 'yelp':yelp, 'phone':phone, 'MoOpen':MoOpen, 'TuOpen':TuOpen, 'WeOpen':WeOpen, 'ThOpen':ThOpen, 'FrOpen':FrOpen, 'SaOpen':SaOpen, 'SuOpen':SuOpen, 'MoClose':MoClose, 'TuClose':TuClose, 'WeClose':WeClose, 'ThClose':ThClose, 'FrClose':FrClose, 'SaClose':SaClose, 'SuClose':SuClose})
     
 def restaurant_profile(request, rid):
     MoOpen = ""
@@ -603,12 +544,15 @@ def restaurant_profile(request, rid):
     SaClose = ""
     SuOpen = ""
     SuClose = ""   
-    print rid
-    print request.user.username
+
     
     my_prof = False
     no_seamless = False
-
+    no_yelp = False
+    jazz_man = False
+    town_center = False
+   
+    
     restaurant = Restaurant.objects.filter(id=rid)[0]
     if restaurant.user.id == request.user.id:
         my_prof = True
@@ -618,7 +562,18 @@ def restaurant_profile(request, rid):
 
     if restaurant.seamless == 'No':
         no_seamless = True
-
+    
+    if restaurant.yelp == "":
+        no_yelp = True
+    
+    if "Jazzman's Cafe" in restaurant.name:
+        jazz_man = True
+    print 'This is jazz_man', jazz_man
+  
+    if "California Pizza Kitchen" in restaurant.name:
+        town_center = True
+    print 'This is town_center', town_center
+    
     website = str(restaurant.website)
     yelp = str(restaurant.yelp)
     address = str(restaurant.number) + ' ' + str(restaurant.street)
@@ -628,167 +583,43 @@ def restaurant_profile(request, rid):
     if len(phone) == 10:
         phone = '(' + phone[0:3] + ') ' + phone[3:6] + '-' + phone[6:10]
     
-    hr = restaurant.moopen.hour
-    mi = restaurant.moopen.minute
-    if str(mi) == '0':
-        mi = '00'
-    if hr == 0:
-        MoOpen = 12 + str(':') + str(mi) + ' am'
-    elif hr > 12:
-        MoOpen = str(hr - 12) + str(':') + str(mi) + ' pm'
-    else:
-        MoOpen = str(hr) + str(':') + str(mi) + ' am'
-    
-    hr = restaurant.tuopen.hour
-    mi = restaurant.tuopen.minute
-    if str(mi) == '0':
-        mi = '00'
-    if hr == 0:
-        TuOpen = 12 + str(':') + str(mi) + ' am'
-    elif hr > 12:
-        TuOpen = str(hr - 12) + str(':') + str(mi) + ' pm'
-    else:
-        TuOpen = str(hr) + str(':') + str(mi) + ' am'
+    MoOpen = restaurant.moopen
+    TuOpen = restaurant.tuopen
+    WeOpen = restaurant.weopen
+    ThOpen = restaurant.thopen
+    FrOpen = restaurant.fropen
+    SaOpen = restaurant.saopen
+    SuOpen = restaurant.suopen
 
-    hr = restaurant.weopen.hour
-    mi = restaurant.weopen.minute
-    if str(mi) == '0':
-        mi = '00'
-    if hr == 0:
-        WeOpen = 12 + str(':') + str(mi) + ' am'
-    elif hr > 12:
-        WeOpen = str(hr - 12) + str(':') + str(mi) + ' pm'
-    else:
-        WeOpen = str(hr) + str(':') + str(mi) + ' am'
+    MoClose = restaurant.moclose
+    TuClose = restaurant.tuclose
+    WeClose = restaurant.weclose
+    ThClose = restaurant.thclose
+    FrClose = restaurant.frclose
+    SaClose = restaurant.saclose
+    SuClose = restaurant.suclose
 
-    hr = restaurant.thopen.hour
-    mi = restaurant.thopen.minute
-    if str(mi) == '0':
-        mi = '00'
-    if hr == 0:
-        ThOpen = 12 + str(':') + str(mi) + ' am'
-    elif hr > 12:
-        ThOpen = str(hr - 12) + str(':') + str(mi) + ' pm'
-    else:
-        ThOpen = str(hr) + str(':') + str(mi) + ' am'
-    
-    hr = restaurant.fropen.hour
-    mi = restaurant.fropen.minute
-    if str(mi) == '0':
-        mi = '00'
-    if hr == 0:
-        FrOpen = 12 + str(':') + str(mi) + ' am'
-    elif hr > 12:
-        FrOpen = str(hr - 12) + str(':') + str(mi) + ' pm'
-    else:
-        FrOpen = str(hr) + str(':') + str(mi) + ' am'
-    
-    hr = restaurant.saopen.hour
-    mi = restaurant.saopen.minute
-    if str(mi) == '0':
-        mi = '00'
-    if hr == 0:
-        SaOpen = 12 + str(':') + str(mi) + ' am'
-    elif hr > 12:
-        SaOpen = str(hr - 12) + str(':') + str(mi) + ' pm'
-    else:
-        SaOpen = str(hr) + str(':') + str(mi) + ' am'
-    
-    hr = restaurant.suopen.hour
-    mi = restaurant.suopen.minute
-    if str(mi) == '0':
-        mi = '00'
-    if hr == 0:
-        SuOpen = 12 + str(':') + str(mi) + ' am'
-    elif hr > 12:
-        SuOpen = str(hr - 12) + str(':') + str(mi) + ' pm'
-    else:
-        SuOpen = str(hr) + str(':') + str(mi) + ' am'
 
-    #closing times
-    hr = restaurant.moclose.hour
-    mi = restaurant.moclose.minute
-    if str(mi) == '0':
-        mi = '00'
-    if hr == 0:
-        MoClose = 12 + str(':') + str(mi) + ' am'
-    elif hr > 12:
-        MoClose = str(hr - 12) + str(':') + str(mi) + ' pm'
-    else:
-        MoClose = str(hr) + str(':') + str(mi) + ' am'
+    menu = Item.objects.filter(rest_id=rid).filter(valid=True).order_by('-calories')
     
-    hr = restaurant.tuclose.hour
-    mi = restaurant.tuclose.minute
-    if str(mi) == '0':
-        mi = '00'
-    if hr == 0:
-        TuClose = 12 + str(':') + str(mi) + ' am'
-    elif hr > 12:
-        TuClose = str(hr - 12) + str(':') + str(mi) + ' pm'
-    else:
-        TuClose = str(hr) + str(':') + str(mi) + ' am'
 
-    hr = restaurant.weclose.hour
-    mi = restaurant.weclose.minute
-    if str(mi) == '0':
-        mi = '00'
-    if hr == 0:
-        WeClose = 12 + str(':') + str(mi) + ' am'
-    elif hr > 12:
-        WeClose = str(hr - 12) + str(':') + str(mi) + ' pm'
-    else:
-        WeClose = str(hr) + str(':') + str(mi) + ' am'
-
-    hr = restaurant.thclose.hour
-    mi = restaurant.thclose.minute
-    if str(mi) == '0':
-        mi = '00'
-    if hr == 0:
-        ThClose = 12 + str(':') + str(mi) + ' am'
-    elif hr > 12:
-        ThClose = str(hr - 12) + str(':') + str(mi) + ' pm'
-    else:
-        ThClose = str(hr) + str(':') + str(mi) + ' am'
-    
-    hr = restaurant.frclose.hour
-    mi = restaurant.frclose.minute
-    if str(mi) == '0':
-        mi = '00'
-    if hr == 0:
-        FrClose = 12 + str(':') + str(mi) + ' am'
-    elif hr > 12:
-        FrClose = str(hr - 12) + str(':') + str(mi) + ' pm'
-    else:
-        FrClose = str(hr) + str(':') + str(mi) + ' am'
-    
-    hr = restaurant.saclose.hour
-    mi = restaurant.saclose.minute
-    if str(mi) == '0':
-        mi = '00'
-    if hr == 0:
-        SaClose = 12 + str(':') + str(mi) + ' am'
-    elif hr > 12:
-        SaClose = str(hr - 12) + str(':') + str(mi) + ' pm'
-    else:
-        SaClose = str(hr) + str(':') + str(mi) + ' am'
-    
-    hr = restaurant.suclose.hour
-    mi = restaurant.suclose.minute
-    if str(mi) == '0':
-        mi = '00'
-    if hr == 0:
-        SuClose = 12 + str(':') + str(mi) + ' am'
-    elif hr > 12:
-        SuClose = str(hr - 12) + str(':') + str(mi) + ' pm'
-    else:
-        SuClose = str(hr) + str(':') + str(mi) + ' am'
-
-    menu = Item.objects.filter(rest_id=rid).filter(valid=True)
-    print menu
-    strings = []
-
+    print 'Header generated'
 
     for item in menu:
+        cal = 0
+        if item.calories == 0:        
+            for add in item.ingredients.all():
+                ingred = Ingredient.objects.filter(id=add.ingred_id)[0]
+                amount = add.amount_grams
+                cal = cal + ingred.calories*amount
+            item.calories = cal
+            item.save()
+    print 'items Cal Sorted'
+
+
+    table = []
+    for item in menu:
+        strings = []
         price = '$' + str(item.price)
         cal = 0
         gpro = 0
@@ -798,17 +629,31 @@ def restaurant_profile(request, rid):
         mgna = 0
         description = str(item.description)
 
-        for add in item.ingredients.all():
-            ingred = Ingredient.objects.filter(id=add.ingred_id)[0]
-            amount = add.amount_grams
-            print ingred
-            cal = cal + ingred.calories*amount
-            gpro = gpro + ingred.protein*amount
-            gfat = gfat + ingred.fat*amount
-            gcarb = gcarb + ingred.carbs*amount
-            gsug = gsug + ingred.sugar*amount
-            mgna = mgna + ingred.sodium*amount
-        
+        if item.protein == - 1:
+            for add in item.ingredients.all():
+                ingred = Ingredient.objects.filter(id=add.ingred_id)[0]
+                amount = add.amount_grams
+                cal = cal + ingred.calories*amount
+                gpro = gpro + ingred.protein*amount
+                gfat = gfat + ingred.fat*amount
+                gcarb = gcarb + ingred.carbs*amount
+                gsug = gsug + ingred.sugar*amount
+                mgna = mgna + ingred.sodium*amount
+            item.calories = cal
+            item.protein = gpro
+            item.fat = gfat
+            item.carbs = gcarb
+            item.sugar = gsug
+            item.sodium = mgna
+            item.save()
+        else: 
+            cal = item.calories
+            gpro = item.protein
+            gfat = item.fat
+            gcarb = item.carbs
+            gsug = item.sugar
+            mgna = item.sodium
+
         calbyTen = cal/10
         calbyTen = round(calbyTen)
         mgnabyTen = mgna/10
@@ -816,47 +661,70 @@ def restaurant_profile(request, rid):
         
         
         cal = calbyTen*10
-        mgna = mgnabyTen*10
-        strings.append(item.name)
+        mgna = mgnabyTen*10 
         strings.append("%d" % cal)
         strings.append("%d" % gpro)
         strings.append("%d" % gfat)
         strings.append("%d" % gcarb)
         strings.append("%d" % gsug)
-        strings.append("%d" % mgna)
+        strings.append("%d (%d%s)" % (mgna, (100*mgna)/2500, '%'))
         strings.append(price)
         strings.append(description)
-      
-    print strings
+        table.append({'name':item.name, 'strings':strings})
 
+    print 'Strings generated'
+    print 'this is my prof', my_prof
 
     if request.method == 'POST':
         if 'delete_key' in request.POST:
-            print request.POST['delete_key']
             delete_item = Item.objects.filter(rest_id=rid).filter(valid=True).filter(name=request.POST['delete_key'])[0]
-            print delete_item
             for add in delete_item.ingredients.all():
-                print add.id
                 add.delete()
             delete_item.delete()
 
-            return render(request, 'rest_profile.html', {'no_seamless':no_seamless, 'hits':restaurant.hits, 'my_prof':my_prof, 'uname':request.user.username, 'rest':restaurant, 'strings':strings, 'address':address, 'website':website, 'yelp':yelp, 'csz':city_st_zip, 'phone':phone, \
+            return render(request, 'rest_profile.html', {'no_yelp':no_yelp, 'no_seamless':no_seamless, 'hits':restaurant.hits, 'my_prof':my_prof, 'uname':request.user.username, 'rest':restaurant, 'table':table, 'address':address, 'website':website, 'yelp':yelp, 'csz':city_st_zip, 'phone':phone, \
             'MoOpen':MoOpen, 'TuOpen':TuOpen, 'WeOpen':WeOpen, 'ThOpen':ThOpen, 'FrOpen':FrOpen, 'SaOpen':SaOpen, 'SuOpen':SuOpen, 'MoClose':MoClose, 'TuClose':TuClose, 'WeClose':WeClose, 'ThClose':ThClose, 'FrClose':FrClose, 'SaClose':SaClose, 'SuClose':SuClose})
 
-        if 'ingred_dish' in request.POST:
-            print '*****************'
-            print request.POST['ingred_dish']
-            item = Item.objects.filter(rest_id=rid).filter(valid=True).filter(name=request.POST['ingred_dish'])[0]
-            ingreds = []
-            for i in item.ingredients.all():
-                ingreds.append(str(i.ingred) + ' ' + str(i.amount_grams) + 'g')
-            print ingreds
+        if 'delete_ingred' in request.POST:
+            dish = Item.objects.filter(rest_id=rid).filter(valid=True).filter(name=request.POST['dish'])[0]
+            cal = 0
+            for add in dish.ingredients.all():
+                ingred = Ingredient.objects.filter(id=add.ingred_id)[0]
+                amount = add.amount_grams
+            
+                if str(add.ingred) == str(request.POST['delete_ingred']):
+                    add.delete()
+                else:
+                    cal = cal + ingred.calories*amount
+                    gpro = gpro + ingred.protein*amount
+                    gfat = gfat + ingred.fat*amount
+                    gcarb = gcarb + ingred.carbs*amount
+                    gsug = gsug + ingred.sugar*amount
+                    mgna = mgna + ingred.sodium*amount
+            dish.calories = cal
+            dish.protein = gpro
+            dish.fat = gfat
+            dish.carbs = gcarb
+            dish.sugar = gsug
+            dish.sodium = mgna
+            dish.save()
 
+            
+            
+            return render(request, 'rest_profile.html', {'no_yelp':no_yelp, 'no_seamless':no_seamless, 'hits':restaurant.hits, 'my_prof':my_prof, 'uname':request.user.username, 'rest':restaurant, 'table':table, 'address':address, 'website':website, 'yelp':yelp, 'csz':city_st_zip, 'phone':phone, \
+            'MoOpen':MoOpen, 'TuOpen':TuOpen, 'WeOpen':WeOpen, 'ThOpen':ThOpen, 'FrOpen':FrOpen, 'SaOpen':SaOpen, 'SuOpen':SuOpen, 'MoClose':MoClose, 'TuClose':TuClose, 'WeClose':WeClose, 'ThClose':ThClose, 'FrClose':FrClose, 'SaClose':SaClose, 'SuClose':SuClose})
+
+
+        if 'ingred_dish' in request.POST:
+            item = Item.objects.filter(rest_id=rid).filter(valid=True).filter(name=request.POST['ingred_dish'])[0]
+            ingreds = ""
+            for i in item.ingredients.all():
+                ingreds += '<span class="glyphicon glyphicon-remove-circle" onClick="removeIngred(\'' + str(i.ingred) + '\', \'' + request.POST['ingred_dish'] + '\')"></span>' + str(i.ingred) + ' ' + str(i.amount_grams) + 'g' + '<br>'
             data = {'ingreds':ingreds, 'dish':request.POST['ingred_dish']}
             return HttpResponse(json.dumps(data), content_type="application/json")
 
         return HttpResponseRedirect('/add_dish/' + rid)
     
-    return render(request, 'rest_profile.html', {'no_seamless':no_seamless, 'hits':restaurant.hits, 'my_prof':my_prof, 'uname':request.user.username, 'rest':restaurant, 'strings':strings, 'address':address, 'website':website, 'yelp':yelp, 'csz':city_st_zip, 'phone':phone, \
+    return render(request, 'rest_profile.html', {'no_yelp':no_yelp, 'no_seamless':no_seamless, 'hits':restaurant.hits, 'my_prof':my_prof, 'jazz_man':jazz_man, 'uname':request.user.username, 'rest':restaurant, 'table':table, 'address':address, 'website':website, 'yelp':yelp, 'csz':city_st_zip, 'phone':phone, \
         'MoOpen':MoOpen, 'TuOpen':TuOpen, 'WeOpen':WeOpen, 'ThOpen':ThOpen, 'FrOpen':FrOpen, 'SaOpen':SaOpen, 'SuOpen':SuOpen, 'MoClose':MoClose, 'TuClose':TuClose, 'WeClose':WeClose, 'ThClose':ThClose, 'FrClose':FrClose, 'SaClose':SaClose, 'SuClose':SuClose})
 
