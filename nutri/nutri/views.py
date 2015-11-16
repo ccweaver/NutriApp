@@ -159,12 +159,12 @@ def search_results(request, term, page=1):
     
     
     if int(page) == 1:
-        rs_35 = rs[:35]
+        rs_40 = rs[:40]
     else:
-        low_index = 35*(int(page)-1)
-        high_index = 35* (int(page))
-        rs_35 = rs[low_index:high_index]
-    return render(request, 'search_results.html', {'rests':rs_35, 'num_rests':len(rs), 'page':int(page), 'page_mult35':int(page)*35, 'term':term})
+        low_index = 40*(int(page)-1)
+        high_index = 40* (int(page))
+        rs_40 = rs[low_index:high_index]
+    return render(request, 'search_results.html', {'rests':rs_40, 'num_rests':len(rs), 'page':int(page), 'page_mult40':int(page)*40, 'term':term})
 
 def dish(request, rid):
     ingred_list = []
