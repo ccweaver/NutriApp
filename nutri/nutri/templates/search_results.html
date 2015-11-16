@@ -134,13 +134,13 @@ Hey! There is nothing listed for your search, but it might be because the name o
 {% if page != 1 %}
 <a href='/search/{{term}}/{{page|add:-1}}' style="font-size:26px; color:#1500fb;">Previous page</a>&nbsp;&nbsp;&nbsp;
 {%endif%}
-{% if num_rests < page_mult40 %}
-Showing results {{page_mult40|add:-39}} - {{num_rests}} of {{num_rests}}
+{% if num_rests < page_mult30 %}
+Showing results {{page_mult30|add:-29}} - {{num_rests}} of {{num_rests}}
 {% else %} 
-Showing results {{page_mult40|add:-39}} - {{page_mult40}} of {{num_rests}}
+Showing results {{page_mult30|add:-29}} - {{page_mult30}} of {{num_rests}}
 
 {%endif%}
-{% if num_rests >= page_mult39 %}
+{% if num_rests >= page_mult29 %}
 &nbsp;&nbsp;&nbsp;<a href='/search/{{term}}/{{page|add:1}}' style="font-size:26px; color:#1500fb;">Next page</a>
 {%endif%}
 
