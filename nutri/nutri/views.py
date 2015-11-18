@@ -236,7 +236,7 @@ def dish(request, rid):
                     ingreds_sorted.append(x[0])
 
             elif not ingred_list:
-                ingreds_sorted = ['Sorry, no ingredient found']
+                ingreds_sorted = ['Sorry, no ingredient found. If your search item was plural, try making it singular.']
             if not request.POST['term']:
                 ingreds_sorted = []
             
