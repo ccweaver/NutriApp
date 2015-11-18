@@ -26,12 +26,12 @@ return false;
 };
 
 //deleting an ingred
-//function removeIngred(ingred, key) {
+function removeIngred(ingred, key) {
 $.ajax(
     {
         type: "post",
         url: "",
-        data: {delete_ingred:ingred, dish:key, csrfmiddlewaretoken:document.getElementsByName('csrfmiddlewaretoken')[0].value},
+        //data: {delete_ingred:ingred, dish:key, csrfmiddlewaretoken:document.getElementsByName('csrfmiddlewaretoken')[0].value},
         success: function (data)
         {
           location.reload();
