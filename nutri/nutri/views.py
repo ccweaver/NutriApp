@@ -551,7 +551,7 @@ def restaurant_profile(request, rid):
     no_yelp = False
     jazz_man = False
     town_center = False
-   
+    claimed_it = False
     
     restaurant = Restaurant.objects.filter(id=rid)[0]
     if restaurant.user.id == request.user.id:
@@ -575,8 +575,8 @@ def restaurant_profile(request, rid):
     print 'This is town_center', town_center
     
     if "Del Frisco's" in restaurant.name:
-        claimed = True
-    print 'This is claimed', claimed
+        claimed_it = True
+    print 'This is claimed', claimed_it
     
     website = str(restaurant.website)
     yelp = str(restaurant.yelp)
