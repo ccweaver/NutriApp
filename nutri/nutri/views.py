@@ -582,6 +582,9 @@ def restaurant_profile(request, rid):
         claimed_it = True
     print 'This is claimed_it', claimed_it
     
+    if "Hudson Grille" in restaurant.name:
+        claimed_it = True
+    
     website = str(restaurant.website)
     yelp = str(restaurant.yelp)
     address = str(restaurant.number) + ' ' + str(restaurant.street)
