@@ -296,11 +296,11 @@ function showModal()
 <h4><span>To check out this restaurant on Yelp: </span><a onclick='redirect("{{yelp}}")'>{{yelp}}</a> </h4>
 {%endif%}
 <div class="dizclaimer">
-{%if claimed_it%}
+{% if claimed_it %}
 If you have food allergies please check with the restuarant when ordering, Calospot cannot verify if the dishes are allergen-free.
-{%else%}
+{% else %}
 At this moment the above resutarant is not associated with Calospot in any way. Nutrition calculations for this menu are made by the Calospot team and not by the restaurant, so variance in ingredients/serving size may occur.  If you have food allergies please check with the restuarant when ordering, Calospot cannot verify if the dishes are allergen-free. Restaurant managers email info@calospot.com to take over this account.
-{%endif%}
+{% endif %}
 </div>
 </div>
 </div>
