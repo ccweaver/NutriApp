@@ -576,7 +576,11 @@ def restaurant_profile(request, rid):
     
     if "Del Frisco's" in restaurant.name:
         claimed_it = True
-    print 'This is claimed', claimed_it
+    print 'This is claimed_it', claimed_it
+    
+    if "Soosh" in restaurant.name:
+        claimed_it = True
+    print 'This is claimed_it', claimed_it
     
     website = str(restaurant.website)
     yelp = str(restaurant.yelp)
