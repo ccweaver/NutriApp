@@ -574,6 +574,10 @@ def restaurant_profile(request, rid):
         town_center = True
     print 'This is town_center', town_center
     
+    if "Del Frisco's" in restaurant.name:
+        claimed = True
+    print 'This is claimed', claimed
+    
     website = str(restaurant.website)
     yelp = str(restaurant.yelp)
     address = str(restaurant.number) + ' ' + str(restaurant.street)
