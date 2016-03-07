@@ -236,7 +236,7 @@ def dish(request, rid):
                     ingreds_sorted.append(x[0])
 
             elif not ingred_list:
-                ingreds_sorted = ['Sorry, no ingredient found']
+                ingreds_sorted = ['Sorry, no ingredient found. If your search item was plural, try making it singular.']
             if not request.POST['term']:
                 ingreds_sorted = []
             
@@ -551,7 +551,7 @@ def restaurant_profile(request, rid):
     no_yelp = False
     jazz_man = False
     town_center = False
-   
+    claimed_it = False
     
     restaurant = Restaurant.objects.filter(id=rid)[0]
     if restaurant.user.id == request.user.id:
@@ -573,6 +573,17 @@ def restaurant_profile(request, rid):
     if "California Pizza Kitchen" in restaurant.name:
         town_center = True
     print 'This is town_center', town_center
+    
+    if "Del Frisco's" in restaurant.name:
+        claimed_it = True
+    print 'This is claimed_it', claimed_it
+    
+    if "Soosh" in restaurant.name:
+        claimed_it = True
+    print 'This is claimed_it', claimed_it
+    
+    if "Hudson Grille" in restaurant.name:
+        claimed_it = True
     
     website = str(restaurant.website)
     yelp = str(restaurant.yelp)
@@ -719,12 +730,12 @@ def restaurant_profile(request, rid):
             item = Item.objects.filter(rest_id=rid).filter(valid=True).filter(name=request.POST['ingred_dish'])[0]
             ingreds = ""
             for i in item.ingredients.all():
-                ingreds += '<span class="glyphicon glyphicon-remove-circle" onClick="removeIngred(\'' + str(i.ingred) + '\', \'' + request.POST['ingred_dish'] + '\')"></span>' + str(i.ingred) + ' ' + str(i.amount_grams) + 'g' + '<br>'
+                ingreds += '<span class="glyphicon glyphicon-remove-circl" onClick="removeIngred(\'' + str(i.ingred) + '\', \'' + request.POST['ingred_dish'] + '\')"></span>' + str(i.ingred) + ' ' + str(i.amount_grams) + 'g' + '<br>'
             data = {'ingreds':ingreds, 'dish':request.POST['ingred_dish']}
             return HttpResponse(json.dumps(data), content_type="application/json")
 
         return HttpResponseRedirect('/add_dish/' + rid)
     
-    return render(request, 'rest_profile.html', {'no_yelp':no_yelp, 'no_seamless':no_seamless, 'hits':restaurant.hits, 'my_prof':my_prof, 'jazz_man':jazz_man, 'uname':request.user.username, 'rest':restaurant, 'table':table, 'address':address, 'website':website, 'yelp':yelp, 'csz':city_st_zip, 'phone':phone, \
+    return render(request, 'rest_profile.html', {'no_yelp':no_yelp, 'no_seamless':no_seamless, 'hits':restaurant.hits, 'my_prof':my_prof, 'jazz_man':jazz_man, 'claimed_it':claimed_it, 'uname':request.user.username, 'rest':restaurant, 'table':table, 'address':address, 'website':website, 'yelp':yelp, 'csz':city_st_zip, 'phone':phone, \
         'MoOpen':MoOpen, 'TuOpen':TuOpen, 'WeOpen':WeOpen, 'ThOpen':ThOpen, 'FrOpen':FrOpen, 'SaOpen':SaOpen, 'SuOpen':SuOpen, 'MoClose':MoClose, 'TuClose':TuClose, 'WeClose':WeClose, 'ThClose':ThClose, 'FrClose':FrClose, 'SaClose':SaClose, 'SuClose':SuClose})
 

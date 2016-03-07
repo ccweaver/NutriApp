@@ -31,7 +31,7 @@ $.ajax(
     {
         type: "post",
         url: "",
-        data: {delete_ingred:ingred, dish:key, csrfmiddlewaretoken:document.getElementsByName('csrfmiddlewaretoken')[0].value},
+        //data: {delete_ingred:ingred, dish:key, csrfmiddlewaretoken:document.getElementsByName('csrfmiddlewaretoken')[0].value},
         success: function (data)
         {
           location.reload();
@@ -150,6 +150,7 @@ function showModal()
     
     .notice{
     	padding-bottom:3%;
+    	font-size:18px;
     }
     
     .dizclaimer{
@@ -277,7 +278,7 @@ function showModal()
          name="Submit">
 </form>
 <div class="notice">
-<i>Add as many dishes as you like! As long as they are under 600 calories. If you create dish and it comes out to be over 600 calories, please remove, adjust ingredients in dish, repost.</i> 
+<i>Restaurant Managers: Add as many dishes as you like! As long as they are under 600 calories. <br><b>If you create dish and it comes out to be over 600 calories, delete and repost using only half the amount of each ingredient, and simply write "1/2 serving" in dish description.</b> Email info@calospot.com for help/questions.</i> 
 </div>
 {%endif%}
 <div class="lastone">
@@ -295,7 +296,11 @@ function showModal()
 <h4><span>To check out this restaurant on Yelp: </span><a onclick='redirect("{{yelp}}")'>{{yelp}}</a> </h4>
 {%endif%}
 <div class="dizclaimer">
-Nutrition calculations for this menu are made by the Calospot team. Slight variance in ingredients/serving size may occur. Restaurant managers email info@calospot.com to take over this account.
+{% if claimed_it %}
+If you have food allergies please check with the restuarant when ordering, Calospot cannot verify if the dishes are allergen-free.
+{% else %}
+At this moment the above resutarant is not associated with Calospot in any way. Nutrition calculations for this menu are made by the Calospot team and not by the restaurant, so variance in ingredients/serving size may occur.  If you have food allergies please check with the restuarant when ordering, Calospot cannot verify if the dishes are allergen-free. Restaurant managers email info@calospot.com to take over this account.
+{% endif %}
 </div>
 </div>
 </div>
