@@ -9,12 +9,12 @@ class Item(models.Model):
 	ingredients = models.ManyToManyField(Addition, blank=True)
 	valid = models.BooleanField(default=False)
 	description = models.TextField()
-	calories = models.DecimalField(max_digits=10, decimal_places=2, default=0)
-	protein = models.DecimalField(max_digits=10, decimal_places=2, default=-1)
-	fat = models.DecimalField(max_digits=10, decimal_places=2, default=-1)
-	carbs = models.DecimalField(max_digits=10, decimal_places=2, default=-1)
-	sugar = models.DecimalField(max_digits=10, decimal_places=2, default=-1)
-	sodium = models.DecimalField(max_digits=10, decimal_places=2, default=-1)
+	calories = models.DecimalField(max_digits=10, decimal_places=2, default=0, null=True)
+	protein = models.DecimalField(max_digits=10, decimal_places=2, default=-1, null=True)
+	fat = models.DecimalField(max_digits=10, decimal_places=2, default=-1, null=True)
+	carbs = models.DecimalField(max_digits=10, decimal_places=2, default=-1, null=True)
+	sugar = models.DecimalField(max_digits=10, decimal_places=2, default=-1, null=True)
+	sodium = models.DecimalField(max_digits=10, decimal_places=2, default=-1, null=True)
 
 	def __unicode__(self):
 		return u'%s' % (self.name)

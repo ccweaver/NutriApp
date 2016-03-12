@@ -47,6 +47,7 @@ INSTALLED_APPS = (
     'Restaurant',
     'menu_items',
     'added_ingreds',
+    'predetermined_vals',
 )
 
 MIDDLEWARE_CLASSES = (
