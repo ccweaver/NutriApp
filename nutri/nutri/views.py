@@ -6,6 +6,7 @@ from django.shortcuts import render
 from ingred_table.models import Ingredient
 from Restaurant.models import Restaurant
 from menu_items.models import Item
+from predetermined_vals import PreValue
 from added_ingreds.models import Addition
 import re, json
 from django.db.models import Q
