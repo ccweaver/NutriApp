@@ -6,7 +6,7 @@ from django.shortcuts import render
 from ingred_table.models import Ingredient
 from Restaurant.models import Restaurant
 from menu_items.models import Item
-from predetermined_vals import PreValue
+from predetermined_vals.models import PreValue
 from added_ingreds.models import Addition
 import re, json
 from django.db.models import Q
@@ -613,7 +613,6 @@ def restaurant_profile(request, rid):
 
 
     menu = Item.objects.filter(rest_id=rid).filter(valid=True).order_by('-calories')
-    
 
     print 'Header generated'
 
@@ -641,7 +640,8 @@ def restaurant_profile(request, rid):
         mgna = 0
         description = str(item.description)
 
-        if item.protein == - 1:
+        print item.protein
+        if item.protein == - 1 or item.protein == None:
             for add in item.ingredients.all():
                 ingred = Ingredient.objects.filter(id=add.ingred_id)[0]
                 amount = add.amount_grams
