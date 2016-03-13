@@ -130,6 +130,7 @@ def neighborhood_list(request, city):
 
 def search_results(request, term, page=1):
     term = term.rstrip()
+    term = term.replace('_', ' ')
     print "Searching for: " + term
     print "Page: " + str(page) 
 
