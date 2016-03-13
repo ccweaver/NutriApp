@@ -15,6 +15,7 @@ class Item(models.Model):
 	carbs = models.DecimalField(max_digits=10, decimal_places=2, default=-1, null=True)
 	sugar = models.DecimalField(max_digits=10, decimal_places=2, default=-1, null=True)
 	sodium = models.DecimalField(max_digits=10, decimal_places=2, default=-1, null=True)
+	likes = models.IntegerField(default = 0)
 
 	def __unicode__(self):
 		return u'%s' % (self.name)

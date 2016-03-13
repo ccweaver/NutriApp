@@ -112,6 +112,22 @@ def sign_in(request):
 
     return render(request, 'sign_in.html', {'form':uform, 'invalid':invalid, 'error':error, 'is_user':is_user, 'user':request.user.username})
 
+def neighborhood_list(request, city):
+    if len(Restaurant.objects.filter(city = city)) == 0:
+        return HttpResponseForbidden()
+    restaurants = Restaurant.objects.filter(city = city).order_by('neighborhood')
+    ns =[]
+    for r in restaurants:
+        if r.neighborhood not in ns:
+            ns.append(r.neighborhood)
+    nsDictList = []
+    for n in ns:
+        if n == '':
+            nsDictList.append({'n':"All Neighborhoods", 'n_':city})
+        else:
+            nsDictList.append({'n':n, 'n_':n.replace(' ', '_')})
+    return render(request, 'neighborhoods.html', {'neighborhoods':nsDictList, 'city': city})
+
 def search_results(request, term, page=1):
     term = term.rstrip()
     print "Searching for: " + term
@@ -143,7 +159,7 @@ def search_results(request, term, page=1):
     # City Search
     ################
     else:
-        rests = Restaurant.objects.filter(Q(city__icontains=term) | Q(street__icontains=term) | Q(name__icontains=term)).order_by('name')
+        rests = Restaurant.objects.filter(Q(city__icontains=term) | Q(street__icontains=term) | Q(name__icontains=term) | Q(neighborhood__icontains=term)).order_by('name')
         rs = []
         for r in rests:
             bool_dm = False
@@ -553,7 +569,7 @@ def restaurant_profile(request, rid):
     jazz_man = False
     town_center = False
     claimed_it = False
-    
+    print request.session
     restaurant = Restaurant.objects.filter(id=rid)[0]
     if restaurant.user.id == request.user.id:
         my_prof = True
@@ -671,7 +687,7 @@ def restaurant_profile(request, rid):
         mgnabyTen = mgna/10
         mgnabyTen = round(mgnabyTen)
         
-        
+        strings.append("%d" % item.likes)
         cal = calbyTen*10
         mgna = mgnabyTen*10 
         strings.append("%d" % cal)
