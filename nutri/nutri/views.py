@@ -25,6 +25,7 @@ def sign_in(request):
     if request.user.username != '':
         is_user = True
 
+    print "**************************************************"
     print request.user
     print is_user
 
@@ -38,13 +39,12 @@ def sign_in(request):
             login_email = request.POST['login_email']
             login_pass = request.POST['login_pass']
             user = auth.authenticate(username=login_email, password=login_pass)
-            print 'hi'
+            print login_pass
             if user is not None:
                 auth.login(request, user)
                 data = {'success':'true'}
             else:
                 data = {'success':'false'}
-
             return HttpResponse(json.dumps(data), content_type = "application/json")
             
         if 'logout' in request.POST:
@@ -54,10 +54,13 @@ def sign_in(request):
             return HttpResponse(json.dumps(data), content_type = "application/json")
 
         if 'proflink' in request.POST:
+            u = User.objects.get(id=request.user.id)
             rest_id = Restaurant.objects.filter(user=request.user.id)
 
             if len(rest_id) > 0:
-                address = '/restaurant_profile/' + str(rest_id[0].id)
+                address = '/restaurant_profile/' + str(rest_id[0].id)            
+            elif u.last_name == 'False': #not a restaurant owner
+                address = '/'            
             else:
                 address = "/add_restaurant"
             
@@ -66,50 +69,46 @@ def sign_in(request):
             return HttpResponse(json.dumps(data), content_type = "application/json")                    
                 
                 
-
-        if 'first_name' in request.POST:
+        print request.POST
+        
+        if 'email2' in request.POST:
             uform = UserForm(request.POST)
-            
-
             if uform.is_valid():
                 print 'valid form'
                 cd = uform.cleaned_data
-                fname = cd['first_name']
-                lname = cd['last_name']
                 email = cd['email']
                 email2 = cd['email2']                       
                 password = cd['password']
-                print fname, lname, email, email2, password
+                neighborhood = cd['neighborhood']
+                restaurant = cd['restaurant']
+                print email, email2, neighborhood, restaurant
                 if User.objects.filter(username=email):
                     error = 'This email address is already in use'
                     return render(request, 'sign_in.html', {'form':uform, 'invalid':invalid, 'error':error})
                 user = User.objects.create_user(email, email, password)
-                user.first_name = fname
-                user.last_name = lname
+                user.first_name = neighborhood
+                user.last_name = str(restaurant)
                 user.save()
 
-                print 'xxx'
                 user = auth.authenticate(username=email, password=password)
                 auth.login(request, user)
-                print '&*('
-                return HttpResponseRedirect('/add_restaurant')
+                if restaurant:
+                    return HttpResponseRedirect('/add_restaurant')
+                return HttpResponseRedirect('/')
+
             
             else:
                 ere = re.compile("^.+@.+\..+$")
 
                 invalid = 'true'
                 print 'invalid form'
-                if not request.POST['first_name']:
-                    error = 'Please enter a first name'
-                elif not request.POST['last_name']:
-                    error = 'Please enter a last name'              
-                elif not ere.match(request.POST['email']):
+                print request.POST['email']
+                if not ere.match(request.POST['email']):
                     error = 'Please enter a valid email address'
                 elif request.POST['email2'] != request.POST['email']:
                     error = "Email addresses don't match"
                 elif not request.POST['password']:
                     error = 'Please enter a password'
-
     return render(request, 'sign_in.html', {'form':uform, 'invalid':invalid, 'error':error, 'is_user':is_user, 'user':request.user.username})
 
 def neighborhood_list(request, city):
@@ -565,6 +564,7 @@ def restaurant_profile(request, rid):
 
     
     my_prof = False
+    signed_in = False
     no_seamless = False
     no_yelp = False
     jazz_man = False
@@ -574,7 +574,8 @@ def restaurant_profile(request, rid):
     restaurant = Restaurant.objects.filter(id=rid)[0]
     if restaurant.user.id == request.user.id:
         my_prof = True
-    else:
+    elif request.user.id != None:
+        signed_in = True
         restaurant.hits = restaurant.hits + 1
         restaurant.save()
 
@@ -688,7 +689,8 @@ def restaurant_profile(request, rid):
         mgnabyTen = mgna/10
         mgnabyTen = round(mgnabyTen)
         
-        strings.append("%d" % item.likes)
+        if signed_in:
+            strings.append("%d" % item.likes)
         cal = calbyTen*10
         mgna = mgnabyTen*10 
         strings.append("%d" % cal)
@@ -711,7 +713,7 @@ def restaurant_profile(request, rid):
                 add.delete()
             delete_item.delete()
 
-            return render(request, 'rest_profile.html', {'no_yelp':no_yelp, 'no_seamless':no_seamless, 'hits':restaurant.hits, 'my_prof':my_prof, 'uname':request.user.username, 'rest':restaurant, 'table':table, 'address':address, 'website':website, 'yelp':yelp, 'csz':city_st_zip, 'phone':phone, \
+            return render(request, 'rest_profile.html', {'no_yelp':no_yelp, 'no_seamless':no_seamless, 'hits':restaurant.hits, 'my_prof':my_prof, 'signed_in':signed_in, 'uname':request.user.username, 'rest':restaurant, 'table':table, 'address':address, 'website':website, 'yelp':yelp, 'csz':city_st_zip, 'phone':phone, \
             'MoOpen':MoOpen, 'TuOpen':TuOpen, 'WeOpen':WeOpen, 'ThOpen':ThOpen, 'FrOpen':FrOpen, 'SaOpen':SaOpen, 'SuOpen':SuOpen, 'MoClose':MoClose, 'TuClose':TuClose, 'WeClose':WeClose, 'ThClose':ThClose, 'FrClose':FrClose, 'SaClose':SaClose, 'SuClose':SuClose})
 
         if 'delete_ingred' in request.POST:
@@ -740,7 +742,7 @@ def restaurant_profile(request, rid):
 
             
             
-            return render(request, 'rest_profile.html', {'no_yelp':no_yelp, 'no_seamless':no_seamless, 'hits':restaurant.hits, 'my_prof':my_prof, 'uname':request.user.username, 'rest':restaurant, 'table':table, 'address':address, 'website':website, 'yelp':yelp, 'csz':city_st_zip, 'phone':phone, \
+            return render(request, 'rest_profile.html', {'no_yelp':no_yelp, 'no_seamless':no_seamless, 'hits':restaurant.hits, 'my_prof':my_prof, 'signed_in':signed_in, 'uname':request.user.username, 'rest':restaurant, 'table':table, 'address':address, 'website':website, 'yelp':yelp, 'csz':city_st_zip, 'phone':phone, \
             'MoOpen':MoOpen, 'TuOpen':TuOpen, 'WeOpen':WeOpen, 'ThOpen':ThOpen, 'FrOpen':FrOpen, 'SaOpen':SaOpen, 'SuOpen':SuOpen, 'MoClose':MoClose, 'TuClose':TuClose, 'WeClose':WeClose, 'ThClose':ThClose, 'FrClose':FrClose, 'SaClose':SaClose, 'SuClose':SuClose})
 
 
@@ -754,6 +756,6 @@ def restaurant_profile(request, rid):
 
         return HttpResponseRedirect('/add_dish/' + rid)
     
-    return render(request, 'rest_profile.html', {'no_yelp':no_yelp, 'no_seamless':no_seamless, 'hits':restaurant.hits, 'my_prof':my_prof, 'jazz_man':jazz_man, 'claimed_it':claimed_it, 'uname':request.user.username, 'rest':restaurant, 'table':table, 'address':address, 'website':website, 'yelp':yelp, 'csz':city_st_zip, 'phone':phone, \
+    return render(request, 'rest_profile.html', {'no_yelp':no_yelp, 'no_seamless':no_seamless, 'hits':restaurant.hits, 'my_prof':my_prof, 'signed_in':signed_in, 'jazz_man':jazz_man, 'claimed_it':claimed_it, 'uname':request.user.username, 'rest':restaurant, 'table':table, 'address':address, 'website':website, 'yelp':yelp, 'csz':city_st_zip, 'phone':phone, \
         'MoOpen':MoOpen, 'TuOpen':TuOpen, 'WeOpen':WeOpen, 'ThOpen':ThOpen, 'FrOpen':FrOpen, 'SaOpen':SaOpen, 'SuOpen':SuOpen, 'MoClose':MoClose, 'TuClose':TuClose, 'WeClose':WeClose, 'ThClose':ThClose, 'FrClose':FrClose, 'SaClose':SaClose, 'SuClose':SuClose})
 
