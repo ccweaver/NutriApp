@@ -18,6 +18,7 @@ from operator import itemgetter
 
     
 def sign_in(request):
+
     invalid = ""
     error = ""
     uform = UserForm
@@ -283,7 +284,7 @@ def dish(request, rid):
                 i_t_a = Ingredient.objects.filter(ingredient=ingred_to_add)
                 
                 density = float(i_t_a.values_list('g_per_ml')[0][0])
-                print 'a;lskdjf;lasdkj'
+                
                 #unit conversions
                 if unit == 'g':
                     amnt_grams = float(amount)
@@ -299,9 +300,8 @@ def dish(request, rid):
                 amnt_grams = "{0:.2f}".format(round(amnt_grams,2))
                 
                 i_t_a_id = i_t_a.values_list('id')[0][0]
-                
-                added_ingred_ids = dish.values_list('ingredients')
 
+                added_ingred_ids = dish.values_list('ingredients')
                 for ind in range(0, len(added_ingred_ids)):       
                     index = added_ingred_ids[ind][0]
                     if index != None:
@@ -309,15 +309,16 @@ def dish(request, rid):
                         print index
                         #grab id of ingredient
                         prev_ads = Addition.objects.filter(id=index).values_list('ingred_id')[0][0]
-                        print 'hi'
                         if prev_ads == i_t_a_id:
                             error = "Ingredient already added to dish"
-
+                
                 if not error:                  
                     addition = Addition(amount_grams=amnt_grams)
-                    addition.ingred_id = i_t_a_id 
+                    addition.ingred_id = i_t_a_id
+                    print amnt_grams, i_t_a_id 
                     addition.save()     
                     print dish[0]
+                    print addition
                     dish[0].ingredients.add(addition)
 
 
@@ -328,6 +329,7 @@ def dish(request, rid):
             data['d_name'] = request.POST['ingred_dish']
             
             if not error:
+                print 'no error'
                 added_ingred_ids = dish.values_list('ingredients')
                 for ind in range(0,len(added_ingred_ids)):
                     index = added_ingred_ids[ind][0]
@@ -357,9 +359,15 @@ def dish(request, rid):
                     error='Please enter a valid dish price'
             print 'the error is: ', error
             if not error:   
+                print 'no error'
                 r = Restaurant.objects.filter(id=rid)
-                i = Item(name=d_name, rest_id=rid, price=d_price, description=d_description)
+                print r
+                print d_name, rid, d_price, d_description
+                i = Item(name=d_name, rest_id=rid, price=float(d_price), description=d_description, valid=False)
+                #i = Item.objects.filter(id=2100)[0]#(name="Tacos", rest_id=rid, price=10, description=d_description, valid=False)
                 i.save()
+
+                print 'item saved'
             data = {'error':error, 'd_name':d_name}
             return HttpResponse(json.dumps(data), content_type="application/json")
 
@@ -571,7 +579,11 @@ def restaurant_profile(request, rid):
     town_center = False
     claimed_it = False
     print request.session
-    restaurant = Restaurant.objects.filter(id=rid)[0]
+    restaurantList = Restaurant.objects.filter(id=rid)
+    if not restaurantList:
+        return HttpResponseForbidden()
+    else:
+        restaurant = restaurantList[0]
     if restaurant.user.id == request.user.id:
         my_prof = True
     elif request.user.id != None:
