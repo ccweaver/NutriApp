@@ -63,6 +63,23 @@ $.ajax(
 return false;
 };
 
+function likeDish(key) {
+
+$.ajax(
+    {
+        type: "post",
+        url: "",
+        data: {dishToLike:key, csrfmiddlewaretoken:document.getElementsByName('csrfmiddlewaretoken')[0].value},
+        success: function (data)
+        {
+          location.reload();
+          return false;
+        }
+    });
+return false;
+};
+
+
 function redirect(website) {
   location.href = website;
 }
@@ -235,9 +252,8 @@ function showModal()
 
 <table class="table" id="menu_table">
  
-    {% if my_prof %}
     <th></th>
-    {% endif %}
+
     <th><u>DISH</u></th>
     {% if signed_in %}<th>Likes</th> {% endif %}
     <th><font color="black">Calories</font></th>
@@ -248,12 +264,17 @@ function showModal()
     <th><font color="black">Sodium(mg),(% DV)</font></th>
     <th><font color="black">Price</font></th>
     <th><font color="black">Description</font></th>
+<div id=refresh>
 {% for d in table %}
 <tr>
 {% if my_prof %}
 <td>
 <button class="btn btn-default btn-sm" id=type="button" onclick="removeItem('{{d.name}}')"><span class="glyphicon glyphicon-remove-circle"></span></button>
 <button class="btn btn-default btn-sm" id=type="button" onclick="openIngreds('{{d.name}}')"><span class="glyphicon glyphicon-eye-open"></span></button>
+</td>
+{% elif signed_in %}
+<td>
+<button class="btn btn-default btn-sm" id=type="button" onclick="likeDish('{{d.name}}')"><span class="glyphicon glyphicon-thumbs-up"></span></button>
 </td>
 {% endif %}
 <td><font color="black">{{ d.name }}</font></td>
@@ -266,12 +287,13 @@ function showModal()
 {% endfor %}
 </tr>
 {% endfor %}
+</div>
 
    <colgroup>
     	<col span="1" font color="#990099">
    </colgroup>
 </table>
-
+{% csrf_token %}
 {% if my_prof %}
 <form action="" method="post">
     {% csrf_token %}

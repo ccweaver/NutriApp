@@ -578,7 +578,6 @@ def restaurant_profile(request, rid):
     jazz_man = False
     town_center = False
     claimed_it = False
-    print request.session
     restaurantList = Restaurant.objects.filter(id=rid)
     if not restaurantList:
         return HttpResponseForbidden()
@@ -702,7 +701,8 @@ def restaurant_profile(request, rid):
         mgnabyTen = round(mgnabyTen)
         
         if signed_in:
-            strings.append("%d" % item.likes)
+            numLikes = item.likes.count()
+            strings.append("%d" % numLikes)
         cal = calbyTen*10
         mgna = mgnabyTen*10 
         strings.append("%d" % cal)
@@ -756,6 +756,15 @@ def restaurant_profile(request, rid):
             
             return render(request, 'rest_profile.html', {'no_yelp':no_yelp, 'no_seamless':no_seamless, 'hits':restaurant.hits, 'my_prof':my_prof, 'signed_in':signed_in, 'uname':request.user.username, 'rest':restaurant, 'table':table, 'address':address, 'website':website, 'yelp':yelp, 'csz':city_st_zip, 'phone':phone, \
             'MoOpen':MoOpen, 'TuOpen':TuOpen, 'WeOpen':WeOpen, 'ThOpen':ThOpen, 'FrOpen':FrOpen, 'SaOpen':SaOpen, 'SuOpen':SuOpen, 'MoClose':MoClose, 'TuClose':TuClose, 'WeClose':WeClose, 'ThClose':ThClose, 'FrClose':FrClose, 'SaClose':SaClose, 'SuClose':SuClose})
+
+        if 'dishToLike' in request.POST:
+            print 'Liking Dish'
+            item = Item.objects.filter(rest_id=rid).filter(valid=True).filter(name=request.POST['dishToLike'])[0]
+            if request.user not in item.likes.all():
+               item.likes.add(request.user)
+            item.save()
+            data = {}
+            return HttpResponse(json.dumps(data), content_type="application/json")
 
 
         if 'ingred_dish' in request.POST:

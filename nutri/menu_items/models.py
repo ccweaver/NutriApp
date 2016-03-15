@@ -1,6 +1,8 @@
 from django.db import models
 from Restaurant.models import Restaurant
 from added_ingreds.models import Addition
+from django.contrib.auth.models import User
+
 
 class Item(models.Model):
 	name = models.CharField(max_length=100)
@@ -15,7 +17,7 @@ class Item(models.Model):
 	carbs = models.DecimalField(max_digits=8, decimal_places=2, default=-1, null=True)
 	sugar = models.DecimalField(max_digits=8, decimal_places=2, default=-1, null=True)
 	sodium = models.DecimalField(max_digits=8, decimal_places=2, default=-1, null=True)
-	likes = models.IntegerField(default=0)
+	likes = models.ManyToManyField(User, blank=True)
 
 	def __unicode__(self):
 		return u'%s' % (self.name)
