@@ -9,7 +9,7 @@ from menu_items.models import Item
 from predetermined_vals.models import PreValue
 from added_ingreds.models import Addition
 import re, json
-from django.db.models import Q
+from django.db.models import Q, Count
 from django.contrib.auth.models import User
 from django.contrib.auth import logout
 from django.contrib import auth
@@ -80,14 +80,12 @@ def sign_in(request):
                 email = cd['email']
                 email2 = cd['email2']                       
                 password = cd['password']
-                neighborhood = cd['neighborhood']
                 restaurant = cd['restaurant']
-                print email, email2, neighborhood, restaurant
+                print email, email2, restaurant
                 if User.objects.filter(username=email):
                     error = 'This email address is already in use'
                     return render(request, 'sign_in.html', {'form':uform, 'invalid':invalid, 'error':error})
                 user = User.objects.create_user(email, email, password)
-                user.first_name = neighborhood
                 user.last_name = str(restaurant)
                 user.save()
 
@@ -110,12 +108,23 @@ def sign_in(request):
                     error = "Email addresses don't match"
                 elif not request.POST['password']:
                     error = 'Please enter a password'
-    return render(request, 'sign_in.html', {'form':uform, 'invalid':invalid, 'error':error, 'is_user':is_user, 'user':request.user.username})
+
+    ###################################################
+    #   Top 10 Table
+    ###################################################
+    print "Top 10 Table"
+    if is_user:
+        r = Restaurant.objects.all()
+        i = Item.objects.filter(rest_id__in=r).annotate(num_likes=Count('likes')).order_by('-num_likes')[:10]
+        top10 = [{'name':x.name, 'likes':x.likes.count(), 'calories':x.calories, 'city':x.rest.city} for x in i]
+
+
+    return render(request, 'sign_in.html', {'form':uform, 'invalid':invalid, 'error':error, 'is_user':is_user, 'user':request.user.username, 'top10':top10})
 
 def neighborhood_list(request, city):
     if len(Restaurant.objects.filter(city = city)) == 0:
         return HttpResponseForbidden()
-    restaurants = Restaurant.objects.filter(city = city).order_by('neighborhood')
+    restaurants = Restaurant.objects.filter(city=city).order_by('neighborhood')
     ns =[]
     for r in restaurants:
         if r.neighborhood not in ns:
