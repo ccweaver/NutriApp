@@ -116,7 +116,7 @@ def sign_in(request):
     if is_user:
         r = Restaurant.objects.all()
         i = Item.objects.filter(rest_id__in=r).annotate(num_likes=Count('likes')).order_by('-num_likes')[:10]
-        top10 = [{'name':x.name, 'likes':x.likes.count(), 'calories':x.calories, 'city':x.rest.city, 'restur':x.rest.name} for x in i]
+        top10 = [{'name':x.name, 'likes':x.likes.count(), 'calories':x.calories, 'neighborhood':x.rest.neighborhood, 'restur':x.rest.name, 'city':x.rest.city} for x in i]
         return render(request, 'sign_in.html', {'form':uform, 'invalid':invalid, 'error':error, 'is_user':is_user, 'user':request.user.username, 'top10':top10})
 
 
