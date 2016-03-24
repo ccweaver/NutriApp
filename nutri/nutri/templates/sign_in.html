@@ -212,6 +212,11 @@ $(document).on("click","#proflink",function(event)
           margin-top:100%;
           font-size:50px;
         }
+        
+        .turble{
+          margin-left:30%;
+          margin-top:10%;
+        }
 </style>
 
 
@@ -282,6 +287,7 @@ $(document).on("click","#proflink",function(event)
               <div class="turf" style="margin-left:29%;">
                
               </div>
+  <div class="turble">
   {% if top10 %}
               <table>
   <col width="300">
@@ -295,6 +301,7 @@ $(document).on("click","#proflink",function(event)
 <tr><td><a href="/restaurant_profile/{{r.bid}}" style="color:black;"><u>{{r.name}}</u></a></td><td><span style="color:#00cc00">{{r.likes}}</span></td><td>{{r.calories}}</td><td>{{r.restur}}</a></td><td>{{r.neighborhood}}</td><td>{{r.city}}</td></tr>
 {%endfor%}
 </table>
+</div>
 {% endif %}
               <div class="berpo">
              
