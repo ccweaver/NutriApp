@@ -1,0 +1,16 @@
+<div id = top10Table>
+{{filter_message}}
+<table>
+  <col width="250">
+  <col width="80">
+  <col width="80">
+  <col width="470">
+  <col width="200">
+  <col width="80"
+<tr><th>Name</th><th>Likes</th><th>Calories</th><th>Restaurant</th><th>Neighborhood</th><th>City</th></tr>
+{%for r in top10%}
+<tr><td><a href="/restaurant_profile/{{r.bid}}" style="color:black;"><u>{{r.name}}</u></a></td><td><span style="color:#00cc00">{{r.likes}}</span></td><td>{{r.calories}}</td><td>{{r.restur}}</a></td><td>{{r.neighborhood}}</td><td>{{r.city}}</td></tr>
+{%endfor%}
+</table>
+</div>
+</div>

@@ -16,7 +16,7 @@ from django.contrib import auth
 from datetime import datetime
 from operator import itemgetter
 
-    
+
 def sign_in(request):
 
     invalid = ""
@@ -109,15 +109,37 @@ def sign_in(request):
                 elif not request.POST['password']:
                     error = 'Please enter a password'
 
+        if 'type' in request.POST:
+
+            term = request.POST['term']
+            termType = request.POST['type']
+            cities = ['Stamford', 'Boston', 'Cambridge']
+            neighborhoods = ['Allston', 'Others']
+            
+            if termType == 'n':
+                i = Item.objects.filter(valid=True).filter(rest__neighborhood=term).annotate(num_likes=Count('likes')).order_by('-num_likes')[:10]
+            elif termType == 'city':
+                i = Item.objects.filter(valid=True).filter(rest__city=term).annotate(num_likes=Count('likes')).order_by('-num_likes')[:10]
+            
+            top10 = [{'bid':x.rest.id, 'name':x.name, 'likes':x.likes.count(), 'calories':x.calories, 'neighborhood':x.rest.neighborhood, 'restur':x.rest.name, 'city':x.rest.city} for x in i]
+        
+            filter_message = "Filter for: %s" % term
+            return render(request, 'top10.html', {'form':uform, 'invalid':invalid, 'error':error, 'is_user':is_user, 'user':request.user.username, 'top10':top10, 'cities':cities, 'neighborhoods':neighborhoods, 'filter_message':filter_message})
+
+
     ###################################################
     #   Top 10 Table
     ###################################################
     print "Top 10 Table"
     if is_user:
-        r = Restaurant.objects.all()
-        i = Item.objects.filter(rest_id__in=r).annotate(num_likes=Count('likes')).order_by('-num_likes')[:10]
+        #If there wasn't so much garbage in DB
+        #cities = Restaurant.objects.values('city').distinct()
+        #neighborhoods = Restaurant.objects.values('neighborhood').distinct()
+        cities = ['Stamford', 'Boston', 'Cambridge']
+        neighborhoods = ['Allston', 'Others']
+        i = Item.objects.filter(valid=True).annotate(num_likes=Count('likes')).order_by('-num_likes')[:10]
         top10 = [{'bid':x.rest.id, 'name':x.name, 'likes':x.likes.count(), 'calories':x.calories, 'neighborhood':x.rest.neighborhood, 'restur':x.rest.name, 'city':x.rest.city} for x in i]
-        return render(request, 'sign_in.html', {'form':uform, 'invalid':invalid, 'error':error, 'is_user':is_user, 'user':request.user.username, 'top10':top10})
+        return render(request, 'sign_in.html', {'form':uform, 'invalid':invalid, 'error':error, 'is_user':is_user, 'user':request.user.username, 'top10':top10, 'cities':cities, 'neighborhoods':neighborhoods})
 
 
     return render(request, 'sign_in.html', {'form':uform, 'invalid':invalid, 'error':error, 'is_user':is_user, 'user':request.user.username})
