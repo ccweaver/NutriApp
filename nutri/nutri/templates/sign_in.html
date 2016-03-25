@@ -8,6 +8,7 @@
 --> 
 
 <script type="text/javascript" src="{{STATIC_URL}}js/bootstrap.min.js"></script>
+<script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
 
   <script src="//code.jquery.com/jquery-1.10.2.js"></script>
   <script src="//code.jquery.com/ui/1.11.1/jquery-ui.js"></script>
@@ -45,6 +46,27 @@ $(document).on("click","#nav_login_submit",function(event)
             });
            return false;
 });
+
+function filter(x, type){
+  $.ajax(
+   {
+      type: "post",
+      url: "",
+      data: {type:type, term:x, csrfmiddlewaretoken:document.getElementsByName('csrfmiddlewaretoken')[0].value},
+      success: function (data)
+      {
+     
+        $("#top10Table").html(data);
+        return false;
+      },
+      error: function(data)
+      {
+
+      }
+    });
+   return false;
+}
+
 
 function hideModal()
 {
@@ -243,12 +265,19 @@ $(document).on("click","#proflink",function(event)
           text-align:center;
           font-size:30;
         }
+        #cDropdown,
+        #nDropdown {
+          float:left;
+          margin-top:0px;
+          padding-top:0px; 
+        }
 </style>
 
 
     <title>CALOSPOT</title>
 </head>
 <body>
+
 <div class="navbar navbar-inverse navbar-fixed-top" id="topnavbar">
     <div class="container-fluid">
         <div class="navbar-header">
@@ -299,7 +328,6 @@ $(document).on("click","#proflink",function(event)
 </div>
 <br><br>
 
-
 <div id="money">
   <div align='left' id="SearchMessage">
     <div class="Giants"
@@ -330,35 +358,38 @@ $(document).on("click","#proflink",function(event)
          
 
  
-              
-              <div class="eli">
-
-</div>
+            
  
               </div>
-  <div class="turble">
+<div class="turble">
   {% if top10 %}
   <div class="sneak">
   {Top Ten Dish List}
   </div>
-              <table>
-  <col width="250">
-  <col width="80">
-  <col width="80">
-  <col width="470">
-  <col width="200">
-  <col width="80"
-<tr><th>Name</th><th>Likes</th><th>Calories</th><th>Restaurant</th><th>Neighborhood</th><th>City</th></tr>
-{%for r in top10%}
-<tr><td><a href="/restaurant_profile/{{r.bid}}" style="color:black;"><u>{{r.name}}</u></a></td><td><span style="color:#00cc00">{{r.likes}}</span></td><td>{{r.calories}}</td><td>{{r.restur}}</a></td><td>{{r.neighborhood}}</td><td>{{r.city}}</td></tr>
-{%endfor%}
-</table>
+
+<div class="dropdown" id="cDropdown">
+  <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Filter by City
+  <span class="caret"></span></button>
+  <ul class="dropdown-menu">
+    {%for city in cities%}
+    <li><a onclick="filter('{{city}}', 'city');">{{city}}</a></li>
+    {% endfor %}
+  </ul>
+</div>
+<div class="dropdown" id="nDropdown">
+  <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Filter by Neighborhood
+  <span class="caret"></span></button>
+  <ul class="dropdown-menu">
+    {%for n in neighborhoods%}
+    <li><a onclick="filter('{{n}}', 'n');">{{n}}</a></li>
+    {% endfor %}
+  </ul>
+</div>
+
+<br><br><br>
+<div id="top10Table">{% include 'top10.html' %}</div>
+</div>
 {% endif %}
-</div>
-
-              
-
-</div>
 
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog">
