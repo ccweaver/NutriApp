@@ -259,6 +259,20 @@ $(document).on("click","#proflink",function(event)
     <a id="cambridgeButton" class="btn btn-danger btn-lg" href="/Cambridge/neighborhoods">Cambridge</a>&nbsp;
     <a id="StamfordButton" class="btn btn-danger btn-lg" href="/Stamford/neighborhoods">Stamford</a>&nbsp;
 <br><br>
+
+{% if top10 %}
+<table>
+  <col width="200">
+  <col width="80">
+  <col width="80">
+  <col width="10">
+<tr><th>Name</th><th>Likes</th><th>Calories</th><th>City</th></tr>
+{%for r in top10%}
+<tr><td>{{r.name}}</td><td>{{r.likes}}</td><td>{{r.calories}}</td><td>{{r.city}}</td></tr>
+{%endfor%}
+</table>
+{% endif %}
+
 <div id="money">
   <div align='left' id="SearchMessage">
     <div class="Giants"
@@ -317,8 +331,6 @@ You can Zoom In<br>on your phone.
         {{ form.email2 }}
         <font size="1"><br><br></font>
         {{ form.password }}
-        <font size="1"><br><br></font>
-        Neighborhood (Optional): {{ form.neighborhood }}
         <font size="1"><br><br></font>
         Click here if you're a restaurant owner: {{ form.restaurant }}
         </font>
