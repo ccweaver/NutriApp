@@ -123,9 +123,9 @@ $(document).on("click","#proflink",function(event)
 
 
 <style type="text/css">
-        body {
-            background-image: url('../static/orange_limes.jpg');
-            background-size: cover;
+       body {
+           ##background-image:url('../static/orange_limes.jpg');
+            background-size:cover;
         }
         
         #buttons {
@@ -212,6 +212,37 @@ $(document).on("click","#proflink",function(event)
           margin-top:100%;
           font-size:50px;
         }
+        
+        .turble{
+          margin-left:%;
+          margin-top:10%;
+        }
+        
+        .bertz {
+          margin-left:35%;
+          margin-top:5%;
+        }
+        
+        .drake {
+          text-align:center;
+          font-size:30;
+          margin-top:5%;
+        }
+        
+        .or{
+          text-align:center;
+          font-size:30;
+          margin-top:%;
+        }
+        
+        .usernotice{
+          margin-left:70%;
+        }
+        
+        .sneak{
+          text-align:center;
+          font-size:30;
+        }
 </style>
 
 
@@ -236,7 +267,7 @@ $(document).on("click","#proflink",function(event)
             <button id="proflink" type="button" class="btn btn-primary btn-sm">{{user}}</button>
             <button id="logout" type="button" class="btn btn-danger btn-sm">Logout</button>
             {% else %}
-            <font color="white" size='3'> Restaurant Management:&nbsp; </font>
+            <font color="white" size='3'> </font>
             <input name="login_email" type="text" id="login_email" placeholder="  Email">
             <input name="login_pass" type="password" id="login_pass" placeholder="  Password">
             <button id="nav_login_submit" class="btn btn-danger btn-sm" id="login_button" style="background-color:">Sign In</button>&nbsp;
@@ -249,61 +280,81 @@ $(document).on("click","#proflink",function(event)
 </div>
 
 <br><br><br><br>
+  <div class="usernotice">
+    //// Sign in to see the most popular dishes in your area ////
+  </div>
 <div class = "container">
-  <div class="contactme">
-  Send us your feedback info@calospot.com 
-  
-</div>
 
-    <a id="beantownbutt" class="btn btn-danger btn-lg" href="/Boston/neighborhoods">Boston</a>&nbsp;
-    <a id="cambridgeButton" class="btn btn-danger btn-lg" href="/Cambridge/neighborhoods">Cambridge</a>&nbsp;
-    <a id="StamfordButton" class="btn btn-danger btn-lg" href="/Stamford/neighborhoods">Stamford</a>&nbsp;
+ <div class ="drake">
+  Spot a healthy meal. See every salad and wrap in your city, and their <span style="color:#2efb00;">nutrition</span> info.
+  </div>
+<div class="bertz">
+ <a id="beantownbutt" class="btn btn-danger btn-lg" href="/Boston/neighborhoods" style="background-color:lightblue; border-color:white; color:;">Boston</a>&nbsp;
+    <a id="cambridgeButton" class="btn btn-danger btn-lg" href="/Cambridge/neighborhoods" style="background-color:lightblue; border-color:white; color:;">Cambridge</a>&nbsp;
+    <a id="StamfordButton" class="btn btn-danger btn-lg" href="/Stamford/neighborhoods" style="background-color:lightblue; border-color:white; color:;">Stamford</a>&nbsp;
+</div>
+<br><br>
+<div class="or">
+  or
+</div>
 <br><br>
 
-{% if top10 %}
-<table>
-  <col width="200">
-  <col width="80">
-  <col width="80">
-  <col width="10">
-<tr><th>Name</th><th>Likes</th><th>Calories</th><th>City</th></tr>
-{%for r in top10%}
-<tr><td>{{r.name}}</td><td>{{r.likes}}</td><td>{{r.calories}}</td><td>{{r.city}}</td></tr>
-{%endfor%}
-</table>
-{% endif %}
 
 <div id="money">
   <div align='left' id="SearchMessage">
     <div class="Giants"
     <font size="10" face="Calibri">
-    View the <span style="color:#00cc00"><u>Under 600 Calories Menu</u></span> from your favorite spot to eat. 
-    <br>
+   
+    
    </div>
 
 
     </font>
   </div>
 <div>
-<br><br><br><br>
 
               <div id="search">
               <form method="GET">
               <font size="5" face="Calibri">
-              <input type="text" id="search_bar" name="search" placeholder="Enter Restaurant or Deli's Name" style="text-align:center">
+              <input type="text" id="search_bar" name="search" placeholder="Enter Restaurant or Deli's Name" style="text-align:center">  <button type="submit" style="margin-left:55%; margin-top:3%;">Search</button>
               <div class="turf" style="margin-left:29%;">
-                [Search "Stamford" to see all places listed in alphabetical order.]
+               
               </div>
+
               <div class="berpo">
-              <button type="submit" style="margin-left:55%; margin-top:3%;">Search</button>
+             
               </div>
               </font>
               </form>
-              <div class="eli">
-You can Zoom In<br>on your phone.
-</div>
-              </div>
+              
+         
 
+ 
+              
+              <div class="eli">
+
+</div>
+ 
+              </div>
+  <div class="turble">
+  {% if top10 %}
+  <div class="sneak">
+  {Top Ten Dish List}
+  </div>
+              <table>
+  <col width="250">
+  <col width="80">
+  <col width="80">
+  <col width="470">
+  <col width="200">
+  <col width="80"
+<tr><th>Name</th><th>Likes</th><th>Calories</th><th>Restaurant</th><th>Neighborhood</th><th>City</th></tr>
+{%for r in top10%}
+<tr><td><a href="/restaurant_profile/{{r.bid}}" style="color:black;"><u>{{r.name}}</u></a></td><td><span style="color:#00cc00">{{r.likes}}</span></td><td>{{r.calories}}</td><td>{{r.restur}}</a></td><td>{{r.neighborhood}}</td><td>{{r.city}}</td></tr>
+{%endfor%}
+</table>
+{% endif %}
+</div>
 
               
 

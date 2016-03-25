@@ -313,11 +313,7 @@ function showModal()
 <h4><span style=>Order these dishes for takeout or delivery on Seamless: </span><a onclick='redirect("{{website}}")'>{{website}}</a></h4>
 {%endif%}
 
-{%if no_yelp%}
 
-{%else%}
-<h4><span>To check out this restaurant on Yelp: </span><a onclick='redirect("{{yelp}}")'>{{yelp}}</a> </h4>
-{%endif%}
 <div class="dizclaimer">
 {% if claimed_it %}
 If you have food allergies please check with the restuarant when ordering, Calospot cannot verify if the dishes are allergen-free.
