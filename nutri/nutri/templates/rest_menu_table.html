@@ -1,0 +1,48 @@
+
+<div class="menutitle">
+	<u>The <span id="shizzle">Under 600 Calories</span> Menu</u>
+</div>
+
+<table class="table" id="menu_table">
+ 
+    {% if signed_in %}<th></th>{% endif %}
+
+    <th><u>DISH</u></th>
+    {% if signed_in %}<th>Likes</th> {% endif %}
+    <th><font color="black">Calories</font></th>
+    <th><font color="black">Protein (g)</font></th>
+    <th><font color="black">Fat(g)</font></th>
+    <th><font color="black">Carbs (g)</font></th>
+    <th><font color="black">Sugar(g)</font></th>
+    <th><font color="black">Sodium(mg),(% DV)</font></th>
+    <th><font color="black">Price</font></th>
+    <th><font color="black">Description</font></th>
+<div id=refresh>
+{% for d in table %}
+<tr>
+{% if my_prof %}
+<td>
+<button class="btn btn-default btn-sm" id=type="button" onclick="removeItem('{{d.name}}')"><span class="glyphicon glyphicon-remove-circle"></span></button>
+<button class="btn btn-default btn-sm" id=type="button" onclick="openIngreds('{{d.name}}')"><span class="glyphicon glyphicon-eye-open"></span></button>
+</td>
+{% elif signed_in %}
+<td>
+<button class="btn btn-default btn-sm" id=type="button" onclick="likeDish('{{d.name}}', '{{forloop.counter}}')"><span class="glyphicon glyphicon-thumbs-up"></span></button>
+</td>
+{% endif %}
+<td><font color="black">{{ d.name }}</font></td>
+{% for s in d.strings %}
+{% if forloop.first%}
+<font color="#00cc00"><td id='{{d.name}}{{forloop.parentloop.counter}}'>{{ s }}</td></font>
+{% else %}
+<td><font color="black">{{ s }}</font></td>
+{% endif %}
+{% endfor %}
+</tr>
+{% endfor %}
+</div>
+
+   <colgroup>
+    	<col span="1" font color="#990099">
+   </colgroup>
+</table>

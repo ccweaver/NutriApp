@@ -63,16 +63,20 @@ $.ajax(
 return false;
 };
 
-function likeDish(key) {
+function likeDish(key, index) {
 
 $.ajax(
     {
         type: "post",
         url: "",
-        data: {dishToLike:key, csrfmiddlewaretoken:document.getElementsByName('csrfmiddlewaretoken')[0].value},
+        data: {dishToLike:key, index:index, csrfmiddlewaretoken:document.getElementsByName('csrfmiddlewaretoken')[0].value},
         success: function (data)
         {
-          location.reload();
+          var docElement = document.getElementById(data.dID);
+          if (data.liked) {
+            var currentVal = docElement.innerHTML;
+            docElement.innerHTML = parseInt(currentVal) + 1;//document.getElementById(data.dID).innerHTML + 1;
+          }
           return false;
         }
     });
@@ -208,6 +212,7 @@ function showModal()
 	  </div>
 <div class="jumbotron" style="background-image: url(../static/marble2.jpg); background-size: 100%;">
 
+<div id="bs"></div>
 <div class="stuff">
 <div id='hits'><b>Number of Views:</b> {{hits}}</div>
 
@@ -246,53 +251,9 @@ function showModal()
 
 </div>
 
-<div class="menutitle">
-	<u>The <span id="shizzle">Under 600 Calories</span> Menu</u>
-</div>
+<div id='menuTable'>{% include 'rest_menu_table.html' %}</div>
 
-<table class="table" id="menu_table">
- 
-    {% if signed_in %}<th></th>{% endif %}
 
-    <th><u>DISH</u></th>
-    {% if signed_in %}<th>Likes</th> {% endif %}
-    <th><font color="black">Calories</font></th>
-    <th><font color="black">Protein (g)</font></th>
-    <th><font color="black">Fat(g)</font></th>
-    <th><font color="black">Carbs (g)</font></th>
-    <th><font color="black">Sugar(g)</font></th>
-    <th><font color="black">Sodium(mg),(% DV)</font></th>
-    <th><font color="black">Price</font></th>
-    <th><font color="black">Description</font></th>
-<div id=refresh>
-{% for d in table %}
-<tr>
-{% if my_prof %}
-<td>
-<button class="btn btn-default btn-sm" id=type="button" onclick="removeItem('{{d.name}}')"><span class="glyphicon glyphicon-remove-circle"></span></button>
-<button class="btn btn-default btn-sm" id=type="button" onclick="openIngreds('{{d.name}}')"><span class="glyphicon glyphicon-eye-open"></span></button>
-</td>
-{% elif signed_in %}
-<td>
-<button class="btn btn-default btn-sm" id=type="button" onclick="likeDish('{{d.name}}')"><span class="glyphicon glyphicon-thumbs-up"></span></button>
-</td>
-{% endif %}
-<td><font color="black">{{ d.name }}</font></td>
-{% for s in d.strings %}
-{% if forloop.first%}
-<td><font color="#00cc00">{{ s }}</font></td>
-{% else %}
-<td><font color="black">{{ s }}</font></td>
-{% endif %}
-{% endfor %}
-</tr>
-{% endfor %}
-</div>
-
-   <colgroup>
-    	<col span="1" font color="#990099">
-   </colgroup>
-</table>
 {% csrf_token %}
 {% if my_prof %}
 <form action="" method="post">

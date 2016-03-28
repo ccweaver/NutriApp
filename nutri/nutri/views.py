@@ -587,6 +587,7 @@ def add_restaurant(request):
     return render(request, 'add_rest.html', {'error':error, 'cuisine':cuisine, 'seamless':seamless, 'deliv_min':deliv_min, 'rest_name':rest_name, 'num_street':num_street, 'city':city, 'state':state, 'zipcode':zipcode, 'website':website, 'yelp':yelp, 'phone':phone, 'MoOpen':MoOpen, 'TuOpen':TuOpen, 'WeOpen':WeOpen, 'ThOpen':ThOpen, 'FrOpen':FrOpen, 'SaOpen':SaOpen, 'SuOpen':SuOpen, 'MoClose':MoClose, 'TuClose':TuClose, 'WeClose':WeClose, 'ThClose':ThClose, 'FrClose':FrClose, 'SaClose':SaClose, 'SuClose':SuClose})
     
 def restaurant_profile(request, rid):
+    print 'Restaurant Profile Function Called'
     MoOpen = ""
     MoClose = ""
     TuOpen = ""
@@ -621,6 +622,21 @@ def restaurant_profile(request, rid):
         signed_in = True
         restaurant.hits = restaurant.hits + 1
         restaurant.save()
+    ## Like Dish -- up here to speed up like response
+    if request.method == 'POST':
+        if 'dishToLike' in request.POST:
+            print 'Liking Dish'
+            item = Item.objects.filter(rest_id=rid).filter(valid=True).filter(name=request.POST['dishToLike'])[0]
+            dID = request.POST['dishToLike'] + request.POST['index']
+            data = {'dID':dID, 'liked': False}
+            print data['dID']
+            if request.user not in item.likes.all():
+                item.likes.add(request.user)
+                data = {'liked': True}
+            item.save()
+            print 'Sending data'
+            return HttpResponse(json.dumps(data), content_type="application/json")
+
 
     if restaurant.seamless == 'No':
         no_seamless = True
@@ -630,19 +646,15 @@ def restaurant_profile(request, rid):
     
     if "Jazzman's Cafe" in restaurant.name:
         jazz_man = True
-    print 'This is jazz_man', jazz_man
-  
+    
     if "California Pizza Kitchen" in restaurant.name:
         town_center = True
-    print 'This is town_center', town_center
     
     if "Del Frisco's" in restaurant.name:
         claimed_it = True
-    print 'This is claimed_it', claimed_it
     
     if "Soosh" in restaurant.name:
         claimed_it = True
-    print 'This is claimed_it', claimed_it
     
     if "Hudson Grille" in restaurant.name:
         claimed_it = True
@@ -672,7 +684,6 @@ def restaurant_profile(request, rid):
     SaClose = restaurant.saclose
     SuClose = restaurant.suclose
 
-
     menu = Item.objects.filter(rest_id=rid).filter(valid=True).order_by('-calories')
 
     print 'Header generated'
@@ -700,6 +711,8 @@ def restaurant_profile(request, rid):
         gsug = 0 
         mgna = 0
         description = str(item.description)
+
+
 
         print item.protein
         if item.protein == - 1 or item.protein == None:
@@ -734,6 +747,7 @@ def restaurant_profile(request, rid):
         
         if signed_in:
             numLikes = item.likes.count()
+            print numLikes
             strings.append("%d" % numLikes)
         cal = calbyTen*10
         mgna = mgnabyTen*10 
@@ -748,9 +762,9 @@ def restaurant_profile(request, rid):
         table.append({'name':item.name, 'strings':strings})
 
     print 'Strings generated'
-    print 'this is my prof', my_prof
 
     if request.method == 'POST':
+        
         if 'delete_key' in request.POST:
             delete_item = Item.objects.filter(rest_id=rid).filter(valid=True).filter(name=request.POST['delete_key'])[0]
             for add in delete_item.ingredients.all():
@@ -788,15 +802,6 @@ def restaurant_profile(request, rid):
             
             return render(request, 'rest_profile.html', {'no_yelp':no_yelp, 'no_seamless':no_seamless, 'hits':restaurant.hits, 'my_prof':my_prof, 'signed_in':signed_in, 'uname':request.user.username, 'rest':restaurant, 'table':table, 'address':address, 'website':website, 'yelp':yelp, 'csz':city_st_zip, 'phone':phone, \
             'MoOpen':MoOpen, 'TuOpen':TuOpen, 'WeOpen':WeOpen, 'ThOpen':ThOpen, 'FrOpen':FrOpen, 'SaOpen':SaOpen, 'SuOpen':SuOpen, 'MoClose':MoClose, 'TuClose':TuClose, 'WeClose':WeClose, 'ThClose':ThClose, 'FrClose':FrClose, 'SaClose':SaClose, 'SuClose':SuClose})
-
-        if 'dishToLike' in request.POST:
-            print 'Liking Dish'
-            item = Item.objects.filter(rest_id=rid).filter(valid=True).filter(name=request.POST['dishToLike'])[0]
-            if request.user not in item.likes.all():
-               item.likes.add(request.user)
-            item.save()
-            data = {}
-            return HttpResponse(json.dumps(data), content_type="application/json")
 
 
         if 'ingred_dish' in request.POST:
