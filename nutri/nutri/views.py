@@ -120,7 +120,7 @@ def sign_in(request):
             elif termType == 'city':
                 i = Item.objects.filter(valid=True).filter(rest__city=term).annotate(num_likes=Count('likes')).order_by('-num_likes')[:10]
             
-            top10 = [{'bid':x.rest.id, 'name':x.name, 'likes':x.likes.count(), 'calories':x.calories, 'neighborhood':x.rest.neighborhood, 'restur':x.rest.name, 'city':x.rest.city} for x in i]
+            top10 = [{'bid':x.rest.id, 'name':x.name, 'likes':x.likes.count(), 'calories':(round(x.calories/10))*10, 'neighborhood':x.rest.neighborhood, 'restur':x.rest.name, 'city':x.rest.city} for x in i]
             
             filter_message = "Showing: %s" % term
             return render(request, 'top10.html', {'form':uform, 'invalid':invalid, 'error':error, 'is_user':is_user, 'user':request.user.username, 'top10':top10, 'cities':cities, 'neighborhoods':neighborhoods, 'filter_message':filter_message})
