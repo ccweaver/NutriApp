@@ -634,6 +634,7 @@ def restaurant_profile(request, rid):
         restaurant = restaurantList[0]
     if restaurant.user.id == request.user.id:
         my_prof = True
+        signed_in = True
     elif request.user.id != None:
         signed_in = True
         restaurant.hits = restaurant.hits + 1
