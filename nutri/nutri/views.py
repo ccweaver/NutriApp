@@ -114,7 +114,7 @@ def sign_in(request):
             term = request.POST['term']
             termType = request.POST['type']
             cities = ['Stamford', 'Boston', 'Cambridge']
-            neighborhoods = ['Allston', 'Others']
+            neighborhoods = ['Allston', 'Back Bay / South End', 'Beacon Hill / West End', 'North End', 'Cambridgeport' ]
             if termType == 'n':
                 i = Item.objects.filter(valid=True).filter(rest__neighborhood=term).annotate(num_likes=Count('likes')).order_by('-num_likes')[:10]
             elif termType == 'city':
