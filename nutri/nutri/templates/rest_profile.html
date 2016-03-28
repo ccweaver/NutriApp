@@ -75,7 +75,7 @@ $.ajax(
           var docElement = document.getElementById(data.dID);
           if (data.liked) {
             var currentVal = docElement.innerHTML;
-            docElement.innerHTML = parseInt(currentVal) + 1;//document.getElementById(data.dID).innerHTML + 1;
+            docElement.innerHTML = parseInt(currentVal) + 1;
           }
           return false;
         }

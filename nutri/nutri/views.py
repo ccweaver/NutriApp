@@ -588,6 +588,22 @@ def add_restaurant(request):
     
 def restaurant_profile(request, rid):
     print 'Restaurant Profile Function Called'
+    
+    #IF like request, act fast
+    if request.method == 'POST':
+        if 'dishToLike' in request.POST:
+            print 'Liking Dish'
+            item = Item.objects.filter(rest_id=rid).filter(valid=True).filter(name=request.POST['dishToLike'])[0]
+            dID = request.POST['dishToLike'] + request.POST['index']
+            data = {'dID':dID, 'liked': False}
+            print data['dID']
+            if request.user not in item.likes.all():
+                item.likes.add(request.user)
+                data = {'dID':dID, 'liked': True}
+            item.save()
+            print 'Sending data'
+            return HttpResponse(json.dumps(data), content_type="application/json")
+
     MoOpen = ""
     MoClose = ""
     TuOpen = ""
@@ -623,21 +639,7 @@ def restaurant_profile(request, rid):
         restaurant.hits = restaurant.hits + 1
         restaurant.save()
     ## Like Dish -- up here to speed up like response
-    if request.method == 'POST':
-        if 'dishToLike' in request.POST:
-            print 'Liking Dish'
-            item = Item.objects.filter(rest_id=rid).filter(valid=True).filter(name=request.POST['dishToLike'])[0]
-            dID = request.POST['dishToLike'] + request.POST['index']
-            data = {'dID':dID, 'liked': False}
-            print data['dID']
-            if request.user not in item.likes.all():
-                item.likes.add(request.user)
-                data = {'liked': True}
-            item.save()
-            print 'Sending data'
-            return HttpResponse(json.dumps(data), content_type="application/json")
-
-
+    
     if restaurant.seamless == 'No':
         no_seamless = True
     
