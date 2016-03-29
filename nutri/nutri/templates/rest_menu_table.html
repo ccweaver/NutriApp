@@ -27,7 +27,7 @@
 </td>
 {% elif signed_in %}
 <td>
-<button class="btn btn-default btn-sm" id=type="button" onclick="likeDish('{{d.name}}', '{{forloop.counter}}')"><span class="glyphicon glyphicon-thumbs-up"></span></button>
+<button class="btn btn-default btn-sm" id=type="button" onclick='likeDish("{{d.name}}", "{{forloop.counter}}")'><span class="glyphicon glyphicon-thumbs-up"></span></button>
 </td>
 {% endif %}
 <td><font color="black">{{ d.name }}</font></td>
