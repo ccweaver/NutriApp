@@ -149,7 +149,15 @@ $(window).load(function(){
             border-style: solid;
             width: 50%;
         }
-
+        
+        #neighborhood {
+            -webkit-border-radius: 5px;
+            -moz-border-radius: 5px;
+            border-radius: 5px;
+            border-style: solid;
+            width: 50%;
+        }
+        
         #num_street {
             -webkit-border-radius: 5px;
             -moz-border-radius: 5px;
@@ -234,6 +242,7 @@ $(window).load(function(){
         <label style="color: #555;">
             <font size="4">Restaurant Name:</font></label>
         <input id="rest_name" type="text" name="rest_name" value='{{rest_name}}' maxlength="200">
+        
         
 
         <div class="container">
@@ -455,7 +464,11 @@ $(window).load(function(){
         <input id="num_street" type="text" name="num_street" value='{{num_street}}' maxlength="100">
 
             <br>
-
+             <label style="color: #555;">
+            <font size="4">Neighborhood:</font></label>
+        <input id="neighborhood" type="text" name="neighborhood" value='{{neighborhood}}' maxlength="200">
+        
+            <br>
         <label style="color: #555; padding-right:2%; margin-left:15%">
             <font size="2">
            City:&nbsp;</font></label>
