@@ -238,7 +238,8 @@ $(window).load(function(){
         {% csrf_token %}
         <font size="5" color="A22;" style="bold;">{{error}}</font>
         <br><br>
-
+        Note: If your restaurant is already listed, close this page and email info@calospot.com to take over the account.
+        <br><br><br>
         <label style="color: #555;">
             <font size="4">Restaurant Name:</font></label>
         <input id="rest_name" type="text" name="rest_name" value='{{rest_name}}' maxlength="200">
