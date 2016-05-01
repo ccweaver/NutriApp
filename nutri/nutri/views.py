@@ -127,11 +127,11 @@ def sign_in(request):
     ###################################################
     #   Top 10 Table
     ###################################################
-    ##print "Top 10 Table"
-    ##if is_user:
-        #If there wasn't so much garbage in DB
-        #cities = Restaurant.objects.values('city').distinct()
-        #neighborhoods = Restaurant.objects.values('neighborhood').distinct()
+    print "Top 10 Table"
+    if is_user:
+        If there wasn't so much garbage in DB
+        cities = Restaurant.objects.values('city').distinct()
+        neighborhoods = Restaurant.objects.values('neighborhood').distinct()
         cities = ['Stamford', 'Boston', 'Cambridge']
         neighborhoods = ['Allston', 'Back Bay / South End', 'Beacon Hill / West End', 'North End', 'Cambridgeport', 'Brighton / Brookline', 'Charlestown', 'Chinatown', 'Dorchester', 'East Boston', 'Fenway', 'Financial District', 'Hyde Park', 'Jamaica Plain', 'Mattapan', 'Mission Hill', 'Mobile Food Truck', 'Roslindale', 'Roxbury', 'South Boston', 'Central Square', 'East Cambridge/MIT', 'Harvard Square / Somerville', 'Porter Square', 'Cove / East Main STreet / Stillwater Ave', 'Downtown', 'Harbor Point', 'Hope Street', 'Long Ridge / High Ridge / Glenbrook']
         i = Item.objects.filter(valid=True).annotate(num_likes=Count('likes')).order_by('-num_likes')[:10]
