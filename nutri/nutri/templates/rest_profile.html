@@ -231,6 +231,7 @@ function showModal()
 
 </h4>
 
+{% if hourz %}
 <div class="lister">
 <ul style="list-style-type:none; padding-left:0">
    <li> <b>M:</b> {% if MoOpen == "Closed" %} Closed {% else %} {{MoOpen}} to {{MoClose}} {% endif %}  
@@ -245,7 +246,11 @@ function showModal()
 
 </ul>
 </div>
+{% endif %}
 
+<div class="loshours">
+{{hours}}
+</div>
 
 </div>
 
