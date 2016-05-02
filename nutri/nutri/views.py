@@ -640,7 +640,7 @@ def restaurant_profile(request, rid):
         restaurant.save()
     ## Like Dish -- up here to speed up like response
     
-    if restaurant.hours = "":
+    if restaurant.hours == "":
         hourz = True
         
     if restaurant.seamless == 'No':
