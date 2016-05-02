@@ -127,8 +127,8 @@ def sign_in(request):
     ###################################################
     #   Top 10 Table
     ###################################################
-    ##print "Top 10 Table"
-    ##if is_user:
+    print "Top 10 Table"
+    if is_user:
         #If there wasn't so much garbage in DB
         #cities = Restaurant.objects.values('city').distinct()
        # neighborhoods = Restaurant.objects.values('neighborhood').distinct()
