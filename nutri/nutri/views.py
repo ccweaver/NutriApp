@@ -618,7 +618,7 @@ def restaurant_profile(request, rid):
     SuOpen = ""
     SuClose = ""   
 
-    
+    hourz = False
     my_prof = False
     signed_in = False
     no_seamless = False
@@ -640,6 +640,9 @@ def restaurant_profile(request, rid):
         restaurant.save()
     ## Like Dish -- up here to speed up like response
     
+    if restaurant.hours = "":
+        hourz = True
+        
     if restaurant.seamless == 'No':
         no_seamless = True
     
@@ -660,7 +663,8 @@ def restaurant_profile(request, rid):
     
     if "Hudson Grille" in restaurant.name:
         claimed_it = True
-    
+        
+    hours = str(restaurant.hours)
     website = str(restaurant.website)
     yelp = str(restaurant.yelp)
     address = str(restaurant.number) + ' ' + str(restaurant.street)
@@ -773,7 +777,7 @@ def restaurant_profile(request, rid):
                 add.delete()
             delete_item.delete()
 
-            return render(request, 'rest_profile.html', {'no_yelp':no_yelp, 'no_seamless':no_seamless, 'hits':restaurant.hits, 'my_prof':my_prof, 'signed_in':signed_in, 'uname':request.user.username, 'rest':restaurant, 'table':table, 'address':address, 'website':website, 'yelp':yelp, 'csz':city_st_zip, 'phone':phone, \
+            return render(request, 'rest_profile.html', {'no_yelp':no_yelp, 'hours':hours, 'hourz':hourz, 'no_seamless':no_seamless, 'hits':restaurant.hits, 'my_prof':my_prof, 'signed_in':signed_in, 'uname':request.user.username, 'rest':restaurant, 'table':table, 'address':address, 'website':website, 'yelp':yelp, 'csz':city_st_zip, 'phone':phone, \
             'MoOpen':MoOpen, 'TuOpen':TuOpen, 'WeOpen':WeOpen, 'ThOpen':ThOpen, 'FrOpen':FrOpen, 'SaOpen':SaOpen, 'SuOpen':SuOpen, 'MoClose':MoClose, 'TuClose':TuClose, 'WeClose':WeClose, 'ThClose':ThClose, 'FrClose':FrClose, 'SaClose':SaClose, 'SuClose':SuClose})
 
         if 'delete_ingred' in request.POST:
