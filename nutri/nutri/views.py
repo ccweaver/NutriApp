@@ -618,7 +618,7 @@ def restaurant_profile(request, rid):
     SuOpen = ""
     SuClose = ""   
 
-    hourz = False
+    
     my_prof = False
     signed_in = False
     no_seamless = False
@@ -640,9 +640,10 @@ def restaurant_profile(request, rid):
         restaurant.save()
     ## Like Dish -- up here to speed up like response
     
-   
+    hourz = False
     if restaurant.hours == "":
         hourz = True
+    hours = str(restaurant.hours)
         
     if restaurant.seamless == 'No':
         no_seamless = True
@@ -665,7 +666,7 @@ def restaurant_profile(request, rid):
     if "Hudson Grille" in restaurant.name:
         claimed_it = True
         
-    hours = str(restaurant.hours)
+   
     website = str(restaurant.website)
     yelp = str(restaurant.yelp)
     address = str(restaurant.number) + ' ' + str(restaurant.street)
