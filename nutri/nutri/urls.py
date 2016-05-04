@@ -1,5 +1,5 @@
 from django.conf.urls import patterns, include, url
-from nutri.views import dish, add_restaurant, restaurant_profile, sign_in, search_results, neighborhood_list
+from nutri.views import dish, add_restaurant, restaurant_profile, sign_in, search_results, neighborhood_list, search_clickThru
 
 
 from django.contrib import admin
@@ -17,6 +17,8 @@ urlpatterns = patterns('',
     url(r'^add_restaurant/$', add_restaurant),
     url(r'^restaurant_profile/(\d+)$', restaurant_profile),
     url(r'^admin/', include(admin.site.urls)),
-    url(r'^(.+)/neighborhoods$', neighborhood_list)
+    url(r'^(.+)/neighborhoods$', neighborhood_list),
+    url(r'^([^/]+)/(.+)/restaurants/$', search_clickThru),
+    url(r'^([^/]+)/(.+)/restaurants/(\d)$', search_clickThru)
 
 )

@@ -189,6 +189,9 @@ def search_results(request, term, page=1):
     # City Search
     ################
     else:
+        terms = term.split(' ')
+        if len(terms) > 2:
+            rests = Restaurant.objects.filter(Q(city__icontains=term.split(' ')[0]) & Q(neighborhood__icontains=" ".join(terms[1:]))) 
         rests = Restaurant.objects.filter(Q(city__icontains=term) | Q(street__icontains=term) | Q(name__icontains=term) | Q(neighborhood__icontains=term)).order_by('name')
         rs = []
         for r in rests:
@@ -212,6 +215,42 @@ def search_results(request, term, page=1):
         high_index = 30* (int(page))
         rs_30 = rs[low_index:high_index]
     return render(request, 'search_results.html', {'rests':rs_30, 'num_rests':len(rs), 'page':int(page), 'page_mult30':int(page)*30, 'term':term})
+
+def search_clickThru(request, city, neighborhood, page=1):
+    city = city.replace('_', ' ')
+    neighborhood = neighborhood.replace('_', ' ')
+    print "Searching for: " + city + ' ' + neighborhood
+    print "Page: " + str(page) 
+
+    #################
+    # City Search
+    ################
+    rests = Restaurant.objects.filter(Q(city__icontains=city) & Q(neighborhood__icontains=neighborhood)) 
+    rs = []
+    for r in rests:
+        bool_dm = False
+        if r.cuisine2:
+            if r.cuisine3:
+                cuisine = r.cuisine1 + ', ' + r.cuisine2 + ', ' + r.cuisine3
+            else:
+                cuisine = r.cuisine1 + ', ' + r.cuisine2
+        else:
+            cuisine = r.cuisine1
+        if r.delivery_min != 0:
+            bool_dm = True
+        rs.append({'r':r.name, 'rid':r.id, 's':r.street, 't':r.number, 'u':r.city, 'v':r.state, 'w':r.zipcode, 'x':cuisine, 'y':r.seamless, 'z':r.delivery_min, 'bool_dm':bool_dm})
+
+    
+    if int(page) == 1:
+        rs_30 = rs[:30]
+    else:
+        low_index = 30*(int(page)-1)
+        high_index = 30* (int(page))
+        rs_30 = rs[low_index:high_index]
+
+    term = neighborhood
+    return render(request, 'search_results.html', {'rests':rs_30, 'num_rests':len(rs), 'page':int(page), 'page_mult30':int(page)*30, 'term':term})
+
 
 def dish(request, rid):
     ingred_list = []
