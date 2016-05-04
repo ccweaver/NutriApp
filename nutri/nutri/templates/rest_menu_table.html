@@ -1,48 +1,55 @@
+<style>
+.datagrid table { border-collapse: collapse; text-align: left; width: 100%; } .datagrid {font: normal 12px/150% Arial, Helvetica, sans-serif; background: #fff; overflow: hidden; border: 1px solid #006699; -webkit-border-radius: 3px; -moz-border-radius: 3px; border-radius: 3px; }.datagrid table td, .datagrid table th { padding: 3px 10px; }.datagrid table thead th {background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #006699), color-stop(1, #00557F) );background:-moz-linear-gradient( center top, #006699 5%, #00557F 100% );filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#006699', endColorstr='#00557F');background-color:#006699; color:#FFFFFF; font-size: 15px; font-weight: bold; border-left: 1px solid #0070A8; } .datagrid table thead th:first-child { border: none; }.datagrid table tbody td { color: #00496B; border-left: 1px solid #E1EEF4;font-size: 12px;font-weight: normal; }.datagrid table tbody .alt td { background: #E1EEF4; color: #00496B; }.datagrid table tbody td:first-child { border-left: none; }.datagrid table tbody tr:last-child td { border-bottom: none; }.datagrid table tfoot td div { border-top: 1px solid #006699;background: #E1EEF4;} .datagrid table tfoot td { padding: 0; font-size: 12px } .datagrid table tfoot td div{ padding: 2px; }.datagrid table tfoot td ul { margin: 0; padding:0; list-style: none; text-align: right; }.datagrid table tfoot  li { display: inline; }.datagrid table tfoot li a { text-decoration: none; display: inline-block;  padding: 2px 8px; margin: 1px;color: #FFFFFF;border: 1px solid #006699;-webkit-border-radius: 3px; -moz-border-radius: 3px; border-radius: 3px; background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #006699), color-stop(1, #00557F) );background:-moz-linear-gradient( center top, #006699 5%, #00557F 100% );filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#006699', endColorstr='#00557F');background-color:#006699; }.datagrid table tfoot ul.active, .datagrid table tfoot ul a:hover { text-decoration: none;border-color: #006699; color: #FFFFFF; background: none; background-color:#00557F;}div.dhtmlx_window_active, div.dhx_modal_cover_dv { position: fixed !important; }
+</style>
+
+
 
 <div class="menutitle">
 	<span id="shizzle"><u>The Menu</u></span>
 </div>
 
-<table class="table" id="menu_table">
- 
-    {% if signed_in %}<th></th>{% endif %}
+<div class="datagrid">
+<table class="table" id="menu_table" border="0">
+     
+        {% if signed_in %}<th></th>{% endif %}
 
-    <th><u>DISH</u></th>
-    {% if signed_in %}<th>Likes</th> {% endif %}
-    <th><font color="black">Calories</font></th>
-    <th><font color="black">Protein (g)</font></th>
-    <th><font color="black">Fat(g)</font></th>
-    <th><font color="black">Carbs (g)</font></th>
-    <th><font color="black">Sugar(g)</font></th>
-    <th><font color="black">Sodium(mg),(% DV)</font></th>
-    <th><font color="black">Price</font></th>
-    <th><font color="black">Description</font></th>
-<div id=refresh>
-{% for d in table %}
-<tr>
-{% if my_prof %}
-<td>
-<button class="btn btn-default btn-sm" id=type="button" onclick="removeItem('{{d.name}}')"><span class="glyphicon glyphicon-remove-circle"></span></button>
-<button class="btn btn-default btn-sm" id=type="button" onclick="openIngreds('{{d.name}}')"><span class="glyphicon glyphicon-eye-open"></span></button>
-</td>
-{% elif signed_in %}
-<td>
-<button class="btn btn-default btn-sm" id=type="button" onclick='likeDish("{{d.name}}", "{{forloop.counter}}")'><span class="glyphicon glyphicon-thumbs-up"></span></button>
-</td>
-{% endif %}
-<td><font color="black">{{ d.name }}</font></td>
-{% for s in d.strings %}
-{% if forloop.first%}
-<font color="#00cc00"><td id='{{d.name}}{{forloop.parentloop.counter}}'>{{ s }}</td></font>
-{% else %}
-<td><font color="black">{{ s }}</font></td>
-{% endif %}
-{% endfor %}
-</tr>
-{% endfor %}
-</div>
+        <th><u>DISH</u></th>
+        {% if signed_in %}<th>Likes</th> {% endif %}
+        <th><font color="black">Calories</font></th>
+        <th><font color="black">Protein (g)</font></th>
+        <th><font color="black">Fat(g)</font></th>
+        <th><font color="black">Carbs (g)</font></th>
+        <th><font color="black">Sugar(g)</font></th>
+        <th><font color="black">Sodium(mg),(% DV)</font></th>
+        <th><font color="black">Price</font></th>
+        <th><font color="black">Description</font></th>
+    <div id=refresh>
+    {% for d in table %}
+    <tr>
+    {% if my_prof %}
+    <td>
+    <button class="btn btn-default btn-sm" id=type="button" onclick="removeItem('{{d.name}}')"><span class="glyphicon glyphicon-remove-circle"></span></button>
+    <button class="btn btn-default btn-sm" id=type="button" onclick="openIngreds('{{d.name}}')"><span class="glyphicon glyphicon-eye-open"></span></button>
+    </td>
+    {% elif signed_in %}
+    <td>
+    <button class="btn btn-default btn-sm" id=type="button" onclick='likeDish("{{d.name}}", "{{forloop.counter}}")'><span class="glyphicon glyphicon-thumbs-up"></span></button>
+    </td>
+    {% endif %}
+    <td><font color="black">{{ d.name }}</font></td>
+    {% for s in d.strings %}
+    {% if forloop.first%}
+    <font color="#00cc00"><td id='{{d.name}}{{forloop.parentloop.counter}}'>{{ s }}</td></font>
+    {% else %}
+    <td><font color="black">{{ s }}</font></td>
+    {% endif %}
+    {% endfor %}
+    </tr>
+    {% endfor %}
+    </div>
 
-   <colgroup>
-    	<col span="1" font color="#990099">
-   </colgroup>
+       <colgroup>
+        	<col span="1" font color="#990099">
+       </colgroup>
 </table>
+</div>
