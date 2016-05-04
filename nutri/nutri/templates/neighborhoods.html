@@ -51,14 +51,6 @@ $(document).on("click","#next_page",function(event)
 
 <style type="text/css">
 
-
-           
-        body {
-            ##background-image: url('http://i375.photobucket.com/albums/oo197/Charles-Stanton_151515/light-green-background-2_zpsaalvszae.jpg');
-            background-size:;
-            background-repeat:
-                   
-        }
         
         .returns{
             margin-left:12%;
@@ -75,7 +67,7 @@ $(document).on("click","#next_page",function(event)
         }
 
         .rest_box{
-          background-image:url("{{STATIC_URL}}/greengrass.jpg");
+          background:white;
           background-position:bottom;
         }
         
@@ -89,26 +81,7 @@ $(document).on("click","#next_page",function(event)
         
 </style>
 
-
-    <title>CALOSPOT</title>
-</head>
-<body>
-<div class="navbar navbar-inverse navbar-fixed-top" id="topnavbar">
-      <div class="container-fluid">
-        <div class="navbar-header">
-          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-            <span class="sr-only">Toggle navigation</span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </button>
-          <a class="navbar-brand" href="/">{% block navtitle %} <span style="color:#2efb00;opacity=.99;">Calo</span><span style="color:#1500fb;opacity=.99;">Spot</span>{% endblock %}</a>          
-          
-          </div>
-           <div class="nav navbar-nav navbar-right"><span style="font-size:15px; color:white; margin-right:%"></span></div>
-          </div>
-          </div>
- 
+{% include 'navbarHeader.html' %}
 <br><br><br><br><br>
 <div class="container">
 <div class="contact">
@@ -120,7 +93,7 @@ $(document).on("click","#next_page",function(event)
 <div class="returns">
 
 {% for n in neighborhoods %}
-<ul class='rest_box' style="padding-top:1%; font-size:18px; padding-left:10%; border-style:solid; padding-bottom:9%; padding-right:0%"> 
+<ul class='rest_box' style="padding-top:1%; font-size:18px; padding-left:10%; border-style:solid; padding-bottom:4%; padding-right:0%"> 
 <a href="{{n.n_}}/restaurants" style="font-size:30px; color:black; font-weight:bold;">{{n.n}}</a>  
 
 
