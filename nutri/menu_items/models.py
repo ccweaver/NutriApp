@@ -7,7 +7,7 @@ from django.contrib.auth.models import User
 class Item(models.Model):
 	name = models.CharField(max_length=100)
 	rest = models.ForeignKey(Restaurant)
-	price = models.DecimalField(max_digits=10, decimal_places=2)
+	price = models.DecimalField(max_digits=10, decimal_places=2, default=0, blank=True)
 	ingredients = models.ManyToManyField(Addition, blank=True)
 	valid = models.BooleanField(default=False)
 	description = models.TextField()
