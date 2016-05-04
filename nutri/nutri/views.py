@@ -225,7 +225,7 @@ def search_clickThru(request, city, neighborhood, page=1):
     #################
     # City Search
     ################
-    rests = Restaurant.objects.filter(Q(city__icontains=city) & Q(neighborhood__icontains=neighborhood)) 
+    rests = Restaurant.objects.filter(Q(city__icontains=city) & Q(neighborhood__icontains=neighborhood)).order_by('name')
     rs = []
     for r in rests:
         bool_dm = False
