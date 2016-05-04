@@ -641,7 +641,7 @@ def restaurant_profile(request, rid):
     ## Like Dish -- up here to speed up like response
     
     hourz = False
-    if restaurant.hours == "":
+    if restaurant.hours == None:
         hourz = True
     hours = str(restaurant.hours)
         
