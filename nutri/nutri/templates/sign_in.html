@@ -336,8 +336,8 @@ $(document).on("click","#proflink",function(event)
         <div class="navbar-collapse collapse">
           <div id="login_list" align='right'>
             {% if is_user %}
-            <button id="proflink" type="button" class="btn btn-primary btn-sm">{{user}}</button>
-            <button id="logout" type="button" class="btn btn-danger btn-sm">Logout</button>
+            <button id="proflink" type="button" class="btn btn-primary btn-sm" style="color:blue">{{user}}</button>
+            <button id="logout" type="button" class="btn btn-danger btn-sm" style="color:green">Logout</button>
             {% else %}
             <font color="white" size='3'> </font>
             <input name="login_email" type="text" id="login_email" placeholder="  Email">
