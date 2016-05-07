@@ -113,7 +113,7 @@ def sign_in(request):
             term = request.POST['term']
             termType = request.POST['type']
             cities = ['Stamford', 'Boston', 'Cambridge']
-            neighborhoods = ['Allston', 'Back Bay / South End', 'Beacon Hill / West End', 'North End', 'Cambridgeport', 'Brighton / Brookline', 'Charlestown', 'Chinatown', 'Dorchester', 'East Boston', 'Fenway', 'Financial District', 'Hyde Park', 'Jamaica Plain', 'Mattapan', 'Mission Hill', 'Mobile Food Truck', 'Roslindale', 'Roxbury', 'South Boston', 'Central Square', 'East Cambridge / MIT', 'Harvard Square / Somerville', 'Inman Square', 'Porter Square', 'Cove / East Main Street / Stillwater Ave', 'Downtown Stamford', 'Harbor Point', 'Hope Street', 'Long Ridge / High Ridge / Glenbrook']  
+            neighborhoods = ['Allston', 'Back Bay / South End', 'Beacon Hill / West End', 'North End', 'Cambridgeport', 'Brighton / Brookline', 'Chinatown', 'Charlestown', 'Dorchester', 'East Boston', 'Fenway', 'Financial District', 'Hyde Park', 'Jamaica Plain', 'Mattapan', 'Mission Hill', 'Mobile Food Truck', 'Roslindale', 'Roxbury', 'South Boston', 'Central Square', 'East Cambridge / MIT', 'Harvard Square / Somerville', 'Inman Square', 'Porter Square', 'Cove / East Main Street / Stillwater Ave', 'Downtown Stamford', 'Harbor Point', 'Hope Street', 'Long Ridge / High Ridge / Glenbrook']  
             if termType == 'n':
                 i = Item.objects.filter(valid=True).filter(rest__neighborhood=term).annotate(num_likes=Count('likes')).order_by('-num_likes')[:10]
             elif termType == 'city':
@@ -133,7 +133,7 @@ def sign_in(request):
         #cities = Restaurant.objects.values('city').distinct()
        # neighborhoods = Restaurant.objects.values('neighborhood').distinct()
         cities = ['Stamford', 'Boston', 'Cambridge']
-        neighborhoods = ['Allston', 'Back Bay / South End', 'Beacon Hill / West End', 'North End', 'Cambridgeport', 'Brighton / Brookline', 'Charlestown', 'Chinatown', 'Dorchester', 'East Boston', 'Fenway', 'Financial District', 'Hyde Park', 'Jamaica Plain', 'Mattapan', 'Mission Hill', 'Mobile Food Truck', 'Roslindale', 'Roxbury', 'South Boston', 'Central Square', 'East Cambridge / MIT', 'Harvard Square / Somerville', 'Inman Square', 'Porter Square', 'Cove / East Main Street / Stillwater Ave', 'Downtown Stamford', 'Harbor Point', 'Hope Street', 'Long Ridge / High Ridge / Glenbrook']
+        neighborhoods = ['Allston', 'Back Bay / South End', 'Beacon Hill / West End', 'North End', 'Cambridgeport', 'Brighton / Brookline', 'Chinatown', 'Charlestown', 'Dorchester', 'East Boston', 'Fenway', 'Financial District', 'Hyde Park', 'Jamaica Plain', 'Mattapan', 'Mission Hill', 'Mobile Food Truck', 'Roslindale', 'Roxbury', 'South Boston', 'Central Square', 'East Cambridge / MIT', 'Harvard Square / Somerville', 'Inman Square', 'Porter Square', 'Cove / East Main Street / Stillwater Ave', 'Downtown Stamford', 'Harbor Point', 'Hope Street', 'Long Ridge / High Ridge / Glenbrook']
         i = Item.objects.filter(valid=True).annotate(num_likes=Count('likes')).order_by('-num_likes')[:10]
         top10 = [{'bid':x.rest.id, 'name':x.name, 'likes':x.likes.count(), 'calories':int((round(x.calories/10))*10), 'neighborhood':x.rest.neighborhood, 'restur':x.rest.name, 'city':x.rest.city} for x in i]
         return render(request, 'sign_in.html', {'form':uform, 'invalid':invalid, 'error':error, 'is_user':is_user, 'user':request.user.username, 'top10':top10, 'cities':cities, 'neighborhoods':neighborhoods})
