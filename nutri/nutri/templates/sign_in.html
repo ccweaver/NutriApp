@@ -265,6 +265,12 @@ $(document).on("click","#proflink",function(event)
           text-align:center;
           font-size:30;
         }
+        
+        .zoom{
+          text-align:center;
+          margin-top:100%;
+          font-size:50px;
+        }
         #cDropdown,
         #nDropdown {
           float:left;
@@ -390,6 +396,13 @@ $(document).on("click","#proflink",function(event)
 <div id="top10Table">{% include 'top10.html' %}</div>
 </div>
 {% endif %}
+
+<div class="zoom">
+Zoom in on your phone
+</div>
+
+
+
 
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog">
