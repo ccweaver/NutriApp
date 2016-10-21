@@ -131,7 +131,6 @@ def sign_in(request):
     if is_user:
         #If there wasn't so much garbage in DB
         #cities = Restaurant.objects.values('city').distinct()
-       #neighborhoods = Restaurant.objects.values('neighborhood').distinct()
         cities = ['Stamford', 'Boston', 'Cambridge', 'Phoenix']
         neighborhoods = ['Allston', 'Back Bay / South End', 'Beacon Hill / West End', 'North End', 'Cambridgeport', 'Brighton / Brookline', 'Chinatown', 'Charlestown', 'Dorchester', 'East Boston', 'Fenway', 'Financial District', 'Hyde Park', 'Jamaica Plain', 'Mattapan', 'Mission Hill', 'Mobile Food Truck', 'Roslindale', 'Roxbury', 'South Boston', 'Central Square', 'East Cambridge / MIT', 'Harvard Square / Somerville', 'Inman Square', 'Porter Square', 'Cove / East Main Street / Stillwater Ave', 'Downtown Stamford', 'Harbor Point', 'Hope Street', 'Long Ridge / High Ridge / Glenbrook', 'Arcadia', 'Biltmore Area / Desert Ridge', 'Chandler Area', 'Downtown Phoenix / Encanto Village / East Camelback', 'Gilbert Area', 'Glendale Area', 'Maryvale', 'Mesa Area', 'Peoria Area', 'Scottsdale Area', 'South Phoenix', 'Tempe Area', 'Deer Valley', 'Grand Canyon University Area', 'North Mountain Village Area', 'Paradise Valley Village Area', 'Cave / Anthem Area' ]
         i = Item.objects.filter(valid=True).annotate(num_likes=Count('likes')).order_by('-num_likes')[:10]
